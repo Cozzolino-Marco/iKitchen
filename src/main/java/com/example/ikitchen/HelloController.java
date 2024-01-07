@@ -7,8 +7,10 @@ public class HelloController {
     @FXML
     private Label welcomeText;
 
+    //TODO ao questo provaaa
+
     @FXML
     protected void onHelloButtonClick() {
-        welcomeText.setText("Provaa!");
+        welcomeText.setText("Prova!");
     }
 }
