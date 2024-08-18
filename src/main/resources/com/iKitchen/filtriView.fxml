@@ -7,6 +7,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.iKitchen.view.DispensaControllerGrafico"
@@ -15,12 +18,32 @@
     <!-- Barra di navigazione superiore -->
     <VBox prefWidth="500.0" spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
-            <Label text="Ottieni ricetta - Categorie" style="-fx-text-fill: white;">
+            <Label text="Ottieni ricetta - Filtri" style="-fx-text-fill: white;">
                 <font>
                     <Font name="System Bold" size="20.0"/>
                 </font>
-            </Label>
+            </Label>j
         </HBox>
+    </VBox>
+
+    <!-- Sezione centrale con i menu a tendina -->
+    <VBox spacing="80.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="50.0" alignment="CENTER">
+        <ComboBox fx:id="provenienzaComboBox" promptText="Seleziona l'opzione" prefWidth="200.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Da chef"/>
+                    <String fx:value="Dal web"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
+        <ComboBox fx:id="filtraggioComboBox" promptText="Seleziona l'opzione" prefWidth="200.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Tutte le ricette"/>
+                    <String fx:value="Filtrate in base alla dispensa"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
     </VBox>
 
     <!-- Barra di navigazione inferiore -->
