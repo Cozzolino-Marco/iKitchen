@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.iKitchen.view.DispensaControllerGrafico"
+            prefHeight="500.0" prefWidth="500.0">
+
+    <!-- Barra di navigazione superiore -->
+    <VBox prefWidth="500.0" spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
+            <Label text="Dispensa" style="-fx-text-fill: white;">
+                <font>
+                    <Font name="System Bold" size="20.0"/>
+                </font>
+            </Label>
+        </HBox>
+
+        <!-- Sezione per i tab Validi/Non Validi -->
+        <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.topAnchor="40.0" AnchorPane.bottomAnchor="50.0" prefWidth="500.0">
+            <Tab text="Validi">
+                <AnchorPane>
+                    <!-- Lista degli articoli validi -->
+                    <ListView fx:id="validItemsList" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                </AnchorPane>
+            </Tab>
+            <Tab text="Non validi">
+                <AnchorPane>
+                    <!-- Lista degli articoli non validi -->
+                    <ListView fx:id="nonValidItemsList" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                </AnchorPane>
+            </Tab>
+        </TabPane>
+    </VBox>
+
+    <!-- Barra di navigazione inferiore -->
+    <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
+        <Button text="🏠" onAction="#homePageUtente"/>
+        <Button text="🌍" onAction="#categorieView"/>
+        <Button text="❤" onAction="#preferitiView"/>
+        <Button text="➕" onAction="#aggiungiProdotto"/>
+    </HBox>
+
+</AnchorPane>

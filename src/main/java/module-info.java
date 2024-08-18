@@ -1,8 +1,10 @@
 module com.example.ikitchen {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
-
-    opens com.example.ikitchen to javafx.fxml;
-    exports com.example.ikitchen;
+    exports com.iKitchen;
+    opens com.iKitchen to javafx.fxml;
+    opens com.iKitchen.view to javafx.fxml;
+    exports com.iKitchen.view;
 }

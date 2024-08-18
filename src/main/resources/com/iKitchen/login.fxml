@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.iKitchen.view.LoginGrafico">
+    <center>
+        <VBox fx:id="topControls" alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+
+            <VBox maxWidth="200">
+                <Label text="Username" />
+                <TextField fx:id="textFieldUsername" />
+            </VBox>
+            <VBox maxWidth="200">
+                <Label text="password" />
+                <PasswordField fx:id="textFieldPassword" />
+            </VBox>
+
+            <Button text="Login" onAction="#onHelloButtonClick"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>
+
