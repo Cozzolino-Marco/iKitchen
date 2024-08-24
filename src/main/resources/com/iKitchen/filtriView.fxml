@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iKitchen.view.DispensaControllerGrafico"
+            fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico"
             prefHeight="500.0" prefWidth="500.0">
 
     <!-- Barra di navigazione superiore -->
@@ -22,7 +22,7 @@
                 <font>
                     <Font name="System Bold" size="20.0"/>
                 </font>
-            </Label>j
+            </Label>
         </HBox>
     </VBox>
 

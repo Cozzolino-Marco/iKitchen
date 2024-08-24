@@ -13,6 +13,8 @@ import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import java.io.IOException;
 import java.sql.SQLException;
+import static com.iKitchen.model.domain.ScreenSize.HEIGHT_GUI1;
+import static com.iKitchen.model.domain.ScreenSize.WIDTH_GUI1;
 
 public class LoginController {
     public void start(CredentialsBean credB) throws DAOException, IOException {
@@ -31,7 +33,7 @@ public class LoginController {
         //System.out.print("ciaooooooooooooooooooooooo" + cred.getRole());
         if(cred.getRole() == null) {
             fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
-            scene = new Scene(fxmlLoader.load(), 500, 500);
+            scene = new Scene(fxmlLoader.load(), WIDTH_GUI1, HEIGHT_GUI1);
         }else{
             String fxmlFile;
 
@@ -57,7 +59,7 @@ public class LoginController {
             }
             fxmlLoader = new FXMLLoader();
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-            scene = new Scene(rootNode, 500, 500);
+            scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
         }
 
         stage.setTitle("iKitchen");
@@ -65,4 +67,3 @@ public class LoginController {
         stage.show();
     }
 }
-

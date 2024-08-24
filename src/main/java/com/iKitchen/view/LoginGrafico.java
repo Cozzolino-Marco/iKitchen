@@ -17,12 +17,11 @@ public class LoginGrafico {
     @FXML
     protected void onHelloButtonClick(){
         CredentialsBean credB;
-
         credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
-        try{
+        try {
             LoginController loginController = new LoginController();
             loginController.start(credB);
-        }catch (DAOException | IOException e){
+        } catch (DAOException | IOException e) {
             throw new IllegalArgumentException(e);
         }
     }

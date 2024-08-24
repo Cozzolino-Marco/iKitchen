@@ -17,18 +17,19 @@ public class Credentials {
         Credentials.password = password;
     }
 
+    // Getter
     public String getUsername() {
         return username;
     }
     public String getPassword() {
         return password;
     }
-
     public Role getRole() {
         return role;
     }
 
+    // Setter
     public void setRole(Role role){
-        Credentials.role=role;
+        Credentials.role = role;
     }
 }

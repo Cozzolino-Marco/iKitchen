@@ -9,10 +9,10 @@ public class CredentialsBean {
         this.password = password;
     }
 
+    // Getter
     public String getUsername() {
         return username;
     }
-
     public String getPassword() {
         return password;
     }

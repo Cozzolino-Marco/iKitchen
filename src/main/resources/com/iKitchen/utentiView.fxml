@@ -10,9 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.collections.FXCollections?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iKitchen.view.DispensaControllerGrafico"
+            fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico"
             prefHeight="500.0" prefWidth="500.0">
 
     <!-- Barra di navigazione superiore -->
@@ -41,6 +42,14 @@
             </Tab>
         </TabPane>
     </VBox>
+
+    <!-- Lista dei prodotti/ingredienti -->
+    <ListView fx:id="productListView" AnchorPane.topAnchor="40.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <!-- Placeholder per gli elementi dinamici -->
+        <items>
+            <FXCollections fx:factory="observableArrayList"/>
+        </items>
+    </ListView>
 
     <!-- Barra di navigazione inferiore -->
     <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
