@@ -26,7 +26,7 @@ public class LoginProcedureDAO{
         } catch (SQLException e) {
             throw new DAOException("Login error: " + e.getMessage());
         } finally {
-            if(cs!= null){
+            if (cs!= null){
                 cs.close();
             }
         }

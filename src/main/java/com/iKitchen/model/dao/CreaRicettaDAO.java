@@ -3,7 +3,6 @@ package com.iKitchen.model.dao;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.domain.Ricetta;
 import java.sql.CallableStatement;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 public class CreaRicettaDAO {
@@ -14,7 +13,7 @@ public class CreaRicettaDAO {
 
         /*try {
             Connection conn = ConnectionFactory.getConnection();
-            cs = conn.prepareCall("{call creaEvento(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            cs = conn.prepareCall("{call crea_ricetta(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
             cs.setString(1, ricetta.getTitolo());
             cs.setString(2, ricetta.getDescrizione());
             cs.setBlob(3, ricetta.getImageUrl());

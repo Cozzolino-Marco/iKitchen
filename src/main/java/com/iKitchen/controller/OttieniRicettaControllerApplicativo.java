@@ -64,12 +64,12 @@ public class OttieniRicettaControllerApplicativo {
         return ricetteBean;
     }
 
-    public void ottieniRicetta(BeanRicette beanRicette) throws DAOException, SQLException {
+    /*public void ottieniRicetta(BeanRicette beanRicette) throws DAOException, SQLException {
     }
 
     public void verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
     }
 
     public void usaRicetta(BeanRicetta beanRicetta) throws DAOException, SQLException {
-    }
+    }*/
 }

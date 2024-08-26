@@ -1,7 +1,6 @@
 package com.iKitchen.model.bean;
 
 import com.iKitchen.model.domain.ListIngredienti;
-
 import java.sql.Blob;
 import java.util.Arrays;
 import java.util.List;

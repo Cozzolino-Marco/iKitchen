@@ -30,11 +30,10 @@ public class LoginController {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
-        //System.out.print("ciaooooooooooooooooooooooo" + cred.getRole());
-        if(cred.getRole() == null) {
+        if (cred.getRole() == null) {
             fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
             scene = new Scene(fxmlLoader.load(), WIDTH_GUI1, HEIGHT_GUI1);
-        }else{
+        } else {
             String fxmlFile;
 
             try {
@@ -44,24 +43,14 @@ public class LoginController {
             }
 
             if (cred.getRole().getId() == 1) {
-                //System.out.println("Utente domestico");
-
-                /*try {
-                    new ProfileProcedureDAO().execute(cred);
-                } catch(DAOException | SQLException e) {
-                    throw new IllegalArgumentException(e);
-                }*/
-
                 fxmlFile = "/com/iKitchen/utentiView.fxml";
             } else {
-                System.out.println("Chef");
                 fxmlFile = "/com/iKitchen/chefview.fxml";
             }
             fxmlLoader = new FXMLLoader();
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
             scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
         }
-
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();

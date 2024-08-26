@@ -2,7 +2,6 @@ package com.iKitchen.model.dao;
 
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.domain.FactoryRicetta;
-import com.iKitchen.model.domain.ListIngredienti;
 import com.iKitchen.model.domain.ListRicette;
 import com.iKitchen.model.domain.Ricetta;
 import java.sql.CallableStatement;
