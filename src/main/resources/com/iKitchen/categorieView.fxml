@@ -28,7 +28,11 @@
 
     <!-- Sezione centrale con le categorie -->
     <VBox spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="50.0">
-        <ListView>
+
+        <!-- Label per mostrare la categoria selezionata -->
+        <Label fx:id="categoria" text="Seleziona una categoria:"/>
+
+        <ListView fx:id="categoriaListView">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="Colazione"/>

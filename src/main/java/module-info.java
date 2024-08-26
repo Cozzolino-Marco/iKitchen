@@ -7,4 +7,6 @@ module com.example.ikitchen {
     opens com.iKitchen to javafx.fxml;
     opens com.iKitchen.view to javafx.fxml;
     exports com.iKitchen.view;
+    exports com.iKitchen.model.domain;
+    opens com.iKitchen.model.domain to javafx.fxml;
 }

@@ -1,5 +1,7 @@
 package com.iKitchen.model.bean;
 
+import com.iKitchen.model.domain.ListIngredienti;
+
 import java.sql.Blob;
 import java.util.Arrays;
 import java.util.List;
@@ -14,17 +16,17 @@ public class BeanRicetta {
     String provenienza;
     String cuoco;
     Float durataPreparazione;
-    List ingredienti;
+    ListIngredienti ingredienti;
     String passaggi;
     String videoUrl;
     int likes;
 
-    // TODO: Commentare bene questo metodo
-    public BeanRicetta (String titolo, String descrizione, Blob imageUrl, String categoria, String provenienza, String cuoco, float durataPreparazione, List ingredienti, String passaggi, String videoUrl, int likes) {
+    // Per mandare i dati dal controller grafico a quello applicativo
+    public BeanRicetta (String titolo, String descrizione, Blob imageUrl, String categoria, String provenienza, String cuoco, float durataPreparazione, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
-            throw new IllegalArgumentException("Non esiste un prodotto del genere! Inserire almeno 3 caratteri!");
+            throw new IllegalArgumentException("Non esiste una ricetta del genere! Inserire almeno 3 caratteri!");
         }
 
         // Controllo sulla lunghezza del campo descrizione
@@ -39,7 +41,7 @@ public class BeanRicetta {
         }
 
         // Controllo sulla correttezza del campo provenienza
-        if (!provenienza.equals("da chef") && !provenienza.equals("dal web")) {
+        if (!provenienza.equals("Da chef") && !provenienza.equals("Dal web")) {
             throw new IllegalArgumentException("La provenienza deve essere 'da chef' oppure 'dal web'!");
         }
 
@@ -67,6 +69,47 @@ public class BeanRicetta {
         this.likes = likes;
     }
 
+    // Per mandare i dati dal controller applicativo a quello grafico
+    public BeanRicetta (String titolo, String categoria, String cuoco, float durataPreparazione) {
+
+        // Controllo della consistenza del titolo
+        if (titolo.length() < 3) {
+            throw new IllegalArgumentException("Non esiste una ricetta del genere! Inserire almeno 3 caratteri!");
+        }
+
+        // Controllo sulla correttezza del campo categoria
+        List<String> categorieValide = Arrays.asList("Colazione", "Pasto veloce", "Bevande", "Primi piatti", "Secondi piatti", "Contorni", "Dolci");
+        if (!categorieValide.contains(categoria)) {
+            throw new IllegalArgumentException("La categoria non è valida! Le categorie valide sono: " + categorieValide);
+        }
+
+        // Controllo sulla correttezza del campo durata preparazione
+        if (durataPreparazione < 1.0) {
+            throw new IllegalArgumentException("La durata della preparazione deve essere di almeno 1 minuto!");
+        }
+
+        // Assegnazioni
+        this.titolo = titolo;
+        this.categoria = categoria;
+        this.cuoco = cuoco;
+        this.durataPreparazione = durataPreparazione;
+    }
+
+    /* Per mandare i dati dal controller applicativo a quello grafico
+    public BeanRicetta (String titolo, String descrizione, Blob imageUrl, String categoria, String provenienza, String cuoco, float durataPreparazione, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.imageUrl = imageUrl;
+        this.categoria = categoria;
+        this.provenienza = provenienza;
+        this.cuoco = cuoco;
+        this.durataPreparazione = durataPreparazione;
+        this.ingredienti = ingredienti;
+        this.passaggi = passaggi;
+        this.videoUrl = videoUrl;
+        this.likes = likes;
+    }*/
+
     // Getter
     public String getTitolo() {
         return titolo;
@@ -89,7 +132,7 @@ public class BeanRicetta {
     public Float getDurataPreparazione() {
         return durataPreparazione;
     }
-    public List getIngredienti() {
+    public ListIngredienti getIngredienti() {
         return ingredienti;
     }
     public String getPassaggi() {
