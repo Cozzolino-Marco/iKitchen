@@ -1,13 +1,12 @@
 package com.iKitchen.view;
 
 import com.iKitchen.model.domain.ApplicazioneStage;
+import com.iKitchen.model.domain.ScreenSize;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
-import static com.iKitchen.model.domain.ScreenSize.HEIGHT_GUI1;
-import static com.iKitchen.model.domain.ScreenSize.WIDTH_GUI1;
 
 public class UtenteControllerGrafico {
 
@@ -19,7 +18,7 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -34,7 +33,7 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -49,7 +48,7 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/filtriView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -64,7 +63,7 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/preferitiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -79,7 +78,7 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/aggiungiProdottoView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);

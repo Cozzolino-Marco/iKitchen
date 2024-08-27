@@ -61,7 +61,6 @@ public class OttieniRicettaControllerApplicativo {
                     ricetta.getDurataPreparazione(),
                     ricetta.getCalorie()
             );
-            System.out.println("Immagine ricetta dal controller applicativo: " + ricetta.getImmagine());
             ricetteBean.addRicetta(beanRicetta);
         }
         return ricetteBean;

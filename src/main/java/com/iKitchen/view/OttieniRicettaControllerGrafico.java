@@ -5,9 +5,9 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
 import com.iKitchen.model.domain.ApplicazioneStage;
+import com.iKitchen.model.domain.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -17,29 +17,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import static com.iKitchen.model.domain.ScreenSize.HEIGHT_GUI1;
-import static com.iKitchen.model.domain.ScreenSize.WIDTH_GUI1;
 
 public class OttieniRicettaControllerGrafico {
 
     // Elementi grafici
     @FXML
-    private Label categoria;
+    private Label categoriaLabelTitle;
 
     @FXML
     private ListView<String> categoriaListView;
@@ -72,14 +62,18 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
+    // Setta il titolo della categoria della barra di navigazione superiore
+    public void setCategoriaLabelTitle(String categoria) {
+        categoriaLabelTitle.setText(categoria);
+    }
+
+    // Setter delle tre informazioni di filtraggio delle ricette
     public void setCategoria(String categoria) {
         this.categoriaScelta = categoria;
     }
-
     public void setProvenienza(String provenienza) {
         this.provenienzaScelta = provenienza;
     }
-
     public void setFiltraggio(String filtraggio) {
         this.filtraggioScelta = filtraggio;
     }
@@ -99,14 +93,14 @@ public class OttieniRicettaControllerGrafico {
         OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
         controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
 
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();
     }
 
-    // Metodo che mostra le ricette caricate
+    // Metodo che mostra le ricette caricate a livello grafico
     @FXML
     protected void mostraRicette() throws DAOException, SQLException, IOException {
 
@@ -120,12 +114,13 @@ public class OttieniRicettaControllerGrafico {
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
         OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+        controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata
         controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
         controller.setProvenienza(provenienzaComboBox.getValue().toString()); // Passa la provenienza selezionata
         controller.setFiltraggio(filtraggioComboBox.getValue().toString()); // Passa la filtraggio selezionata
         controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString());
 
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -156,25 +151,31 @@ public class OttieniRicettaControllerGrafico {
         BorderPane element = new BorderPane();
 
         // Creazione dell'immagine del piatto
-        HBox img = new HBox();
+        HBox imgBox = new HBox();
         if (ricettaBean.getImmagine() != null) {
             try {
                 InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
-                if (inputStream != null) {  // Controllo per evitare il NullPointerException
-                    Image image = new Image(inputStream);
+                if (inputStream != null) {
+                    Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
                     ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(60);
-                    imageView.setFitWidth(60);
-                    imageView.setPreserveRatio(true);
-                    img = new HBox(imageView);
+                    imageView.setFitHeight(70);
+                    imageView.setFitWidth(65);
+
+                    // Creazione di un Rectangle per angoli arrotondati delle immagini
+                    Rectangle clip = new Rectangle(65, 70);
+                    clip.setArcWidth(15);
+                    clip.setArcHeight(15);
+                    imageView.setClip(clip);
+
+                    imgBox = new HBox(imageView);
                 } else {
-                    img = new HBox(new Text("Immagine non presente"));
+                    imgBox = new HBox(new Text("Immagine non presente"));
                 }
             } catch (SQLException e) {
-                img = new HBox(new Text("Immagine non presente"));
+                imgBox = new HBox(new Text("Immagine non presente"));
             }
         } else {
-            img = new HBox(new Text("Immagine non presente"));
+            imgBox = new HBox(new Text("Immagine non presente"));
         }
 
         // Creazione del titolo della ricetta
@@ -183,38 +184,59 @@ public class OttieniRicettaControllerGrafico {
 
         // Creazione dell'icona del cuoco e del nome del cuoco
         ImageView cuocoIcon = new ImageView(new Image(getClass().getResourceAsStream("/cuoco_icon.jpg")));
-        cuocoIcon.setFitHeight(16);
-        cuocoIcon.setFitWidth(16);
+        cuocoIcon.setFitHeight(14);
+        cuocoIcon.setFitWidth(14);
         Label cuocoLabel = new Label(ricettaBean.getCuoco());
+        cuocoLabel.setStyle("-fx-font-size: 10px;");
         HBox cuocoBox = new HBox(cuocoIcon, cuocoLabel);
         cuocoBox.setSpacing(5);
 
         // Creazione dell'icona per le calorie
         ImageView calorieIcon = new ImageView(new Image(getClass().getResourceAsStream("/calorie_icon.png")));
-        calorieIcon.setFitHeight(16);
-        calorieIcon.setFitWidth(16);
+        calorieIcon.setFitHeight(14);
+        calorieIcon.setFitWidth(14);
         Label calorieLabel = new Label(ricettaBean.getCalorie() + " Kcal");
+        calorieLabel.setStyle("-fx-font-size: 12px;");
+
+        // Creazione di uno spazio vuoto (Region) tra le calorie e la durata
+        Region spacer = new Region();
+        spacer.setMinWidth(10);
 
         // Creazione dell'icona per durata della preparazione
         ImageView durataIcon = new ImageView(new Image(getClass().getResourceAsStream("/duration_icon.png")));
-        durataIcon.setFitHeight(16);
-        durataIcon.setFitWidth(16);
+        durataIcon.setFitHeight(14);
+        durataIcon.setFitWidth(14);
         Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " min");
+        durataLabel.setStyle("-fx-font-size: 12px;");
 
-        HBox infoBox = new HBox(calorieIcon, calorieLabel, durataIcon, durataLabel);
-        infoBox.setSpacing(10);
+        // Parte bottom per info calorie e durata
+        HBox infoBox = new HBox(calorieIcon, calorieLabel, spacer, durataIcon, durataLabel);
+        infoBox.setSpacing(5);
 
-        // VBox che contiene le informazioni del cuoco e durata
+        // VBox che contiene le informazioni del cuoco e calorie-durata
         VBox detailsBox = new VBox(cuocoBox, infoBox);
         detailsBox.setSpacing(5);
 
+        // Creazione della struttura principale
+        VBox titleAndDetailsBox = new VBox(titleLabel, detailsBox);
+        titleAndDetailsBox.setSpacing(5);
+        titleAndDetailsBox.setAlignment(Pos.CENTER_LEFT);
+
         // Creazione dell'icona del like interattiva
-        ImageView likeIcon = new ImageView(new Image(getClass().getResourceAsStream("/like_icon.jpg")));
+        ImageView likeIcon = new ImageView(new Image(getClass().getResourceAsStream("/like_icon_black.jpg")));
         likeIcon.setFitHeight(24);
         likeIcon.setFitWidth(24);
+        final boolean[] isLiked = {false}; // Stato del like
+
         // Impostare il comportamento interattivo del like
         likeIcon.setOnMouseClicked(event -> {
-            // Aggiungi il comportamento quando si clicca l'icona del like
+            if (isLiked[0]) {
+                likeIcon.setImage(new Image(getClass().getResourceAsStream("/like_icon_black.jpg")));
+                isLiked[0] = false;
+            } else {
+                likeIcon.setImage(new Image(getClass().getResourceAsStream("/like_icon_red.png")));
+                isLiked[0] = true;
+            }
             System.out.println("Like cliccato per: " + ricettaBean.getTitolo());
         });
 
@@ -223,11 +245,11 @@ public class OttieniRicettaControllerGrafico {
         StackPane.setAlignment(likeIcon, Pos.TOP_RIGHT);
 
         // Creazione della struttura principale
-        HBox mainContent = new HBox(img, detailsBox);
+        HBox mainContent = new HBox(imgBox, titleAndDetailsBox);
         mainContent.setSpacing(10);
+        mainContent.setAlignment(Pos.CENTER_LEFT); // Allinea tutto a sinistra
 
         // Impostazione dell'elemento grafico
-        element.setTop(titleLabel);
         element.setCenter(mainContent);
         element.setRight(likePane);
         element.setPadding(new Insets(10));
@@ -244,7 +266,7 @@ public class OttieniRicettaControllerGrafico {
         String fxmlFile = "/com/iKitchen/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -253,9 +275,6 @@ public class OttieniRicettaControllerGrafico {
 
     public void categorieView() throws IOException {
 
-        /* Aggiorna la variabile categoriaSelezionata con la categoria attualmente selezionata
-        this.categoriaSelezionata = this.categoria.getText();*/
-
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
@@ -263,7 +282,7 @@ public class OttieniRicettaControllerGrafico {
         String fxmlFile = "/com/iKitchen/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -278,7 +297,7 @@ public class OttieniRicettaControllerGrafico {
         String fxmlFile = "/com/iKitchen/preferitiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -293,7 +312,7 @@ public class OttieniRicettaControllerGrafico {
         String fxmlFile = "/com/iKitchen/aggiungiProdottoView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, WIDTH_GUI1, HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);

@@ -13,8 +13,7 @@
 <?import javafx.collections.FXCollections?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.iKitchen.view.UtenteControllerGrafico"
-            prefHeight="500.0" prefWidth="500.0">
+            fx:controller="com.iKitchen.view.UtenteControllerGrafico">
 
     <!-- Barra di navigazione superiore -->
     <VBox prefWidth="500.0" spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
