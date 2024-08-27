@@ -1,16 +1,18 @@
 package com.iKitchen.model.domain;
 
+import java.io.Serializable;
 import java.sql.Blob;
 
-public abstract class Ricetta {
+public abstract class Ricetta implements Serializable {
 
     // Variabili
     String titolo;
     String descrizione;
-    Blob imageUrl;
+    transient Blob immagine;
     String provenienza;
     String cuoco;
-    Float durataPreparazione;
+    int durataPreparazione;
+    int calorie;
     ListIngredienti ingredienti;
     String passaggi;
     String videoUrl;
@@ -23,8 +25,8 @@ public abstract class Ricetta {
     public String getDescrizione() {
         return descrizione;
     }
-    public Blob getImageUrl() {
-        return imageUrl;
+    public Blob getImmagine() {
+        return immagine;
     }
     public String getProvenienza() {
         return provenienza;
@@ -32,8 +34,11 @@ public abstract class Ricetta {
     public String getCuoco() {
         return cuoco;
     }
-    public Float getDurataPreparazione() {
+    public int getDurataPreparazione() {
         return durataPreparazione;
+    }
+    public int getCalorie() {
+        return calorie;
     }
     public ListIngredienti getIngredienti() {
         return ingredienti;
@@ -55,8 +60,8 @@ public abstract class Ricetta {
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
-    public void setImageUrl(Blob imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImmagine(Blob immagine) {
+        this.immagine = immagine;
     }
     public void setProvenienza(String provenienza) {
         this.provenienza = provenienza;
@@ -64,8 +69,11 @@ public abstract class Ricetta {
     public void setCuoco(String cuoco) {
         this.cuoco = cuoco;
     }
-    public void setDurataPreparazione(Float durataPreparazione) {
+    public void setDurataPreparazione(int durataPreparazione) {
         this.durataPreparazione = durataPreparazione;
+    }
+    public void setCalorie(int calorie) {
+        this.calorie = calorie;
     }
     public void setIngredienti(ListIngredienti ingredienti) {
         this.ingredienti = ingredienti;

@@ -4,10 +4,7 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.domain.FactoryRicetta;
 import com.iKitchen.model.domain.ListRicette;
 import com.iKitchen.model.domain.Ricetta;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
 
@@ -41,20 +38,10 @@ public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
                 while (rs.next()) {
                     Ricetta ricetta = factoryRicetta.createRicetta(rs.getString("categoria"));
                     ricetta.setTitolo(rs.getString("titolo"));
-                    /*ricetta.setDescrizione(rs.getString("descrizione"));
-                    ricetta.setImageUrl(rs.getBlob("imageUrl"));
-                    ricetta.setCategoria(rs.getString("categoria"));
-                    ricetta.setProvenienza(rs.getString("provenienza"));*/
+                    ricetta.setImmagine(rs.getBlob("immagine"));
                     ricetta.setCuoco(rs.getString("cuoco"));
-                    ricetta.setDurataPreparazione(rs.getFloat("durataPreparazione"));
-                    /*ricetta.setPassaggi(rs.getString("passaggi"));
-                    ricetta.setVideoUrl(rs.getString("videoUrl"));
-                    ricetta.setLikes(rs.getInt("likes"));*/
-
-                    /* Recupera e imposta gli ingredienti
-                    String idRicetta = rs.getString("idRicetta");
-                    ListIngredienti ingredienti = ingredientiDAO.getIngredientiPerRicetta(idRicetta);
-                    ricetta.setIngredienti(ingredienti);*/
+                    ricetta.setDurataPreparazione(rs.getInt("durataPreparazione"));
+                    ricetta.setCalorie(rs.getInt("calorie"));
 
                     // Aggiungi ricetta alla lista ricette
                     listRicette.addRicetta(ricetta);

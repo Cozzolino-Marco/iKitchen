@@ -55,10 +55,13 @@ public class OttieniRicettaControllerApplicativo {
         for (Ricetta ricetta : listRicette.getListaRicette()) {
             BeanRicetta beanRicetta = new BeanRicetta(
                     ricetta.getTitolo(),
+                    ricetta.getImmagine(),
                     ricetta.getCategoria(),
                     ricetta.getCuoco(),
-                    ricetta.getDurataPreparazione()
+                    ricetta.getDurataPreparazione(),
+                    ricetta.getCalorie()
             );
+            System.out.println("Immagine ricetta dal controller applicativo: " + ricetta.getImmagine());
             ricetteBean.addRicetta(beanRicetta);
         }
         return ricetteBean;

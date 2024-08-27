@@ -10,18 +10,19 @@ public class BeanRicetta {
     // Variabili
     String titolo;
     String descrizione;
-    Blob imageUrl;
+    Blob immagine;
     String categoria;
     String provenienza;
     String cuoco;
-    Float durataPreparazione;
+    int durataPreparazione;
+    int calorie;
     ListIngredienti ingredienti;
     String passaggi;
     String videoUrl;
     int likes;
 
     // Per mandare i dati dal controller grafico a quello applicativo
-    public BeanRicetta (String titolo, String descrizione, Blob imageUrl, String categoria, String provenienza, String cuoco, float durataPreparazione, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
+    public BeanRicetta (String titolo, String descrizione, Blob immagine, String categoria, String provenienza, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
@@ -45,8 +46,13 @@ public class BeanRicetta {
         }
 
         // Controllo sulla correttezza del campo durata preparazione
-        if (durataPreparazione < 1.0) {
+        if (durataPreparazione < 1) {
             throw new IllegalArgumentException("La durata della preparazione deve essere di almeno 1 minuto!");
+        }
+
+        // Controllo sulla correttezza del campo calorie
+        if (calorie < 0) {
+            throw new IllegalArgumentException("Non puo' esistere una ricetta con calorie negative!");
         }
 
         // Controllo sulla correttezza del campo likes
@@ -57,11 +63,12 @@ public class BeanRicetta {
         // Assegnazioni
         this.titolo = titolo;
         this.descrizione = descrizione;
-        this.imageUrl = imageUrl;
+        this.immagine = immagine;
         this.categoria = categoria;
         this.provenienza = provenienza;
         this.cuoco = cuoco;
         this.durataPreparazione = durataPreparazione;
+        this.calorie = calorie;
         this.ingredienti = ingredienti;
         this.passaggi = passaggi;
         this.videoUrl = videoUrl;
@@ -69,7 +76,7 @@ public class BeanRicetta {
     }
 
     // Per mandare i dati dal controller applicativo a quello grafico
-    public BeanRicetta (String titolo, String categoria, String cuoco, float durataPreparazione) {
+    public BeanRicetta (String titolo, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
@@ -83,26 +90,34 @@ public class BeanRicetta {
         }
 
         // Controllo sulla correttezza del campo durata preparazione
-        if (durataPreparazione < 1.0) {
+        if (durataPreparazione < 1) {
             throw new IllegalArgumentException("La durata della preparazione deve essere di almeno 1 minuto!");
+        }
+
+        // Controllo sulla correttezza del campo calorie
+        if (calorie < 0) {
+            throw new IllegalArgumentException("Non puo' esistere una ricetta con calorie negative!");
         }
 
         // Assegnazioni
         this.titolo = titolo;
+        this.immagine = immagine;
         this.categoria = categoria;
         this.cuoco = cuoco;
         this.durataPreparazione = durataPreparazione;
+        this.calorie = calorie;
     }
 
     /* Per mandare i dati dal controller applicativo a quello grafico
-    public BeanRicetta (String titolo, String descrizione, Blob imageUrl, String categoria, String provenienza, String cuoco, float durataPreparazione, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
+    public BeanRicetta (String titolo, String descrizione, Blob immagine, String categoria, String provenienza, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
         this.titolo = titolo;
         this.descrizione = descrizione;
-        this.imageUrl = imageUrl;
+        this.immagine = immagine;
         this.categoria = categoria;
         this.provenienza = provenienza;
         this.cuoco = cuoco;
         this.durataPreparazione = durataPreparazione;
+        this.calorie = calorie;
         this.ingredienti = ingredienti;
         this.passaggi = passaggi;
         this.videoUrl = videoUrl;
@@ -116,8 +131,8 @@ public class BeanRicetta {
     public String getDescrizione() {
         return descrizione;
     }
-    public Blob getImageUrl() {
-        return imageUrl;
+    public Blob getImmagine() {
+        return immagine;
     }
     public String getCategoria() {
         return categoria;
@@ -128,8 +143,11 @@ public class BeanRicetta {
     public String getCuoco() {
         return cuoco;
     }
-    public Float getDurataPreparazione() {
+    public int getDurataPreparazione() {
         return durataPreparazione;
+    }
+    public int getCalorie() {
+        return calorie;
     }
     public ListIngredienti getIngredienti() {
         return ingredienti;

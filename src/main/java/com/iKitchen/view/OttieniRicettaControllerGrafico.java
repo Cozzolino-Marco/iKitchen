@@ -9,18 +9,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +61,6 @@ public class OttieniRicettaControllerGrafico {
 
     // Configurazione iniziale degli elementi grafici
     public void initialize(String categoriaScelta, String provenienzaScelta, String filtraggioScelta) {
-
         if (elementContainer != null) {
             try {
                 caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta);
@@ -65,27 +70,18 @@ public class OttieniRicettaControllerGrafico {
                 throw new RuntimeException(e);
             }
         }
+    }
 
-        /*if (categoria != null) {
-            // Debug per verificare se 'categoria' è inizializzato
-            System.out.println("Categoria è correttamente inizializzata");
-        } else {
-            System.err.println("Errore: categoria è null");
-        }
+    public void setCategoria(String categoria) {
+        this.categoriaScelta = categoria;
+    }
 
-        if (elementContainer != null) {
-            caricaRicette(Collections.emptyList());
-        }
+    public void setProvenienza(String provenienza) {
+        this.provenienzaScelta = provenienza;
+    }
 
-        if (categoriaListView != null) {
-            categoriaListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    categoria.setText(newValue); // Imposta la categoria selezionata nella label
-                }
-            });
-        } else {
-            System.err.println("Errore: categoriaListView è null");
-        }*/
+    public void setFiltraggio(String filtraggio) {
+        this.filtraggioScelta = filtraggio;
     }
 
     @FXML
@@ -110,18 +106,7 @@ public class OttieniRicettaControllerGrafico {
         stage.show();
     }
 
-    public void setCategoria(String categoria) {
-        this.categoriaScelta = categoria;
-    }
-
-    public void setProvenienza(String provenienza) {
-        this.provenienzaScelta = provenienza;
-    }
-
-    public void setFiltraggio(String filtraggio) {
-        this.filtraggioScelta = filtraggio;
-    }
-
+    // Metodo che mostra le ricette caricate
     @FXML
     protected void mostraRicette() throws DAOException, SQLException, IOException {
 
@@ -147,20 +132,7 @@ public class OttieniRicettaControllerGrafico {
         stage.show();
     }
 
-    /*private void caricaRicette(List<BeanRicetta> listaRicette) {
-        elementContainer.getChildren().clear();
-        if (listaRicette != null && !listaRicette.isEmpty()) {
-            for (BeanRicetta ricetta : listaRicette) {
-                BorderPane element = createElement(ricetta);
-                elementContainer.getChildren().add(element);
-            }
-        } else {
-            Text noRecipesText = new Text("Nessuna ricetta trovata.");
-            elementContainer.getChildren().add(noRecipesText);
-        }
-    }*/
-
-    // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricetta dal DB
+    // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
     private void caricaRicette(String categoria, String provenienza, String filtraggio) throws DAOException, SQLException {
 
         // Crea un bean con le informazioni selezionate
@@ -172,37 +144,94 @@ public class OttieniRicettaControllerGrafico {
         // Ottieni la lista delle ricette dal controller applicativo
         BeanRicette listaRicette = ricette.mostraRicette(infoPerListaRicette);
 
+        // Ciclo che itera la creazione di un elemento ricetta per la lista ricette
         for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
             BorderPane element = createElement(beanRicetta);
             elementContainer.getChildren().add(element);
         }
-
-        // Passa la lista delle ricette al metodo per aggiornare l'interfaccia grafica
-        //mostraRicette(listaRicette.getListRicette());
     }
 
+    // Gestione grafica di un elemento ricetta
     private BorderPane createElement(BeanRicetta ricettaBean) {
         BorderPane element = new BorderPane();
 
-        /*Label titleLabel = new Label(ricettaBean.getTitolo());
+        // Creazione dell'immagine del piatto
+        HBox img = new HBox();
+        if (ricettaBean.getImmagine() != null) {
+            try {
+                InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
+                if (inputStream != null) {  // Controllo per evitare il NullPointerException
+                    Image image = new Image(inputStream);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(60);
+                    imageView.setFitWidth(60);
+                    imageView.setPreserveRatio(true);
+                    img = new HBox(imageView);
+                } else {
+                    img = new HBox(new Text("Immagine non presente"));
+                }
+            } catch (SQLException e) {
+                img = new HBox(new Text("Immagine non presente"));
+            }
+        } else {
+            img = new HBox(new Text("Immagine non presente"));
+        }
+
+        // Creazione del titolo della ricetta
+        Label titleLabel = new Label(ricettaBean.getTitolo());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        Label descriptionLabel = new Label(ricettaBean.getDescrizione());
-        descriptionLabel.setWrapText(true);
-        descriptionLabel.setStyle("-fx-font-size: 12px;");
+        // Creazione dell'icona del cuoco e del nome del cuoco
+        ImageView cuocoIcon = new ImageView(new Image(getClass().getResourceAsStream("/cuoco_icon.jpg")));
+        cuocoIcon.setFitHeight(16);
+        cuocoIcon.setFitWidth(16);
+        Label cuocoLabel = new Label(ricettaBean.getCuoco());
+        HBox cuocoBox = new HBox(cuocoIcon, cuocoLabel);
+        cuocoBox.setSpacing(5);
 
-        VBox infoBox = new VBox(titleLabel, descriptionLabel);
-        infoBox.setSpacing(6);
-         */
+        // Creazione dell'icona per le calorie
+        ImageView calorieIcon = new ImageView(new Image(getClass().getResourceAsStream("/calorie_icon.png")));
+        calorieIcon.setFitHeight(16);
+        calorieIcon.setFitWidth(16);
+        Label calorieLabel = new Label(ricettaBean.getCalorie() + " Kcal");
 
-        Label descrizioneText = new Label(ricettaBean.getTitolo());
-        descrizioneText.setWrapText(true);
+        // Creazione dell'icona per durata della preparazione
+        ImageView durataIcon = new ImageView(new Image(getClass().getResourceAsStream("/duration_icon.png")));
+        durataIcon.setFitHeight(16);
+        durataIcon.setFitWidth(16);
+        Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " min");
 
-        HBox descrizione = new HBox(descrizioneText);
+        HBox infoBox = new HBox(calorieIcon, calorieLabel, durataIcon, durataLabel);
+        infoBox.setSpacing(10);
 
-        element.setCenter(descrizione);
-        //element.setPadding(new Insets(10));
-        element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white;");
+        // VBox che contiene le informazioni del cuoco e durata
+        VBox detailsBox = new VBox(cuocoBox, infoBox);
+        detailsBox.setSpacing(5);
+
+        // Creazione dell'icona del like interattiva
+        ImageView likeIcon = new ImageView(new Image(getClass().getResourceAsStream("/like_icon.jpg")));
+        likeIcon.setFitHeight(24);
+        likeIcon.setFitWidth(24);
+        // Impostare il comportamento interattivo del like
+        likeIcon.setOnMouseClicked(event -> {
+            // Aggiungi il comportamento quando si clicca l'icona del like
+            System.out.println("Like cliccato per: " + ricettaBean.getTitolo());
+        });
+
+        // Impostazione della posizione dell'icona del like nell'angolo in alto a destra
+        StackPane likePane = new StackPane(likeIcon);
+        StackPane.setAlignment(likeIcon, Pos.TOP_RIGHT);
+
+        // Creazione della struttura principale
+        HBox mainContent = new HBox(img, detailsBox);
+        mainContent.setSpacing(10);
+
+        // Impostazione dell'elemento grafico
+        element.setTop(titleLabel);
+        element.setCenter(mainContent);
+        element.setRight(likePane);
+        element.setPadding(new Insets(10));
+        element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         return element;
     }
