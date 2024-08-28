@@ -1,8 +1,6 @@
 package com.iKitchen.model.bean;
 
 import java.sql.Blob;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 public class BeanIngrediente {

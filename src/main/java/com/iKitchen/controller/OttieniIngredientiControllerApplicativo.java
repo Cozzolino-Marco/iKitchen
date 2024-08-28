@@ -13,7 +13,7 @@ import java.util.Date;
 public class OttieniIngredientiControllerApplicativo {
 
     // Variabili
-    private RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO;
+    private final RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO;
 
     // Costruttore per inizializzare il DAO
     public OttieniIngredientiControllerApplicativo() {

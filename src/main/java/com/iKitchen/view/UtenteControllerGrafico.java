@@ -14,7 +14,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -29,12 +29,6 @@ import java.sql.SQLException;
 public class UtenteControllerGrafico {
 
     @FXML
-    private ListView<BorderPane> validItemsList;
-
-    @FXML
-    private ListView<BorderPane> nonValidItemsList;
-
-    @FXML
     private VBox elementContainerValidi; // Contenitore per gli ingredienti validi
 
     @FXML
@@ -42,6 +36,9 @@ public class UtenteControllerGrafico {
 
     // Variabili
     private OttieniIngredientiControllerApplicativo ingredienti = null;
+    public VBox mainContainer;
+    public ScrollPane scrollPaneValidi;
+    public ScrollPane scrollPaneNonValidi;
 
     // Metodo per caricare e mostrare gli ingredienti
     public void initialize() throws DAOException, SQLException {
@@ -79,7 +76,7 @@ public class UtenteControllerGrafico {
         BorderPane element = new BorderPane();
 
         // Creazione dell'immagine dell'ingrediente
-        HBox imgBox = new HBox();
+        HBox imgBox;
         if (ingrediente.getImmagine() != null) {
             try {
                 InputStream inputStream = ingrediente.getImmagine().getBinaryStream();
@@ -158,21 +155,6 @@ public class UtenteControllerGrafico {
         Scene scene;
 
         String fxmlFile = "/com/iKitchen/categorieView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void filtriView() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/filtriView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);

@@ -7,7 +7,7 @@ public class BeanIngredienti {
 
     // Variabili
     private String username;
-    private List<BeanIngrediente> listIngredienti;
+    private final List<BeanIngrediente> listIngredienti;
 
     // Costruttore bean per restituzione lista
     public BeanIngredienti() {
