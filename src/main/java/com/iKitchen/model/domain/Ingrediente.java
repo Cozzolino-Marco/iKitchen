@@ -1,5 +1,6 @@
 package com.iKitchen.model.domain;
 
+import java.sql.Blob;
 import java.util.Date;
 
 public class Ingrediente {
@@ -10,6 +11,7 @@ public class Ingrediente {
     private Date scadenza;
     private int quantita;
     private int limite;
+    transient Blob immagine;
 
     // Getter
     public String getCodIngrediente() {
@@ -27,6 +29,9 @@ public class Ingrediente {
     public int getLimite() {
         return limite;
     }
+    public Blob getImmagine() {
+        return immagine;
+    }
 
     // Setter
     public void setCodIngrediente(String codIngrediente) {
@@ -43,5 +48,8 @@ public class Ingrediente {
     }
     public void setLimite(int limite) {
         this.limite = limite;
+    }
+    public void setImmagine(Blob immagine) {
+        this.immagine = immagine;
     }
 }

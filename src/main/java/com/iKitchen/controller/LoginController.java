@@ -1,6 +1,7 @@
 package com.iKitchen.controller;
 
 import com.iKitchen.model.domain.ScreenSize;
+import com.iKitchen.view.UtenteControllerGrafico;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
-    public void start(CredentialsBean credB) throws DAOException, IOException {
+    public void start(CredentialsBean credB) throws DAOException, IOException, SQLException {
 
         Credentials cred= new Credentials(credB.getUsername(),credB.getPassword());
 

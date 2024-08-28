@@ -1,5 +1,6 @@
 package com.iKitchen.model.bean;
 
+import java.sql.Blob;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -12,21 +13,22 @@ public class BeanIngrediente {
     private Date scadenza;
     private int quantita;
     private int limite;
+    private Blob immagine;
 
     // Per mandare i dati dal controller grafico a quello applicativo
-    public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite) {
+    public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite, Blob immagine) {
 
         // Controllo della consistenza del nome
         if (nome.length() < 3) {
             throw new IllegalArgumentException("Non esiste un prodotto del genere! Inserire almeno 3 caratteri!");
         }
 
-        // Controllo sulla validita' della datan di scadenza del prodotto
+        /* Controllo sulla validita' della data di scadenza del prodotto
         LocalDate currentDate = LocalDate.now();
         java.util.Date currentDateAsDate =  java.util.Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         if (scadenza.before(currentDateAsDate)) {
             throw new IllegalArgumentException("La data inserita deve essere successiva alla data attuale!");
-        }
+        }*/
 
         // Controllo della consistenza del parametro quantita'
         if (quantita <= 0) {
@@ -44,6 +46,7 @@ public class BeanIngrediente {
         this.scadenza = scadenza;
         this.quantita = quantita;
         this.limite = limite;
+        this.immagine = immagine;
     }
 
     // Getter
@@ -61,5 +64,8 @@ public class BeanIngrediente {
     }
     public int getLimite() {
         return limite;
+    }
+    public Blob getImmagine() {
+        return immagine;
     }
 }

@@ -7,6 +7,7 @@ import com.iKitchen.controller.LoginController;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.CredentialsBean;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class LoginGrafico {
     @FXML
@@ -23,6 +24,8 @@ public class LoginGrafico {
             loginController.start(credB);
         } catch (DAOException | IOException e) {
             throw new IllegalArgumentException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

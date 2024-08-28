@@ -317,8 +317,7 @@ public class OttieniRicettaControllerGrafico {
 
         } catch (DAOException | SQLException e) {
             e.printStackTrace();
-            // Gestisci l'errore (ad esempio, mostrando un messaggio di errore all'utente)
-            popupContent.getChildren().add(new Label("Errore nel caricamento dei dettagli della ricetta."));
+            popupContent.getChildren().add(new Label("Errore nel caricamento dei dettagli della ricetta"));
             Scene popupScene = new Scene(popupContent, ScreenSize.POPUP_WIDTH_GUI1, ScreenSize.POPUP_HEIGHT_GUI1);
             popupStage.setScene(popupScene);
             popupStage.show();

@@ -34,7 +34,7 @@ public class OttieniDettagliRicettaDAO {
                 ResultSet rs = cs.getResultSet();
                 FactoryRicetta factoryRicetta = new FactoryRicetta();
 
-                // Itera attraverso il ResultSet e popola la lista di ricette
+                // Popola la ricetta
                 if (rs.next()) {
                     ricetta = factoryRicetta.createRicetta(rs.getString("categoria"));
                     ricetta.setCodice(rs.getString("codRicetta"));

@@ -28,11 +28,9 @@ public class BeanRicette {
     public String getCategoria() {
         return categoria;
     }
-
     public String getProvenienza() {
         return provenienza;
     }
-
     public String getFiltraggio() {
         return filtraggio;
     }

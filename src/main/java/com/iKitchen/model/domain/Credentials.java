@@ -18,10 +18,10 @@ public class Credentials {
     }
 
     // Getter
-    public String getUsername() {
+    public static String getUsername() {
         return username;
     }
-    public String getPassword() {
+    public static String getPassword() {
         return password;
     }
     public Role getRole() {
