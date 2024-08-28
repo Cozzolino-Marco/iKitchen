@@ -6,6 +6,7 @@ import java.sql.Blob;
 public abstract class Ricetta implements Serializable {
 
     // Variabili
+    String codRicetta;
     String titolo;
     String descrizione;
     transient Blob immagine;
@@ -19,6 +20,9 @@ public abstract class Ricetta implements Serializable {
     int likes;
 
     // Getter
+    public String getCodice() {
+        return codRicetta;
+    }
     public String getTitolo() {
         return titolo;
     }
@@ -54,6 +58,9 @@ public abstract class Ricetta implements Serializable {
     }
 
     // Setter
+    public void setCodice(String codRicetta) {
+        this.codRicetta = codRicetta;
+    }
     public void setTitolo(String titolo) {
         this.titolo = titolo;
     }

@@ -5,12 +5,16 @@ import java.util.Date;
 public class Ingrediente {
 
     // Variabili
+    private String codIngrediente;
     private String nome;
     private Date scadenza;
     private int quantita;
     private int limite;
 
     // Getter
+    public String getCodIngrediente() {
+        return codIngrediente;
+    }
     public String getNome() {
         return nome;
     }
@@ -25,6 +29,9 @@ public class Ingrediente {
     }
 
     // Setter
+    public void setCodIngrediente(String codIngrediente) {
+        this.codIngrediente = codIngrediente;
+    }
     public void setNome(String nome) {
         this.nome = nome;
     }

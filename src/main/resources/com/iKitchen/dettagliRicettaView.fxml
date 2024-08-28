@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico">
+    <Label fx:id="titoloLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <ImageView fx:id="immagineView" fitWidth="200" fitHeight="200" preserveRatio="true" />
+    <Label fx:id="descrizioneLabel" wrapText="true" />
+    <Label text="Categoria:" />
+    <Label fx:id="categoriaLabel" />
+    <Label text="Provenienza:" />
+    <Label fx:id="provenienzaLabel" />
+    <Label text="Cuoco:" />
+    <Label fx:id="cuocoLabel" />
+    <Label text="Durata Preparazione:" />
+    <Label fx:id="durataLabel" />
+    <Label text="Calorie:" />
+    <Label fx:id="calorieLabel" />
+    <Label text="Ingredienti:" />
+    <Label fx:id="ingredientiLabel" wrapText="true" />
+    <Label text="Passaggi:" />
+    <Label fx:id="passaggiLabel" wrapText="true" />
+    <Label text="Video URL:" />
+    <Label fx:id="videoUrlLabel" wrapText="true" />
+    <Label text="Likes:" />
+    <Label fx:id="likesLabel" />
+</VBox>

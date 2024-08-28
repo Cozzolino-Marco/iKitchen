@@ -7,13 +7,14 @@ import java.util.Date;
 public class BeanIngrediente {
 
     // Variabili
+    private String codIngrediente;
     private String nome;
     private Date scadenza;
     private int quantita;
     private int limite;
 
     // Per mandare i dati dal controller grafico a quello applicativo
-    public BeanIngrediente (String nome, Date scadenza, int quantita, int limite) {
+    public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite) {
 
         // Controllo della consistenza del nome
         if (nome.length() < 3) {
@@ -36,9 +37,19 @@ public class BeanIngrediente {
         if (limite <= 0) {
             throw new IllegalArgumentException("La soglia limite deve essere almeno positiva!");
         }
+
+        // Assegnazioni
+        this.codIngrediente = codIngrediente;
+        this.nome = nome;
+        this.scadenza = scadenza;
+        this.quantita = quantita;
+        this.limite = limite;
     }
 
     // Getter
+    public String getCodIngrediente() {
+        return codIngrediente;
+    }
     public String getNome() {
         return nome;
     }

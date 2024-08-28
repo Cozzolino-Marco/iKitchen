@@ -8,6 +8,7 @@ import java.util.List;
 public class BeanRicetta {
 
     // Variabili
+    String codRicetta;
     String titolo;
     String descrizione;
     Blob immagine;
@@ -21,8 +22,8 @@ public class BeanRicetta {
     String videoUrl;
     int likes;
 
-    // Per mandare i dati dal controller grafico a quello applicativo
-    public BeanRicetta (String titolo, String descrizione, Blob immagine, String categoria, String provenienza, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
+    // Passaggio di dati completo per la visualizzazione della ricetta in dettaglio
+    public BeanRicetta (String codRicetta, String titolo, String descrizione, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
@@ -40,10 +41,10 @@ public class BeanRicetta {
             throw new IllegalArgumentException("La categoria non è valida! Le categorie valide sono: " + categorieValide);
         }
 
-        // Controllo sulla correttezza del campo provenienza
+        /* Controllo sulla correttezza del campo provenienza
         if (!provenienza.equals("Da chef") && !provenienza.equals("Dal web")) {
             throw new IllegalArgumentException("La provenienza deve essere 'da chef' oppure 'dal web'!");
-        }
+        }*/
 
         // Controllo sulla correttezza del campo durata preparazione
         if (durataPreparazione < 1) {
@@ -61,11 +62,11 @@ public class BeanRicetta {
         }
 
         // Assegnazioni
+        this.codRicetta = codRicetta;
         this.titolo = titolo;
         this.descrizione = descrizione;
         this.immagine = immagine;
         this.categoria = categoria;
-        this.provenienza = provenienza;
         this.cuoco = cuoco;
         this.durataPreparazione = durataPreparazione;
         this.calorie = calorie;
@@ -75,8 +76,8 @@ public class BeanRicetta {
         this.likes = likes;
     }
 
-    // Per mandare i dati dal controller applicativo a quello grafico
-    public BeanRicetta (String titolo, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie) {
+    // Passaggio di dati parziale per la visualizzazione delle info base delle ricette
+    public BeanRicetta (String codRicetta, String titolo, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
@@ -100,6 +101,7 @@ public class BeanRicetta {
         }
 
         // Assegnazioni
+        this.codRicetta = codRicetta;
         this.titolo = titolo;
         this.immagine = immagine;
         this.categoria = categoria;
@@ -108,23 +110,10 @@ public class BeanRicetta {
         this.calorie = calorie;
     }
 
-    /* Per mandare i dati dal controller applicativo a quello grafico
-    public BeanRicetta (String titolo, String descrizione, Blob immagine, String categoria, String provenienza, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.immagine = immagine;
-        this.categoria = categoria;
-        this.provenienza = provenienza;
-        this.cuoco = cuoco;
-        this.durataPreparazione = durataPreparazione;
-        this.calorie = calorie;
-        this.ingredienti = ingredienti;
-        this.passaggi = passaggi;
-        this.videoUrl = videoUrl;
-        this.likes = likes;
-    }*/
-
     // Getter
+    public String getCodice() {
+        return codRicetta;
+    }
     public String getTitolo() {
         return titolo;
     }

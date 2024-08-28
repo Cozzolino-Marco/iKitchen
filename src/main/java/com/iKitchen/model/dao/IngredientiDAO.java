@@ -28,6 +28,7 @@ public class IngredientiDAO {
                 // Itera attraverso il ResultSet e popola la lista di ingredienti
                 while (rs.next()) {
                     Ingrediente ingrediente = new Ingrediente();
+                    ingrediente.setCodIngrediente(rs.getString("codIngrediente"));
                     ingrediente.setNome(rs.getString("nome"));
                     ingrediente.setScadenza(rs.getDate("scadenza"));
                     ingrediente.setQuantita(rs.getInt("quantita"));

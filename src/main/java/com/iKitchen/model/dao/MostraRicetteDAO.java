@@ -37,6 +37,7 @@ public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
                 // Itera attraverso il ResultSet e popola la lista di ricette
                 while (rs.next()) {
                     Ricetta ricetta = factoryRicetta.createRicetta(rs.getString("categoria"));
+                    ricetta.setCodice(rs.getString("codRicetta"));
                     ricetta.setTitolo(rs.getString("titolo"));
                     ricetta.setImmagine(rs.getBlob("immagine"));
                     ricetta.setCuoco(rs.getString("cuoco"));
