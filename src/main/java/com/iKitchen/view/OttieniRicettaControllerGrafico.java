@@ -4,15 +4,19 @@ import com.iKitchen.controller.OttieniRicettaControllerApplicativo;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
+import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
+import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.domain.ScreenSize;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -26,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class OttieniRicettaControllerGrafico {
 
@@ -41,6 +46,9 @@ public class OttieniRicettaControllerGrafico {
 
     @FXML
     private ComboBox filtraggioComboBox;
+
+    @FXML
+    private Label titoloLabel;
 
     @FXML
     private VBox elementContainer; // Contenitore per gli elementi delle ricette
@@ -154,7 +162,7 @@ public class OttieniRicettaControllerGrafico {
         BorderPane element = new BorderPane();
 
         // Creazione dell'immagine del piatto
-        HBox imgBox = new HBox();
+        HBox imgBox;
         if (ricettaBean.getImmagine() != null) {
             try {
                 InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
@@ -305,8 +313,25 @@ public class OttieniRicettaControllerGrafico {
             Label videoUrl = new Label("Video: " + dettagliRicetta.getVideoUrl());
             Label likes = new Label("Likes: " + dettagliRicetta.getLikes());
 
+            // Pulsante per confermare l'uso della ricetta
+            AtomicReference<HBox> msg1 = null;
+            AtomicReference<HBox> msg2 = null;
+            CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
+            Button confirmButton = new Button("Usa ricetta");
+            EventHandler confirmHandler = (confirmEvent) -> {
+                try {
+                    ricetta.usaRicetta(usernameBean, ricettaBean);
+                    msg1.set(new HBox(new Text("La ricetta è stata usata con successo!")));
+                    //Utils.showNotify("La ricetta è stata usata con successo!");
+                } catch (DAOException | SQLException e) {
+                    msg2.set(new HBox(new Text("Errore durante l'uso della ricetta.")));
+                    //Utils.showErrorPopup("Errore durante l'uso della ricetta.");
+                }
+            };
+            confirmButton.setOnAction(confirmHandler);
+
             // Aggiungi gli elementi al layout
-            popupContent.getChildren().addAll(titolo, descrizione, cuoco, calorie, durata, ingredienti, passaggi, videoUrl, likes);
+            popupContent.getChildren().addAll(titolo, descrizione, cuoco, calorie, durata, ingredienti, passaggi, videoUrl, likes, confirmButton);
 
             // Imposta il layout come scena del popup
             Scene popupScene = new Scene(popupContent, ScreenSize.POPUP_WIDTH_GUI1, ScreenSize.POPUP_HEIGHT_GUI1);
@@ -384,4 +409,9 @@ public class OttieniRicettaControllerGrafico {
         stage.setScene(scene);
         stage.show();
     }
+
+    public Label getLabelTitolo() {
+        return this.titoloLabel;
+    }
+
 }

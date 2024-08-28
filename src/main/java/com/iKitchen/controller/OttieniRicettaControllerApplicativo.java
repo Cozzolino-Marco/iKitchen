@@ -3,6 +3,7 @@ package com.iKitchen.controller;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
+import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.*;
 import java.sql.SQLException;
 
@@ -17,44 +18,6 @@ public class OttieniRicettaControllerApplicativo {
     public OttieniRicettaControllerApplicativo(){
         facadeOttieniRicetta = new FacadeOttieniRicetta();
     }
-
-    /*public boolean verificaQuantita(Beanutente beanutente, BeanRicetta beanRicetta) throws DAOException, SQLException {
-
-        // Estraggo le informazioni dal bean
-        String username = beanRicetta.getUsername();
-
-        // Recupera la lista degli ingredienti richiesti dalla ricetta
-        ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti();
-
-        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO)
-        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
-
-        // Itera attraverso gli ingredienti della ricetta
-        for (Ingrediente ingredienteRichiesto : ingredientiRicetta.getListaIngredienti()) {
-            boolean ingredienteTrovato = false;
-
-            // Cerca l'ingrediente richiesto nella dispensa dell'utente
-            for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
-                if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
-                    ingredienteTrovato = true;
-
-                    // Verifica se la quantità è sufficiente
-                    if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita()) {
-                        // Quantità non sufficiente, restituisci false
-                        return false;
-                    }
-                }
-            }
-
-            // Se l'ingrediente non è stato trovato nella dispensa, restituisci false
-            if (!ingredienteTrovato) {
-                return false;
-            }
-        }
-
-        // Se tutti gli ingredienti sono sufficienti, restituisci true
-        return true;
-    }*/
 
     // Restituisce la lista di ricette in base ai filtri scelti
     public BeanRicette mostraRicette(BeanRicette infoPerListaRicette) throws DAOException, SQLException {
@@ -112,6 +75,44 @@ public class OttieniRicettaControllerApplicativo {
         return beanRicetta;
     }
 
-    /*public void usaRicetta(BeanRicetta beanRicetta) throws DAOException, SQLException {
-    }*/
+    public boolean usaRicetta(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
+
+        // Estraggo le informazioni dal bean
+        String username = credentials.getUsername();
+
+        // Recupera la lista degli ingredienti richiesti dalla ricetta
+        ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti();
+
+        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO)
+        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
+
+        // Itera attraverso gli ingredienti della ricetta
+        for (Ingrediente ingredienteRichiesto : ingredientiRicetta.getListaIngredienti()) {
+            boolean ingredienteTrovato = false;
+
+            // Cerca l'ingrediente richiesto nella dispensa dell'utente
+            for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
+                if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
+                    ingredienteTrovato = true;
+
+                    // Verifica se la quantità è sufficiente
+                    if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita()) {
+                        // Quantità non sufficiente, restituisci false
+                        return false;
+                    }
+
+                    // Se necessario, puoi sottrarre la quantità utilizzata dall'ingrediente nella dispensa
+                    ingredienteDispensa.setQuantita(ingredienteDispensa.getQuantita() - ingredienteRichiesto.getQuantita());
+                }
+            }
+
+            // Se l'ingrediente non è stato trovato nella dispensa, restituisci false
+            if (!ingredienteTrovato) {
+                return false;
+            }
+        }
+
+        // Se tutti gli ingredienti sono sufficienti, restituisci true
+        return true;
+    }
 }

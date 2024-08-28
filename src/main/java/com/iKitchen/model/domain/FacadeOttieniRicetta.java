@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class FacadeOttieniRicetta {
 
-    /* Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
+    // Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
     public ListIngredienti ottieniIngredientiDispensaUtente(String username) throws DAOException, SQLException {
 
         // Istanzia il DAO per recuperare gli ingredienti della dispensa
@@ -19,7 +19,7 @@ public class FacadeOttieniRicetta {
         ListIngredienti listProdottiDispensa = recuperaIngredientiDispensaDAO.execute(username);
 
         return listProdottiDispensa;
-    }*/
+    }
 
     // Metodo per mostrare le ricette
     public ListRicette mostraRicette(String categoria, String provenienza, String filtro) throws DAOException, SQLException {
