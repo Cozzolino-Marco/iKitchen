@@ -57,7 +57,7 @@ public class OttieniRicettaControllerApplicativo {
         // Uso il facade per centralizzare i DAO delle procedure
         ricetta = facadeOttieniRicetta.ottieniDettagliRicetta(codRicetta, categoria);
 
-        // Creo un nuovo bean per restituire la ricetta alla vista
+        // Creo un nuovo bean completo per restituire la ricetta alla vista
         BeanRicetta beanRicetta = new BeanRicetta(
                 ricetta.getCodice(),
                 ricetta.getTitolo(),
@@ -81,13 +81,14 @@ public class OttieniRicettaControllerApplicativo {
         String username = credentials.getUsername();
 
         // Recupera la lista degli ingredienti richiesti dalla ricetta
-        ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti();
+        //ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti();
+        //ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti().getListaIngredienti();
 
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO)
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
 
         // Itera attraverso gli ingredienti della ricetta
-        for (Ingrediente ingredienteRichiesto : ingredientiRicetta.getListaIngredienti()) {
+        for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
             boolean ingredienteTrovato = false;
 
             // Cerca l'ingrediente richiesto nella dispensa dell'utente
@@ -97,8 +98,9 @@ public class OttieniRicettaControllerApplicativo {
 
                     // Verifica se la quantità è sufficiente
                     if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita()) {
-                        // Quantità non sufficiente, restituisci false
                         return false;
+                    } else {
+                        //facadeOttieniRicetta.usaRicetta(); // Usa il facade per chiamata DAO per aggiornamento quantità
                     }
 
                     // Se necessario, puoi sottrarre la quantità utilizzata dall'ingrediente nella dispensa

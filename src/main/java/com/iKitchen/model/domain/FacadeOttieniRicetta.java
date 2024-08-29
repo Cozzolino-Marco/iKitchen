@@ -4,6 +4,7 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.dao.MostraRicetteDAO;
 import com.iKitchen.model.dao.OttieniDettagliRicettaDAO;
 import com.iKitchen.model.dao.RecuperaIngredientiDispensaDAO;
+import com.iKitchen.model.dao.UsaRicettaDAO;
 
 import java.sql.SQLException;
 
@@ -43,5 +44,15 @@ public class FacadeOttieniRicetta {
         Ricetta ricetta = ottieniDettagliRicettaDAO.execute(codRicetta, categoria);
 
         return ricetta;
+    }
+
+    // Metodo per mostrare una ricetta specifica
+    public void usaRicetta() throws DAOException, SQLException {
+
+        // Istanzia il DAO per mostrare la lista di ricette filtrate
+        UsaRicettaDAO usaRicettaDAO = new UsaRicettaDAO();
+
+        // Eseguo la query usando il DAO e ottengo il risultato
+        usaRicettaDAO.execute();
     }
 }

@@ -314,17 +314,18 @@ public class OttieniRicettaControllerGrafico {
             Label likes = new Label("Likes: " + dettagliRicetta.getLikes());
 
             // Pulsante per confermare l'uso della ricetta
-            AtomicReference<HBox> msg1 = null;
-            AtomicReference<HBox> msg2 = null;
+            //final HBox[] msg1 = new HBox[1];
+            //AtomicReference<HBox> msg2 = null;
             CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
             Button confirmButton = new Button("Usa ricetta");
             EventHandler confirmHandler = (confirmEvent) -> {
                 try {
-                    ricetta.usaRicetta(usernameBean, ricettaBean);
-                    msg1.set(new HBox(new Text("La ricetta è stata usata con successo!")));
+                    boolean result = ricetta.usaRicetta(usernameBean, dettagliRicetta);
+                    System.out.println(result);
+                    //msg1[0] = new HBox(new Text("La ricetta è stata usata con successo!"));
                     //Utils.showNotify("La ricetta è stata usata con successo!");
                 } catch (DAOException | SQLException e) {
-                    msg2.set(new HBox(new Text("Errore durante l'uso della ricetta.")));
+                    //msg2.set(new HBox(new Text("Errore durante l'uso della ricetta.")));
                     //Utils.showErrorPopup("Errore durante l'uso della ricetta.");
                 }
             };
@@ -413,5 +414,4 @@ public class OttieniRicettaControllerGrafico {
     public Label getLabelTitolo() {
         return this.titoloLabel;
     }
-
 }

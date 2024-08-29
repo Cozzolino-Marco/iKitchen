@@ -31,7 +31,7 @@ public class IngredientiDAO {
                     ingrediente.setCodIngrediente(rs.getString("codIngrediente"));
                     ingrediente.setNome(rs.getString("nome"));
                     ingrediente.setScadenza(rs.getDate("scadenza"));
-                    ingrediente.setQuantita(rs.getInt("quantita"));
+                    ingrediente.setQuantita(rs.getInt("quantitaRichiesta"));
                     ingrediente.setLimite(rs.getInt("limite"));
                     listIngredienti.addIngrediente(ingrediente);
                 }
