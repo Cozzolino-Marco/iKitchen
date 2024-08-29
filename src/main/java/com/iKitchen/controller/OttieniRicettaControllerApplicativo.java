@@ -1,6 +1,7 @@
 package com.iKitchen.controller;
 
 import com.iKitchen.exception.DAOException;
+import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
 import com.iKitchen.model.bean.CredentialsBean;
@@ -15,7 +16,7 @@ public class OttieniRicettaControllerApplicativo {
     Ricetta ricetta;
 
     // Gestione pattern Facade
-    public OttieniRicettaControllerApplicativo(){
+    public OttieniRicettaControllerApplicativo() {
         facadeOttieniRicetta = new FacadeOttieniRicetta();
     }
 
@@ -80,11 +81,7 @@ public class OttieniRicettaControllerApplicativo {
         // Estraggo le informazioni dal bean
         String username = credentials.getUsername();
 
-        // Recupera la lista degli ingredienti richiesti dalla ricetta
-        //ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti();
-        //ListIngredienti ingredientiRicetta = beanRicetta.getIngredienti().getListaIngredienti();
-
-        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO)
+        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO con il facade)
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
 
         // Itera attraverso gli ingredienti della ricetta
@@ -99,12 +96,8 @@ public class OttieniRicettaControllerApplicativo {
                     // Verifica se la quantità è sufficiente
                     if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita()) {
                         return false;
-                    } else {
-                        //facadeOttieniRicetta.usaRicetta(); // Usa il facade per chiamata DAO per aggiornamento quantità
                     }
-
-                    // Se necessario, puoi sottrarre la quantità utilizzata dall'ingrediente nella dispensa
-                    ingredienteDispensa.setQuantita(ingredienteDispensa.getQuantita() - ingredienteRichiesto.getQuantita());
+                    break;  // Esci dal loop interno poiché l'ingrediente è stato trovato
                 }
             }
 
@@ -114,7 +107,14 @@ public class OttieniRicettaControllerApplicativo {
             }
         }
 
-        // Se tutti gli ingredienti sono sufficienti, restituisci true
-        return true;
+        // Se tutti gli ingredienti sono sufficienti, aggiorna le quantità richiamando il DAO con il facade
+        boolean result = facadeOttieniRicetta.usaRicetta(beanRicetta.getCodice());
+
+        // Se la query è andata a buon fine allora restituisci true, altrmenti false
+        if (result == true) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

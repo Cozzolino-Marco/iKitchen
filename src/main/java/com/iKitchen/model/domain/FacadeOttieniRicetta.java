@@ -37,7 +37,7 @@ public class FacadeOttieniRicetta {
     // Metodo per mostrare una ricetta specifica
     public Ricetta ottieniDettagliRicetta(String codRicetta, String categoria) throws DAOException, SQLException {
 
-        // Istanzia il DAO per mostrare la lista di ricette filtrate
+        // Istanzia il DAO per mostrare i dettagli della ricetta
         OttieniDettagliRicettaDAO ottieniDettagliRicettaDAO = new OttieniDettagliRicettaDAO();
 
         // Eseguo la query usando il DAO e ottengo il risultato
@@ -46,13 +46,15 @@ public class FacadeOttieniRicetta {
         return ricetta;
     }
 
-    // Metodo per mostrare una ricetta specifica
-    public void usaRicetta() throws DAOException, SQLException {
+    // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta
+    public boolean usaRicetta(String codRicetta) throws DAOException, SQLException {
 
-        // Istanzia il DAO per mostrare la lista di ricette filtrate
+        // Istanzia il DAO per aggiornamento quantità
         UsaRicettaDAO usaRicettaDAO = new UsaRicettaDAO();
 
         // Eseguo la query usando il DAO e ottengo il risultato
-        usaRicettaDAO.execute();
+        boolean result = usaRicettaDAO.execute(codRicetta);
+
+        return result;
     }
 }

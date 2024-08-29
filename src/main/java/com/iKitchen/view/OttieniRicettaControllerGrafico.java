@@ -8,7 +8,8 @@ import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
-import com.iKitchen.model.domain.ScreenSize;
+import com.iKitchen.model.utility.Popup;
+import com.iKitchen.model.utility.ScreenSize;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class OttieniRicettaControllerGrafico {
 
@@ -314,19 +314,18 @@ public class OttieniRicettaControllerGrafico {
             Label likes = new Label("Likes: " + dettagliRicetta.getLikes());
 
             // Pulsante per confermare l'uso della ricetta
-            //final HBox[] msg1 = new HBox[1];
-            //AtomicReference<HBox> msg2 = null;
             CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
             Button confirmButton = new Button("Usa ricetta");
             EventHandler confirmHandler = (confirmEvent) -> {
                 try {
                     boolean result = ricetta.usaRicetta(usernameBean, dettagliRicetta);
-                    System.out.println(result);
-                    //msg1[0] = new HBox(new Text("La ricetta è stata usata con successo!"));
-                    //Utils.showNotify("La ricetta è stata usata con successo!");
+                    if (result) {
+                        Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!");
+                    } else {
+                        Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.");
+                    }
                 } catch (DAOException | SQLException e) {
-                    //msg2.set(new HBox(new Text("Errore durante l'uso della ricetta.")));
-                    //Utils.showErrorPopup("Errore durante l'uso della ricetta.");
+                    Popup.mostraPopup("Errore", "Errore durante l'uso della ricetta: " + e.getMessage());
                 }
             };
             confirmButton.setOnAction(confirmHandler);

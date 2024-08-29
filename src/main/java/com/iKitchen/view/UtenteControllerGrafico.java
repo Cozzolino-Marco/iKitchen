@@ -7,7 +7,7 @@ import com.iKitchen.model.bean.BeanIngredienti;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
-import com.iKitchen.model.domain.ScreenSize;
+import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;

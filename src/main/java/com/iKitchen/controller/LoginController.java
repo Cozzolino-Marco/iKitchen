@@ -1,7 +1,6 @@
 package com.iKitchen.controller;
 
-import com.iKitchen.model.domain.ScreenSize;
-import com.iKitchen.view.UtenteControllerGrafico;
+import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

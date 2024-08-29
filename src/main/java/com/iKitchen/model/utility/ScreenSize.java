@@ -1,4 +1,4 @@
-package com.iKitchen.model.domain;
+package com.iKitchen.model.utility;
 
 public class ScreenSize {
 

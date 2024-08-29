@@ -9,4 +9,6 @@ module com.example.ikitchen {
     exports com.iKitchen.view;
     exports com.iKitchen.model.domain;
     opens com.iKitchen.model.domain to javafx.fxml;
+    exports com.iKitchen.model.utility;
+    opens com.iKitchen.model.utility to javafx.fxml;
 }
