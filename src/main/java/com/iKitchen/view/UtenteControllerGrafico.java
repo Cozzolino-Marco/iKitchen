@@ -20,11 +20,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class UtenteControllerGrafico {
 
@@ -77,44 +78,92 @@ public class UtenteControllerGrafico {
 
         // Creazione dell'immagine dell'ingrediente
         HBox imgBox;
-        if (ingrediente.getImmagine() != null) {
-            try {
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(65);
+
+        // Imposta l'immagine
+        try {
+            if (ingrediente.getImmagine() != null) {
                 InputStream inputStream = ingrediente.getImmagine().getBinaryStream();
                 if (inputStream != null) {
-                    Image image = new Image(inputStream, 100, 100, true, true);
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(70);
-                    imageView.setFitWidth(65);
-
-                    // Creazione di un Rectangle per angoli arrotondati delle immagini
-                    Rectangle clip = new Rectangle(65, 70);
-                    clip.setArcWidth(15);
-                    clip.setArcHeight(15);
-                    imageView.setClip(clip);
-
-                    imgBox = new HBox(imageView);
+                    Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
+                    imageView.setImage(image);
                 } else {
-                    imgBox = new HBox(new Text("Immagine non presente"));
+                    // Carica immagine di default
+                    Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+                    imageView.setImage(defaultImage);
                 }
-            } catch (SQLException e) {
-                imgBox = new HBox(new Text("Immagine non presente"));
+            } else {
+                // Carica immagine di default
+                Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+                imageView.setImage(defaultImage);
             }
-        } else {
-            imgBox = new HBox(new Text("Immagine non presente"));
+        } catch (SQLException e) {
+            // Carica immagine di default
+            Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+            imageView.setImage(defaultImage);
         }
 
-        // Creazione del titolo dell'ingrediente
+        // Creazione di un Rectangle per angoli arrotondati delle immagini
+        Rectangle clip = new Rectangle(65, 70);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        imageView.setClip(clip);
+
+        // Impostazione dello stile dell'immagine
+        imageView.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 15;");
+
+        imgBox = new HBox(imageView);
+
+        // Creazione del titolo dell'ingrediente e icone
         Label titleLabel = new Label(ingrediente.getNome());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
+        // Icone matita e cestino
+        ImageView pencilIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil_icon.png")));
+        pencilIcon.setFitHeight(20);
+        pencilIcon.setFitWidth(20);
+
+        ImageView trashIcon = new ImageView(new Image(getClass().getResourceAsStream("/trash_icon.png")));
+        trashIcon.setFitHeight(20);
+        trashIcon.setFitWidth(20);
+
+        // Creazione di un AnchorPane per gestire la posizione delle icone
+        AnchorPane iconsAnchorPane = new AnchorPane();
+        iconsAnchorPane.getChildren().addAll(pencilIcon, trashIcon);
+
+        // Posizionamento delle icone all'interno dell'AnchorPane con uno spazio tra di esse
+        AnchorPane.setTopAnchor(pencilIcon, 0.0);
+        AnchorPane.setRightAnchor(pencilIcon, 25.0); // Spazio tra matita e cestino
+
+        AnchorPane.setTopAnchor(trashIcon, 0.0);
+        AnchorPane.setRightAnchor(trashIcon, 0.0); // Posizione del cestino vicino al bordo
+
+        // StackPane per contenere le icone
+        StackPane editingIcons = new StackPane(iconsAnchorPane);
+        StackPane.setAlignment(editingIcons, Pos.TOP_RIGHT);
+
+        // Combina titolo e icone in un unico HBox
+        HBox titleAndIconsBox = new HBox(titleLabel, editingIcons);
+        titleAndIconsBox.setSpacing(10); // Spazio tra il titolo e le icone
+        titleAndIconsBox.setAlignment(Pos.CENTER_LEFT);
+
         // Dettagli dell'ingrediente (quantità e scadenza)
-        Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita());
+        Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " g");
         quantitaLabel.setStyle("-fx-font-size: 12px;");
-        Label scadenzaLabel = new Label("Scadenza: " + ingrediente.getScadenza());
+
+        // Formattazione della data di scadenza
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
+        String formattedDate = "";
+        if (ingrediente.getScadenza() != null) {
+            formattedDate = sdf.format(ingrediente.getScadenza());
+        }
+        Label scadenzaLabel = new Label("Scadenza: " + formattedDate);
         scadenzaLabel.setStyle("-fx-font-size: 12px;");
 
         // VBox per contenere i dettagli dell'ingrediente
-        VBox detailsBox = new VBox(titleLabel, quantitaLabel, scadenzaLabel);
+        VBox detailsBox = new VBox(titleAndIconsBox, quantitaLabel, scadenzaLabel);
         detailsBox.setSpacing(5);
         detailsBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -122,9 +171,11 @@ public class UtenteControllerGrafico {
         HBox mainContent = new HBox(imgBox, detailsBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
+        mainContent.setPadding(new Insets(5)); // Padding per distanziare l'elemento dal bordo del BorderPane
 
         // Impostazione dell'elemento grafico
         element.setCenter(mainContent);
+        element.setRight(editingIcons);
         element.setPadding(new Insets(10));
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 

@@ -1,7 +1,6 @@
 package com.iKitchen.controller;
 
 import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
 import com.iKitchen.model.bean.CredentialsBean;
