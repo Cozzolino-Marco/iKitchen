@@ -15,11 +15,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,17 +39,46 @@ public class UtenteControllerGrafico {
     @FXML
     private VBox elementContainerNonValidi; // Contenitore per gli ingredienti non validi
 
+    @FXML
+    private TabPane tabPane;
+
+    @FXML
+    private Tab tabValidi;
+
+    @FXML
+    private Tab tabNonValidi;
+
     // Variabili
     private OttieniIngredientiControllerApplicativo ingredienti = null;
     public VBox mainContainer;
     public ScrollPane scrollPaneValidi;
     public ScrollPane scrollPaneNonValidi;
 
-    // Metodo per caricare e mostrare gli ingredienti
+    // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
         if (elementContainerValidi != null) {
             caricaIngredienti(Credentials.getUsername());
         }
+
+        // Centrare il TabPane orizzontalmente
+        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
+        tabPane.setTabMinWidth(130); // Larghezza minima dei tab
+        tabPane.setTabMaxWidth(150); // Larghezza massima dei tab
+
+        // Configurazione del TabPane
+        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
+
+        // Configurazione dei Tab
+        configureTab(tabValidi, "#00A5A5", "#8ee8e4"); // Colori per i tab "Validi"
+        configureTab(tabNonValidi, "#00A5A5", "#8ee8e4"); // Colori per i tab "Non validi"
+
+        // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            updateTabStyles();
+        });
+
+        // Imposta lo stile iniziale
+        updateTabStyles();
     }
 
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
@@ -114,6 +147,7 @@ public class UtenteControllerGrafico {
         // Impostazione dello stile dell'immagine
         imageView.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 15;");
 
+        // Predisposizione immagine
         imgBox = new HBox(imageView);
 
         // Creazione del titolo dell'ingrediente e icone
@@ -124,7 +158,6 @@ public class UtenteControllerGrafico {
         ImageView pencilIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil_icon.png")));
         pencilIcon.setFitHeight(20);
         pencilIcon.setFitWidth(20);
-
         ImageView trashIcon = new ImageView(new Image(getClass().getResourceAsStream("/trash_icon.png")));
         trashIcon.setFitHeight(20);
         trashIcon.setFitWidth(20);
@@ -136,7 +169,6 @@ public class UtenteControllerGrafico {
         // Posizionamento delle icone all'interno dell'AnchorPane con uno spazio tra di esse
         AnchorPane.setTopAnchor(pencilIcon, 0.0);
         AnchorPane.setRightAnchor(pencilIcon, 25.0); // Spazio tra matita e cestino
-
         AnchorPane.setTopAnchor(trashIcon, 0.0);
         AnchorPane.setRightAnchor(trashIcon, 0.0); // Posizione del cestino vicino al bordo
 
@@ -149,7 +181,7 @@ public class UtenteControllerGrafico {
         titleAndIconsBox.setSpacing(10); // Spazio tra il titolo e le icone
         titleAndIconsBox.setAlignment(Pos.CENTER_LEFT);
 
-        // Dettagli dell'ingrediente (quantità e scadenza)
+        // Dettagli dell'ingrediente (quantità)
         Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " g");
         quantitaLabel.setStyle("-fx-font-size: 12px;");
 
@@ -243,5 +275,34 @@ public class UtenteControllerGrafico {
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // Metodo per configurare lo stile base dei tab
+    private void configureTab(Tab tab, String unselectedColor, String selectedColor) {
+        // Usa solo stili di base che sono applicabili direttamente
+        tab.setStyle("-fx-background-color: " + unselectedColor + ";"
+                + "-fx-text-fill: white;"
+                + "-fx-border-radius: 10px;"
+                + "-fx-background-radius: 10px;");
+    }
+
+    // Metodo per aggiornare gli stili dei tab in base alla selezione
+    private void updateTabStyles() {
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+
+        // Aggiorna gli stili dei tab
+        for (Tab tab : tabPane.getTabs()) {
+            if (tab.equals(selectedTab)) {
+                tab.setStyle("-fx-background-color: #8ee8e4;" // Colore per il tab selezionato
+                        + "-fx-text-fill: white;"
+                        + "-fx-border-radius: 10px;"
+                        + "-fx-background-radius: 10px;");
+            } else {
+                tab.setStyle("-fx-background-color: #00A5A5;" // Colore per i tab non selezionati
+                        + "-fx-text-fill: white;"
+                        + "-fx-border-radius: 10px;"
+                        + "-fx-background-radius: 10px;");
+            }
+        }
     }
 }

@@ -36,8 +36,8 @@
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>
 
-            <TabPane tabClosingPolicy="UNAVAILABLE" prefWidth="500.0">
-                <Tab text="Validi">
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" prefWidth="500.0">
+                <Tab fx:id="tabValidi" text="Validi">
                     <!-- ScrollPane per Ingredienti Validi -->
                     <VBox spacing="10.0">
                         <ScrollPane fx:id="scrollPaneValidi" fitToWidth="true" fitToHeight="true">
@@ -45,7 +45,7 @@
                         </ScrollPane>
                     </VBox>
                 </Tab>
-                <Tab text="Non validi">
+                <Tab fx:id="tabNonValidi" text="Non validi">
                     <!-- ScrollPane per Ingredienti Non Validi -->
                     <VBox spacing="10.0">
                         <ScrollPane fx:id="scrollPaneNonValidi" fitToWidth="true" fitToHeight="true">
