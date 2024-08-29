@@ -47,7 +47,6 @@
             <Button text="🏠" onAction="#homePageUtente"/>
             <Button text="🌍" onAction="#categorieView"/>
             <Button text="❤" onAction="#preferitiView"/>
-            <Button text="➕" onAction="#aggiungiProdotto"/>
         </HBox>
     </bottom>
 

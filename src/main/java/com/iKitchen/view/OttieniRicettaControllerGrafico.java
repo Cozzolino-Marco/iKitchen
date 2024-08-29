@@ -17,14 +17,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -52,6 +50,9 @@ public class OttieniRicettaControllerGrafico {
 
     @FXML
     private VBox elementContainer; // Contenitore per gli elementi delle ricette
+
+    @FXML
+    private ScrollPane scrollPane;
 
     // Variabili
     private OttieniRicettaControllerApplicativo ricette = null;
@@ -92,23 +93,31 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     public void filtriView() throws IOException {
 
+        // Ottieni la categoria selezionata dall'utente
         String categoriaScelta = categoriaListView.getSelectionModel().getSelectedItem();
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
+        // Controlla se l'utente ha selezionato una categoria
+        if (categoriaScelta == null) {
+            // Mostra un popup di errore se la categoria non è stata selezionata
+            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
+        } else {
+            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
 
-        String fxmlFile = "/com/iKitchen/filtriView.fxml";
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+            String fxmlFile = "/com/iKitchen/filtriView.fxml";
+            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
-        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-        controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
 
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
+            stage.setTitle("iKitchen");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
@@ -123,10 +132,21 @@ public class OttieniRicettaControllerGrafico {
         // Ottieni la lista delle ricette dal controller applicativo
         BeanRicette listaRicette = ricette.mostraRicette(infoPerListaRicette);
 
-        // Ciclo che itera la creazione di un elemento ricetta per la lista ricette
-        for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
-            BorderPane element = createElement(beanRicetta);
-            elementContainer.getChildren().add(element);
+        // Trova il BorderPane principale (root) della view
+        BorderPane root = (BorderPane) scrollPane.getParent().getParent();
+
+        // Se la lista è vuota, mostra il messaggio relativo
+        if (listaRicette.getListRicette().isEmpty()) {
+            Label emptyMessage = new Label("La lista è vuota!");
+            emptyMessage.setFont(new Font("System Bold", 20));
+            emptyMessage.setStyle("-fx-text-fill: grey;");
+            root.setCenter(emptyMessage);
+        } else {
+            // Ciclo che itera la creazione di un elemento ricetta per la lista ricette
+            for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
+                BorderPane element = createElement(beanRicetta);
+                elementContainer.getChildren().add(element);
+            }
         }
     }
 
@@ -134,27 +154,32 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     protected void mostraRicette() throws DAOException, SQLException, IOException {
 
-        String categoriaScelta = this.categoriaScelta;
+        if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null) {
+            // Mostra un avviso se uno dei campi non è stato selezionato
+            Popup.mostraPopup("Attenzione", "Si prega di selezionare entrambe le opzioni prima di procedere!", "error");
+        } else {
+            String categoriaScelta = this.categoriaScelta;
 
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
 
-        String fxmlFile = "/com/iKitchen/elencoRicetteView.fxml";
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+            String fxmlFile = "/com/iKitchen/elencoRicetteView.fxml";
+            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
-        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-        controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata
-        controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
-        controller.setProvenienza(provenienzaComboBox.getValue().toString()); // Passa la provenienza selezionata
-        controller.setFiltraggio(filtraggioComboBox.getValue().toString()); // Passa la filtraggio selezionata
-        controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString());
+            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+            controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata
+            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+            controller.setProvenienza(provenienzaComboBox.getValue().toString()); // Passa la provenienza selezionata
+            controller.setFiltraggio(filtraggioComboBox.getValue().toString()); // Passa la filtraggio selezionata
+            controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString());
 
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
+            stage.setTitle("iKitchen");
+            stage.setScene(scene);
+            stage.show();
+        }
     }
 
     // Gestione grafica di un elemento ricetta
@@ -318,14 +343,10 @@ public class OttieniRicettaControllerGrafico {
             Button confirmButton = new Button("Usa ricetta");
             EventHandler confirmHandler = (confirmEvent) -> {
                 try {
-                    boolean result = ricetta.usaRicetta(usernameBean, dettagliRicetta);
-                    if (result) {
-                        Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
-                    } else {
-                        Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
-                    }
+                    ricetta.usaRicetta(usernameBean, dettagliRicetta);
+                    Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
                 } catch (DAOException | SQLException e) {
-                    Popup.mostraPopup("Errore", "Errore durante l'uso della ricetta: " + e.getMessage(), "error");
+                    Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
                 }
             };
             confirmButton.setOnAction(confirmHandler);

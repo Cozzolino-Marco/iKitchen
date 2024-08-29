@@ -6,6 +6,7 @@ import com.iKitchen.model.bean.BeanRicette;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.*;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class OttieniRicettaControllerApplicativo {
 
@@ -75,13 +76,16 @@ public class OttieniRicettaControllerApplicativo {
         return beanRicetta;
     }
 
-    public boolean usaRicetta(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
+    public void usaRicetta(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
 
         // Estraggo le informazioni dal bean
         String username = credentials.getUsername();
 
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO con il facade)
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
+
+        // Ottieni la data corrente
+        Date currentDate = new Date();
 
         // Itera attraverso gli ingredienti della ricetta
         for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
@@ -92,28 +96,21 @@ public class OttieniRicettaControllerApplicativo {
                 if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
                     ingredienteTrovato = true;
 
-                    // Verifica se la quantità è sufficiente
-                    if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita()) {
-                        return false;
+                    // Verifica se la quantità è insufficiente oppure se è scaduto
+                    if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita() || ingredienteDispensa.getScadenza().before(currentDate)) {
+                        throw new IllegalArgumentException("La quantità è insufficiente oppure è scaduto!");
                     }
                     break;  // Esci dal loop interno poiché l'ingrediente è stato trovato
                 }
             }
 
-            // Se l'ingrediente non è stato trovato nella dispensa, restituisci false
+            // Se l'ingrediente non è stato trovato nella dispensa allora lancia l'eccezione
             if (!ingredienteTrovato) {
-                return false;
+                throw new IllegalArgumentException("L'ingrediente non è stato trovato nella dispensa!");
             }
         }
 
         // Se tutti gli ingredienti sono sufficienti, aggiorna le quantità richiamando il DAO con il facade
-        boolean result = facadeOttieniRicetta.usaRicetta(beanRicetta.getCodice());
-
-        // Se la query è andata a buon fine allora restituisci true, altrmenti false
-        if (result == true) {
-            return true;
-        } else {
-            return false;
-        }
+        facadeOttieniRicetta.usaRicetta(beanRicetta.getCodice());
     }
 }

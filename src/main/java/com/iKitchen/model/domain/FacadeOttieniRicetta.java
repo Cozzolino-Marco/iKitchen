@@ -47,14 +47,12 @@ public class FacadeOttieniRicetta {
     }
 
     // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta
-    public boolean usaRicetta(String codRicetta) throws DAOException, SQLException {
+    public void usaRicetta(String codRicetta) throws DAOException, SQLException {
 
         // Istanzia il DAO per aggiornamento quantità
         UsaRicettaDAO usaRicettaDAO = new UsaRicettaDAO();
 
-        // Eseguo la query usando il DAO e ottengo il risultato
-        boolean result = usaRicettaDAO.execute(codRicetta);
-
-        return result;
+        // Eseguo la query usando il DAO
+        usaRicettaDAO.execute(codRicetta);
     }
 }

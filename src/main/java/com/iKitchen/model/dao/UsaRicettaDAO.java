@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class UsaRicettaDAO {
 
-    public boolean execute(Object... params) throws DAOException, SQLException {
+    public void execute(Object... params) throws DAOException, SQLException {
 
         // Parametri
         CallableStatement cs = null;
@@ -26,10 +26,8 @@ public class UsaRicettaDAO {
             boolean valoreRestituito = cs.getBoolean(2);
 
             // Gestione restituzione del valore di ritorno
-            if(valoreRestituito == true) {
-                return true;
-            } else {
-                return false;
+            if(valoreRestituito == false) {
+                throw new IllegalArgumentException("Errore query!");
             }
 
         } catch (SQLException e) {

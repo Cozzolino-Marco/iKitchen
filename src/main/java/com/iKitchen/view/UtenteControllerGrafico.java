@@ -21,15 +21,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Objects;
 
 public class UtenteControllerGrafico {
 
@@ -69,13 +68,11 @@ public class UtenteControllerGrafico {
         tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
 
         // Configurazione dei Tab
-        configureTab(tabValidi, "#00A5A5", "#8ee8e4"); // Colori per i tab "Validi"
-        configureTab(tabNonValidi, "#00A5A5", "#8ee8e4"); // Colori per i tab "Non validi"
+        configureTab(tabValidi); // Colori per i tab "Validi"
+        configureTab(tabNonValidi); // Colori per i tab "Non validi"
 
         // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            updateTabStyles();
-        });
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> updateTabStyles());
 
         // Imposta lo stile iniziale
         updateTabStyles();
@@ -124,17 +121,17 @@ public class UtenteControllerGrafico {
                     imageView.setImage(image);
                 } else {
                     // Carica immagine di default
-                    Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+                    Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
                     imageView.setImage(defaultImage);
                 }
             } else {
                 // Carica immagine di default
-                Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+                Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
                 imageView.setImage(defaultImage);
             }
         } catch (SQLException e) {
             // Carica immagine di default
-            Image defaultImage = new Image(getClass().getResourceAsStream("/default_image.png"), 100, 100, true, true);
+            Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
             imageView.setImage(defaultImage);
         }
 
@@ -155,10 +152,10 @@ public class UtenteControllerGrafico {
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         // Icone matita e cestino
-        ImageView pencilIcon = new ImageView(new Image(getClass().getResourceAsStream("/pencil_icon.png")));
+        ImageView pencilIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pencil_icon.png"))));
         pencilIcon.setFitHeight(20);
         pencilIcon.setFitWidth(20);
-        ImageView trashIcon = new ImageView(new Image(getClass().getResourceAsStream("/trash_icon.png")));
+        ImageView trashIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/trash_icon.png"))));
         trashIcon.setFitHeight(20);
         trashIcon.setFitWidth(20);
 
@@ -278,9 +275,9 @@ public class UtenteControllerGrafico {
     }
 
     // Metodo per configurare lo stile base dei tab
-    private void configureTab(Tab tab, String unselectedColor, String selectedColor) {
+    private void configureTab(Tab tab) {
         // Usa solo stili di base che sono applicabili direttamente
-        tab.setStyle("-fx-background-color: " + unselectedColor + ";"
+        tab.setStyle("-fx-background-color: " + "#00A5A5" + ";"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"
                 + "-fx-background-radius: 10px;");
