@@ -320,12 +320,12 @@ public class OttieniRicettaControllerGrafico {
                 try {
                     boolean result = ricetta.usaRicetta(usernameBean, dettagliRicetta);
                     if (result) {
-                        Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!");
+                        Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
                     } else {
-                        Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.");
+                        Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
                     }
                 } catch (DAOException | SQLException e) {
-                    Popup.mostraPopup("Errore", "Errore durante l'uso della ricetta: " + e.getMessage());
+                    Popup.mostraPopup("Errore", "Errore durante l'uso della ricetta: " + e.getMessage(), "error");
                 }
             };
             confirmButton.setOnAction(confirmHandler);
