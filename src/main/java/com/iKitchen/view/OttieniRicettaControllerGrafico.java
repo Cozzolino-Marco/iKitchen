@@ -72,7 +72,7 @@ public class OttieniRicettaControllerGrafico {
         if (elementContainer != null) {
             try {
                 caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta);
-            } catch (DAOException | SQLException e) {
+            } catch (DAOException | SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -98,7 +98,7 @@ public class OttieniRicettaControllerGrafico {
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
-    private void caricaRicette(String categoria, String provenienza, String filtraggio) throws DAOException, SQLException {
+    private void caricaRicette(String categoria, String provenienza, String filtraggio) throws DAOException, SQLException, IOException {
 
         // Crea un bean con le informazioni selezionate
         BeanRicette infoPerListaRicette = new BeanRicette(categoria, provenienza, filtraggio);
@@ -145,7 +145,7 @@ public class OttieniRicettaControllerGrafico {
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
             OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-            controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata
+            controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata al titolo
             controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
             controller.setProvenienza(provenienzaComboBox.getValue().toString()); // Passa la provenienza selezionata
             controller.setFiltraggio(filtraggioComboBox.getValue().toString()); // Passa la filtraggio selezionata

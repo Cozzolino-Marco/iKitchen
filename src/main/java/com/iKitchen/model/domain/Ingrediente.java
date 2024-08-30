@@ -13,6 +13,14 @@ public class Ingrediente {
     private int limite;
     transient Blob immagine;
 
+    // Costruttore di default vuoto
+    public Ingrediente() {}
+
+    // Costruttore utile al metodo scrapeRecipe
+    public Ingrediente(String nome) {
+        this.nome = nome;
+    }
+
     // Getter
     public String getCodIngrediente() {
         return codIngrediente;

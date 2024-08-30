@@ -19,6 +19,32 @@ public abstract class Ricetta implements Serializable {
     String videoUrl;
     int likes;
 
+    // Costruttore di default vuoto
+    public Ricetta() {}
+
+    // Costruttore utile al metodo scrapeRecipe
+    public Ricetta(String titolo, String descrizione, String cuoco, String calorie, String durataPreparazione, ListIngredienti ingredienti, String passaggi) {
+        this.titolo = titolo;
+        this.descrizione = descrizione;
+        this.cuoco = cuoco;
+
+        // Gestione dei valori vuoti o non validi
+        try {
+            this.calorie = calorie.isEmpty() ? 0 : Integer.parseInt(calorie);
+        } catch (NumberFormatException e) {
+            this.calorie = 0; // Imposta un valore di default o gestisci l'errore
+        }
+
+        try {
+            this.durataPreparazione = durataPreparazione.isEmpty() ? 0 : Integer.parseInt(durataPreparazione);
+        } catch (NumberFormatException e) {
+            this.durataPreparazione = 0; // Imposta un valore di default o gestisci l'errore
+        }
+
+        this.ingredienti = ingredienti;
+        this.passaggi = passaggi;
+    }
+
     // Getter
     public String getCodice() {
         return codRicetta;

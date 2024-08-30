@@ -2,6 +2,7 @@ module com.example.ikitchen {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires org.jsoup;
 
     exports com.iKitchen;
     opens com.iKitchen to javafx.fxml;

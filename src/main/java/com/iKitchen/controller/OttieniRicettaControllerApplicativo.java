@@ -5,6 +5,9 @@ import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.*;
+import com.iKitchen.view.OttieniRicettaControllerGraficoAPI;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -21,12 +24,22 @@ public class OttieniRicettaControllerApplicativo {
     }
 
     // Restituisce la lista di ricette in base ai filtri scelti
-    public BeanRicette mostraRicette(BeanRicette infoPerListaRicette) throws DAOException, SQLException {
+    public BeanRicette mostraRicette(BeanRicette infoPerListaRicette) throws DAOException, SQLException, IOException {
 
         // Estraggo le informazioni dal bean
         String categoria = infoPerListaRicette.getCategoria();
         String provenienza = infoPerListaRicette.getProvenienza();
         String filtro = infoPerListaRicette.getFiltraggio();
+
+        if (provenienza.equals("Dal web")) {
+
+            // Chiamata alla boundary dell'attore esterno
+            OttieniRicettaControllerGraficoAPI controllerAttoreSecondario = new OttieniRicettaControllerGraficoAPI();
+            controllerAttoreSecondario.recuperaRicette();
+
+            /* Uso il facade per centralizzare i DAO delle procedure
+            listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro);*/
+        }
 
         // Uso il facade per centralizzare i DAO delle procedure
         listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro);
