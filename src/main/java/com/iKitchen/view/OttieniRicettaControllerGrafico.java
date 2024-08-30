@@ -10,9 +10,6 @@ import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +21,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -33,26 +29,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.util.Callback;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.Priority;
 
 public class OttieniRicettaControllerGrafico {
 
     // Elementi grafici
     @FXML
     private Label categoriaLabelTitle;
-
-    @FXML
-    private ListView<String> categoriesListView;
 
     @FXML
     private ComboBox provenienzaComboBox;
@@ -64,7 +52,7 @@ public class OttieniRicettaControllerGrafico {
     private Label titoloLabel;
 
     @FXML
-    private VBox elementContainer; // Contenitore per gli elementi delle ricette
+    private VBox elementContainer;
 
     @FXML
     private ScrollPane scrollPane;
@@ -84,9 +72,7 @@ public class OttieniRicettaControllerGrafico {
         if (elementContainer != null) {
             try {
                 caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta);
-            } catch (DAOException e) {
-                throw new RuntimeException(e);
-            } catch (SQLException e) {
+            } catch (DAOException | SQLException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -143,7 +129,7 @@ public class OttieniRicettaControllerGrafico {
 
     // Metodo che mostra le ricette caricate a livello grafico
     @FXML
-    protected void mostraRicette() throws DAOException, SQLException, IOException {
+    protected void mostraRicette() throws IOException {
 
         if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null) {
             // Mostra un avviso se uno dei campi non è stato selezionato
@@ -288,6 +274,7 @@ public class OttieniRicettaControllerGrafico {
         return element;
     }
 
+    // Metodo per mostrare la pagina dei dettagli della ricetta scelta
     private void mostraDettagliRicetta(BeanRicetta ricettaBean) {
         // Crea un nuovo Stage per il popup
         Stage popupStage = new Stage();
@@ -361,6 +348,7 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
+    // Metodo per mostrare la homepage utente
     public void homePageUtente() throws IOException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
@@ -376,6 +364,7 @@ public class OttieniRicettaControllerGrafico {
         stage.show();
     }
 
+    // Metodo per mostrare la pagina dei filtri
     @FXML
     public void filtriView() throws IOException {
 
@@ -406,6 +395,7 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
+    // Metodo per mostrare la pagina della scelta delle categorie
     public void categorieView() throws IOException {
 
         FXMLLoader fxmlLoader;
@@ -433,13 +423,13 @@ public class OttieniRicettaControllerGrafico {
 
         // Creare una LinkedHashMap per mantenere l'ordine di inserimento
         Map<String, String> categorieConImmagini = new LinkedHashMap<>();
-        categorieConImmagini.put("Colazione", "default_image.png");
-        categorieConImmagini.put("Pasto veloce", "default_image.png");
-        categorieConImmagini.put("Bevande", "default_image.png");
-        categorieConImmagini.put("Primi piatti", "default_image.png");
-        categorieConImmagini.put("Secondi piatti", "default_image.png");
-        categorieConImmagini.put("Contorni", "default_image.png");
-        categorieConImmagini.put("Dolci", "default_image.png");
+        categorieConImmagini.put("Colazione", "colazione.png");
+        categorieConImmagini.put("Pasto veloce", "pasto_veloce.png");
+        categorieConImmagini.put("Bevande", "bevande.png");
+        categorieConImmagini.put("Primi piatti", "primi_piatti.png");
+        categorieConImmagini.put("Secondi piatti", "secondi_piatti.png");
+        categorieConImmagini.put("Contorni", "contorni.png");
+        categorieConImmagini.put("Dolci", "dolci.png");
 
         for (Map.Entry<String, String> entry : categorieConImmagini.entrySet()) {
             String categoria = entry.getKey();
@@ -461,10 +451,13 @@ public class OttieniRicettaControllerGrafico {
             textLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
 
             // Creazione e aggiunta dell'immagine al bottone
-            ImageView categoriaImageView = new ImageView(new Image(getClass().getResourceAsStream("/" + immaginePath)));
-            categoriaImageView.setFitHeight(30);
-            categoriaImageView.setFitWidth(30);
-            categoriaImageView.setPreserveRatio(true);
+            ImageView categoriaImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + immaginePath))));
+
+            // Impostazione della dimensione fissa per l'immagine
+            final double fixedSize = 30;
+            categoriaImageView.setFitHeight(fixedSize);
+            categoriaImageView.setFitWidth(fixedSize);
+            categoriaImageView.setPreserveRatio(false);
 
             // Creare una maschera quadrata con angoli smussati per rendere l'immagine stondato
             Rectangle clip = new Rectangle(30, 30);
@@ -493,7 +486,7 @@ public class OttieniRicettaControllerGrafico {
             });
 
             // Stile del bottone con angoli stondati
-            categoriaButton.setStyle("-fx-background-color: #00A5A5; -fx-background-radius: 10;");
+            categoriaButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10;");
 
             // Aggiunta del bottone al contenitore con margini per centratura
             VBox.setMargin(categoriaButton, new Insets(7, 0, 7, 0));
@@ -505,6 +498,7 @@ public class OttieniRicettaControllerGrafico {
         categoriesContainer.setAlignment(Pos.CENTER);
     }
 
+    // Metodo per mostrare la pagina dei preferiti
     public void preferitiView() throws IOException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();

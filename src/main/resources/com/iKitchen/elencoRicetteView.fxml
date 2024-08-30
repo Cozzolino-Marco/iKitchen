@@ -44,8 +44,8 @@
     <!-- Barra di navigazione inferiore -->
     <bottom>
         <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
-            <Button text="🏠" onAction="#homePageUtente"/>
             <Button text="🌍" onAction="#categorieView"/>
+            <Button text="🏠" onAction="#homePageUtente"/>
             <Button text="❤" onAction="#preferitiView"/>
         </HBox>
     </bottom>
