@@ -2,55 +2,47 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico">
 
     <!-- Barra di navigazione superiore -->
-    <VBox prefWidth="500.0" spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
-            <Label text="Ottieni ricetta - Categorie" style="-fx-text-fill: white;">
-                <font>
-                    <Font name="System Bold" size="20.0"/>
-                </font>
-            </Label>
-        </HBox>
-    </VBox>
+    <top>
+        <VBox prefWidth="500.0" spacing="0.0" BorderPane.alignment="CENTER">
+            <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="50.0">
+                <Label text="Ottieni ricetta" style="-fx-text-fill: white;">
+                    <font>
+                        <Font name="System Bold" size="20.0"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
+    </top>
 
-    <!-- Sezione centrale con le categorie -->
-    <VBox spacing="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="60.0" AnchorPane.bottomAnchor="50.0">
-
-        <!-- Label per mostrare la categoria selezionata -->
-        <Label fx:id="categoria" text="Seleziona una categoria:"/>
-
-        <ListView fx:id="categoriaListView">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="Colazione"/>
-                    <String fx:value="Pasto veloce"/>
-                    <String fx:value="Bevande"/>
-                    <String fx:value="Primi piatti"/>
-                    <String fx:value="Secondi piatti"/>
-                    <String fx:value="Contorni"/>
-                    <String fx:value="Dolci"/>
-                </FXCollections>
-            </items>
-        </ListView>
-    </VBox>
+    <!-- Sezione centrale con i bottoni per le categorie -->
+    <center>
+        <VBox fx:id="categoriesContainer" spacing="10.0" BorderPane.alignment="CENTER">
+            <!-- I bottoni delle categorie verranno aggiunti dinamicamente -->
+            <VBox.margin>
+                <Insets top="20.0" bottom="20.0"/>
+            </VBox.margin>
+        </VBox>
+    </center>
 
     <!-- Barra di navigazione inferiore -->
-    <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
-        <Button text="⏪" onAction="#homePageUtente"/>
-        <Button text="🏠" onAction="#homePageUtente"/>
-        <Button text="⏩" onAction="#filtriView"/>
-    </HBox>
+    <bottom>
+        <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" prefHeight="50.0">
+            <Button text="⏪" onAction="#homePageUtente"/>
+            <Button text="🏠" onAction="#homePageUtente"/>
+            <Button text="⏩" onAction="#filtriView"/>
+        </HBox>
+    </bottom>
 
-</AnchorPane>
+</BorderPane>

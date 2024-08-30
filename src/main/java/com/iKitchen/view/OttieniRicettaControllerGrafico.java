@@ -10,6 +10,9 @@ import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -28,7 +32,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 
 public class OttieniRicettaControllerGrafico {
 
@@ -37,7 +52,7 @@ public class OttieniRicettaControllerGrafico {
     private Label categoriaLabelTitle;
 
     @FXML
-    private ListView<String> categoriaListView;
+    private ListView<String> categoriesListView;
 
     @FXML
     private ComboBox provenienzaComboBox;
@@ -53,6 +68,9 @@ public class OttieniRicettaControllerGrafico {
 
     @FXML
     private ScrollPane scrollPane;
+
+    @FXML
+    private VBox categoriesContainer;
 
     // Variabili
     private OttieniRicettaControllerApplicativo ricette = null;
@@ -72,6 +90,9 @@ public class OttieniRicettaControllerGrafico {
                 throw new RuntimeException(e);
             }
         }
+        if (categoriesContainer != null) {
+            loadCategories();
+        }
     }
 
     // Setta il titolo della categoria della barra di navigazione superiore
@@ -88,36 +109,6 @@ public class OttieniRicettaControllerGrafico {
     }
     public void setFiltraggio(String filtraggio) {
         this.filtraggioScelta = filtraggio;
-    }
-
-    @FXML
-    public void filtriView() throws IOException {
-
-        // Ottieni la categoria selezionata dall'utente
-        String categoriaScelta = categoriaListView.getSelectionModel().getSelectedItem();
-
-        // Controlla se l'utente ha selezionato una categoria
-        if (categoriaScelta == null) {
-            // Mostra un popup di errore se la categoria non è stata selezionata
-            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
-        } else {
-            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
-
-            String fxmlFile = "/com/iKitchen/filtriView.fxml";
-            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
-
-            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-            stage.setTitle("iKitchen");
-            stage.setScene(scene);
-            stage.show();
-        }
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
@@ -385,6 +376,36 @@ public class OttieniRicettaControllerGrafico {
         stage.show();
     }
 
+    @FXML
+    public void filtriView() throws IOException {
+
+        // Ottieni la categoria selezionata dall'utente
+        //String categoriaScelta = categoriesListView.getSelectionModel().getSelectedItem();
+
+        // Controlla se l'utente ha selezionato una categoria
+        if (categoriaScelta == null) {
+            // Mostra un popup di errore se la categoria non è stata selezionata
+            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
+        } else {
+            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
+
+            String fxmlFile = "/com/iKitchen/filtriView.fxml";
+            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+
+            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+            stage.setTitle("iKitchen");
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
+
     public void categorieView() throws IOException {
 
         FXMLLoader fxmlLoader;
@@ -394,11 +415,94 @@ public class OttieniRicettaControllerGrafico {
         String fxmlFile = "/com/iKitchen/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+        controller.initialize("", "", "");
+
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // Metodo per aggiornare dinamicamente i bottoni delle categorie
+    @FXML
+    public void loadCategories() {
+        categoriesContainer.getChildren().clear();
+
+        // Creare una LinkedHashMap per mantenere l'ordine di inserimento
+        Map<String, String> categorieConImmagini = new LinkedHashMap<>();
+        categorieConImmagini.put("Colazione", "default_image.png");
+        categorieConImmagini.put("Pasto veloce", "default_image.png");
+        categorieConImmagini.put("Bevande", "default_image.png");
+        categorieConImmagini.put("Primi piatti", "default_image.png");
+        categorieConImmagini.put("Secondi piatti", "default_image.png");
+        categorieConImmagini.put("Contorni", "default_image.png");
+        categorieConImmagini.put("Dolci", "default_image.png");
+
+        for (Map.Entry<String, String> entry : categorieConImmagini.entrySet()) {
+            String categoria = entry.getKey();
+            String immaginePath = entry.getValue();
+
+            // Creazione del bottone
+            Button categoriaButton = new Button();
+            categoriaButton.setPrefWidth(250);
+            categoriaButton.setMaxWidth(250);
+
+            // Creazione dell'HBox per contenere testo e immagine
+            HBox buttonContent = new HBox();
+            buttonContent.setAlignment(Pos.CENTER_LEFT);
+            buttonContent.setSpacing(10);
+            HBox.setHgrow(buttonContent, Priority.ALWAYS);
+
+            // Creazione e aggiunta del testo al bottone
+            Label textLabel = new Label(categoria);
+            textLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
+
+            // Creazione e aggiunta dell'immagine al bottone
+            ImageView categoriaImageView = new ImageView(new Image(getClass().getResourceAsStream("/" + immaginePath)));
+            categoriaImageView.setFitHeight(30);
+            categoriaImageView.setFitWidth(30);
+            categoriaImageView.setPreserveRatio(true);
+
+            // Creare una maschera quadrata con angoli smussati per rendere l'immagine stondato
+            Rectangle clip = new Rectangle(30, 30);
+            clip.setArcWidth(10);
+            clip.setArcHeight(10);
+            categoriaImageView.setClip(clip);
+
+            // Aggiunta di spazio tra il testo e l'immagine per allineare l'immagine a destra
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            // Aggiunta di testo, spazio e immagine all'HBox
+            buttonContent.getChildren().addAll(textLabel, spacer, categoriaImageView);
+
+            // Aggiunta dell'HBox al bottone
+            categoriaButton.setGraphic(buttonContent);
+
+            // Event handler del bottone
+            categoriaButton.setOnAction(event -> {
+                setCategoria(categoria);
+                try {
+                    filtriView();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            // Stile del bottone con angoli stondati
+            categoriaButton.setStyle("-fx-background-color: #00A5A5; -fx-background-radius: 10;");
+
+            // Aggiunta del bottone al contenitore con margini per centratura
+            VBox.setMargin(categoriaButton, new Insets(7, 0, 7, 0));
+            categoriesContainer.getChildren().add(categoriaButton);
+        }
+
+        // Impostazione di padding del VBox per distanziare il primo e ultimo bottone dalle barre di navigazione
+        categoriesContainer.setPadding(new Insets(20, 0, 20, 0));
+        categoriesContainer.setAlignment(Pos.CENTER);
     }
 
     public void preferitiView() throws IOException {

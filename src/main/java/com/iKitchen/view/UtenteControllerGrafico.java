@@ -14,14 +14,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.control.Label;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +29,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class UtenteControllerGrafico {
+
+    @FXML
+    private BorderPane root;
 
     @FXML
     private VBox elementContainerValidi; // Contenitore per gli ingredienti validi
@@ -47,11 +48,17 @@ public class UtenteControllerGrafico {
     @FXML
     private Tab tabNonValidi;
 
+    @FXML
+    public VBox mainContainer;
+
+    @FXML
+    public ScrollPane scrollPaneValidi;
+
+    @FXML
+    public ScrollPane scrollPaneNonValidi;
+
     // Variabili
     private OttieniIngredientiControllerApplicativo ingredienti = null;
-    public VBox mainContainer;
-    public ScrollPane scrollPaneValidi;
-    public ScrollPane scrollPaneNonValidi;
 
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
@@ -87,18 +94,42 @@ public class UtenteControllerGrafico {
         // Inizializza il controller applicativo per ottenere gli ingredienti
         ingredienti = new OttieniIngredientiControllerApplicativo();
 
-        // Ottieni la lista degli ingredienti validi dal controller applicativo
+        // Gestisci la visualizzazione degli ingredienti validi
         BeanIngredienti validi = ingredienti.mostraIngredientiValidi(infoPerListaIngredienti);
-        for (BeanIngrediente ingrediente : validi.getListIngredienti()) {
-            BorderPane element = createIngredientElement(ingrediente);
-            elementContainerValidi.getChildren().add(element);
+        if (validi.getListIngredienti().isEmpty()) {
+            // Mostra il messaggio se la lista degli ingredienti validi è vuota
+            Label emptyMessage = new Label("La lista è vuota!");
+            emptyMessage.setFont(new Font("System Bold", 20));
+            emptyMessage.setStyle("-fx-text-fill: grey;");
+            //elementContainerValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
+            elementContainerValidi.getChildren().add(emptyMessage);
+        } else {
+            // Aggiungi gli ingredienti validi al VBox
+            //elementContainerValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
+            for (BeanIngrediente ingrediente : validi.getListIngredienti()) {
+                BorderPane element = createIngredientElement(ingrediente);
+                elementContainerValidi.getChildren().add(element);
+            }
         }
 
-        // Ottieni la lista degli ingredienti non validi dal controller applicativo
+        // Gestisci la visualizzazione degli ingredienti non validi
         BeanIngredienti nonValidi = ingredienti.mostraIngredientiNonValidi(infoPerListaIngredienti);
-        for (BeanIngrediente ingrediente : nonValidi.getListIngredienti()) {
-            BorderPane element = createIngredientElement(ingrediente);
-            elementContainerNonValidi.getChildren().add(element);
+        //BorderPane root = (BorderPane) scrollPaneNonValidi.getParent().getParent().getParent().getParent().getParent();
+        if (nonValidi.getListIngredienti().isEmpty()) {
+            // Mostra il messaggio se la lista degli ingredienti non validi è vuota
+            Label emptyMessage = new Label("La lista è vuota!");
+            emptyMessage.setFont(new Font("System Bold", 20));
+            emptyMessage.setStyle("-fx-text-fill: grey;");
+            //elementContainerNonValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
+            //root.setCenter(emptyMessage);
+
+        } else {
+            // Aggiungi gli ingredienti non validi al VBox
+            //elementContainerNonValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
+            for (BeanIngrediente ingrediente : nonValidi.getListIngredienti()) {
+                BorderPane element = createIngredientElement(ingrediente);
+                elementContainerNonValidi.getChildren().add(element);
+            }
         }
     }
 
@@ -237,6 +268,10 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+        controller.initialize("", "", "");
+
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
