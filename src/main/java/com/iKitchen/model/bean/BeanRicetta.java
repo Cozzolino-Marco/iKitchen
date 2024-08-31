@@ -31,8 +31,8 @@ public class BeanRicetta {
         }
 
         // Controllo sulla lunghezza del campo descrizione
-        if (descrizione.length() <= 20) {
-            throw new IllegalArgumentException("La lunghezza della descrizione deve essere maggiore di 20 caratteri!");
+        if (descrizione.length() <= 10) {
+            throw new IllegalArgumentException("La lunghezza della descrizione deve essere maggiore di 10 caratteri!");
         }
 
         // Controllo sulla correttezza del campo categoria
@@ -47,8 +47,8 @@ public class BeanRicetta {
         }*/
 
         // Controllo sulla correttezza del campo durata preparazione
-        if (durataPreparazione < 1) {
-            throw new IllegalArgumentException("La durata della preparazione deve essere di almeno 1 minuto!");
+        if (durataPreparazione < 0) {
+            throw new IllegalArgumentException("La durata della preparazione non può essere negativa!");
         }
 
         // Controllo sulla correttezza del campo calorie

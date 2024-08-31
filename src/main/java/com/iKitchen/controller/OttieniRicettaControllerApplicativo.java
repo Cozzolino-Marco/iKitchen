@@ -35,7 +35,7 @@ public class OttieniRicettaControllerApplicativo {
 
             // Chiamata alla boundary dell'attore esterno
             OttieniRicettaControllerGraficoAPI controllerAttoreSecondario = new OttieniRicettaControllerGraficoAPI();
-            controllerAttoreSecondario.recuperaRicette();
+            controllerAttoreSecondario.recuperaRicette(infoPerListaRicette);
 
             /* Uso il facade per centralizzare i DAO delle procedure
             listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro);*/

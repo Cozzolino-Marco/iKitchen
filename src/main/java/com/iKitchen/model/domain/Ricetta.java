@@ -18,31 +18,31 @@ public abstract class Ricetta implements Serializable {
     String passaggi;
     String videoUrl;
     int likes;
+    String linkRicetta;
 
     // Costruttore di default vuoto
     public Ricetta() {}
 
     // Costruttore utile al metodo scrapeRecipe
-    public Ricetta(String titolo, String descrizione, String cuoco, String calorie, String durataPreparazione, ListIngredienti ingredienti, String passaggi) {
+    public Ricetta(String titolo, String cuoco, int durataPreparazione, String calorie, String linkRicetta) {
         this.titolo = titolo;
-        this.descrizione = descrizione;
         this.cuoco = cuoco;
+        this.durataPreparazione = durataPreparazione;
+        this.linkRicetta = linkRicetta;
 
-        // Gestione dei valori vuoti o non validi
+        /* Gestione dei valori vuoti o non validi per la durata della preparazione
+        try {
+            this.durataPreparazione = durataPreparazione.isEmpty() ? 0 : Integer.parseInt(durataPreparazione);
+        } catch (NumberFormatException e) {
+            this.durataPreparazione = 0; // Imposta un valore di default o gestisci l'errore
+        }*/
+
+        // Gestione dei valori vuoti o non validi per le calorie
         try {
             this.calorie = calorie.isEmpty() ? 0 : Integer.parseInt(calorie);
         } catch (NumberFormatException e) {
             this.calorie = 0; // Imposta un valore di default o gestisci l'errore
         }
-
-        try {
-            this.durataPreparazione = durataPreparazione.isEmpty() ? 0 : Integer.parseInt(durataPreparazione);
-        } catch (NumberFormatException e) {
-            this.durataPreparazione = 0; // Imposta un valore di default o gestisci l'errore
-        }
-
-        this.ingredienti = ingredienti;
-        this.passaggi = passaggi;
     }
 
     // Getter
@@ -82,6 +82,9 @@ public abstract class Ricetta implements Serializable {
     public int getLikes() {
         return likes;
     }
+    public String getLinkRicetta() {
+        return linkRicetta;
+    }
 
     // Setter
     public void setCodice(String codRicetta) {
@@ -119,6 +122,9 @@ public abstract class Ricetta implements Serializable {
     }
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+    public void setLinkRicetta(String linkRicetta) {
+        this.linkRicetta = linkRicetta;
     }
 
     // Realizzazione
