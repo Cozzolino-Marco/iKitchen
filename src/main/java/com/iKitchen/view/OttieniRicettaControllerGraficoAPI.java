@@ -2,31 +2,22 @@ package com.iKitchen.view;
 
 import com.iKitchen.model.bean.BeanRicetta;
 import com.iKitchen.model.bean.BeanRicette;
-import com.iKitchen.model.domain.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.sql.Blob;
+import java.sql.SQLException;
+import javax.sql.rowset.serial.SerialBlob;
 
 public class OttieniRicettaControllerGraficoAPI {
 
-    public void recuperaRicette(BeanRicette infoPerListaRicette) throws IOException {
+    public BeanRicette recuperaRicette(BeanRicette infoPerListaRicette) throws IOException, SQLException {
 
         // Estraggo le informazioni dal bean
         String categoria = infoPerListaRicette.getCategoria();
-
-        /* Informazione codificata per la richiesta in internet
-        String categoriaEncoded = requestEncode(categoria);*/
-
-        // URL a cui eseguire la richiesta GET
-        //String url = String.valueOf(new URL("https://ricette.giallozafferano.it/" + categoria + "/" + titoloRicettaEncoded + ".html"));
-        //String url = String.valueOf(new URL("https://ricette.giallozafferano.it/" + titoloRicettaEncoded + ".html")); // Per una ricetta particolare dal titolo
-        String url = String.valueOf(new URL("https://www.giallozafferano.it/ricette-cat/" + categoria + "/"));
+        String url = generateUrl(categoria);
 
         // Apertura di connessione
         Document doc = Jsoup.connect(url).get();
@@ -34,29 +25,25 @@ public class OttieniRicettaControllerGraficoAPI {
         // Controllo se la pagina è vuota o non contiene i dati attesi
         if (doc == null) {
             // TODO: Eccezione
-        } else {
-            ListRicette resultListRicette = scrapeRicette(doc, categoria);
-
-            // Logica per salvare o gestire il risultato
-            if (resultListRicette != null) {
-                //System.out.println("Ricetta trovata: " + resultListRicette.getTitolo());
-            } else {
-                System.out.println("Ricette non trovata.");
-            }
         }
+
+        BeanRicette resultListRicette = scrapeRicette(doc);
+        return resultListRicette;
     }
 
-    public ListRicette scrapeRicette(Document doc, String categoria) throws IOException {
+    // Metodo per il web scraping delle ricette
+    public BeanRicette scrapeRicette(Document doc) throws IOException, SQLException {
 
         BeanRicette ricetteBean = new BeanRicette();
-        BeanRicetta beanRicetta = new BeanRicetta();
-        ListRicette listRicette = new ListRicette();
 
         // Seleziona tutti gli articoli delle ricette
         Elements articoliRicette = doc.select("article.gz-card.gz-card-horizontal.gz-mBottom3x");
 
         // Itera su ciascun articolo per estrarre il titolo e altre informazioni
         for (Element articolo : articoliRicette) {
+
+            // Crea una nuova istanza di BeanRicetta per ogni ricetta
+            BeanRicetta beanRicetta = new BeanRicetta();
 
             // Estrai il titolo della ricetta dal web
             String titolo = articolo.select("h2.gz-title a").text();
@@ -67,88 +54,79 @@ public class OttieniRicettaControllerGraficoAPI {
             // Apri la pagina della ricetta per ottenere ulteriori dettagli
             Document docRicetta = Jsoup.connect(linkRicetta).get();
 
-            // Estrai dati per preparazione e cottura dal web
+            // Estrai dati per preparazione e cottura dal web e li imposta a 0 in caso di null
             String preparazione = docRicetta.select("span.gz-name-featured-data strong").get(1).text();
+            preparazione = (preparazione != null) ? preparazione : "0";
             String cottura = docRicetta.select("span.gz-name-featured-data strong").get(2).text();
+            cottura = (cottura != null) ? cottura : "0";
 
             // Prendi solo i numeri dalle stringhe e convertili in interi
-            int preparazioneMinuti = Integer.parseInt(preparazione.replaceAll("\\D", ""));
-            int cotturaMinuti = Integer.parseInt(cottura.replaceAll("\\D", ""));
+            int preparazioneMinuti = parseStringToInt(preparazione);
+            int cotturaMinuti = parseStringToInt(cottura);
 
             // Somma dei minuti di preparazione e cottura
             int durataPreparazioneTotale = preparazioneMinuti + cotturaMinuti;
 
-            // Estrai le calorie dal web e trasformale in intero
-            String calorieRecuperate = docRicetta.select("div.gz-text-calories-total").first().text();
-            calorieRecuperate = (calorieRecuperate != null && !calorieRecuperate.isEmpty()) ? calorieRecuperate : "0";
-            int calorie = Integer.parseInt(calorieRecuperate);
+            // Estrai le calorie dal web
+            Element calorieElement = docRicetta.select("div.gz-text-calories-total").first();
+            String calorieRecuperate = calorieElement != null ? calorieElement.text().replaceAll("\\D", "") : "";
+            int calorie = !calorieRecuperate.isEmpty() ? Integer.parseInt(calorieRecuperate) : 0;
 
-            // Estrai l'immagine della ricetta dal web
-            Blob immagine = docRicetta.select("div.qualcosa");
+            // Estrai l'immagine della ricetta dal web e fai le conversioni opportune
+            Element immagineElement = docRicetta.select("div.gz-content-recipe.gz-mBottom4x img").first();
+            String urlImmagine = immagineElement.attr("src");
+            byte[] immagineTemp = Jsoup.connect(urlImmagine).ignoreContentType(true).execute().bodyAsBytes();
+            Blob immagine = new SerialBlob(immagineTemp);
 
-            // Controlla se i campi estratti sono nulli e assegna "TBA" se lo sono
-            titolo = (titolo != null && !titolo.isEmpty()) ? titolo : "TBA";
-            linkRicetta = (linkRicetta != null && !linkRicetta.isEmpty()) ? linkRicetta : "TBA";
-            durataPreparazioneTotale = (durataPreparazioneTotale != 0) ? durataPreparazioneTotale : 0;
-
-            // Dichiarazioni ed instanziazioni
-            FactoryRicetta factoryRicetta = new FactoryRicetta();
-            Ricetta ricetta = factoryRicetta.createRicetta(categoria);
-
-            // Costruzione del bean da restituire al controller applicativo
-            ricetta.setTitolo(titolo);
-            ricetta.setCuoco("Giallo Zafferano");
-            ricetta.setDurataPreparazione(durataPreparazioneTotale);
-            ricetta.setCalorie(calorie);
-            ricetta.setImmagine(immagine);
-            ricetta.setLinkRicetta(linkRicetta);
-            listRicette.addRicetta(ricetta);
-
-            // Testing
-            System.out.println("Ricetta trovata: " + ricetta.getTitolo());
-            System.out.println("Link alla ricetta: " + linkRicetta);
-            System.out.println("Durata: " + ricetta.getDurataPreparazione());
-            System.out.println("Calorie: " + ricetta.getCalorie());
-            System.out.println();
+            // Costruzione del bean ricetta da restituire alla funzione principale
+            beanRicetta.setTitolo(titolo);
+            beanRicetta.setCuoco("Giallo Zafferano");
+            beanRicetta.setDurataPreparazione(durataPreparazioneTotale);
+            beanRicetta.setCalorie(calorie);
+            beanRicetta.setImmagine(immagine);
+            beanRicetta.setLinkRicetta(linkRicetta);
+            ricetteBean.addRicetta(beanRicetta);
         }
-        return listRicette;
+        return ricetteBean;
     }
 
-    /*public Ricetta scrapeListRecipe(Document doc) throws IOException {
+    // Metodo che trasforma la categoria passata in base a quelle presenti sul sito web
+    public String generateUrl(String categoria) {
 
-        String titolo = doc.select("h1.gz-title-recipe.gz-mBottom2x").text();
-        String descrizione = doc.select("span.gz-name-featured-data").text();
-        String chef = doc.select("span.chef").text();
-        String calorie = doc.select("span.gz-text-calories-total").text();
-        String durataPreparazione = doc.select("span.gz-name-featured-data").text();
+        String url;
 
-        // Raccogli gli ingredienti e i passaggi in una lista
-        Elements ingredientiElements = doc.select("ul.ingredients li");
-        Elements passaggiElements = doc.select("ol.steps li");
-
-        ListIngredienti ingredientiList = new ListIngredienti();
-        for (Element ing : ingredientiElements) {
-            Ingrediente ingrediente = new Ingrediente(ing.text());
-            ingredientiList.addIngrediente(ingrediente);
+        switch (categoria) {
+            case "Colazione":
+                url = "https://www.giallozafferano.it/ricerca-ricette/colazione/";
+                break;
+            case "Pasto veloce":
+                url = "https://www.giallozafferano.it/ricerca-ricette/panini/";
+                break;
+            case "Bevande":
+                url = "https://www.giallozafferano.it/ricette-cat/Bevande/";
+                break;
+            case "Primi piatti":
+                url = "https://www.giallozafferano.it/ricette-cat/Primi/";
+                break;
+            case "Secondi piatti":
+                url = "https://www.giallozafferano.it/ricette-cat/Secondi-piatti/";
+                break;
+            case "Contorni":
+                url = "https://www.giallozafferano.it/ricerca-ricette/contorni/";
+                break;
+            case "Dolci":
+                url = "https://www.giallozafferano.it/ricette-cat/Dolci-e-Desserts/";
+                break;
+            default:
+                url = "Categoria non riconosciuta";
+                break;
         }
+        return url;
+    }
 
-        StringBuilder passaggi = new StringBuilder();
-        for (Element step : passaggiElements) {
-            passaggi.append(step.text()).append("\n");
-        }
-
-        // Crea un oggetto Ricetta con i dati estratti
-        Ricetta ricetta = new Ricetta(titolo, descrizione, chef, calorie, durataPreparazione, ingredientiList, passaggi.toString()) {
-            @Override
-            public String getCategoria() {
-                return null;
-            }
-        };
-        return ricetta;
-    }*/
-
-    private String requestEncode(String value) throws UnsupportedEncodingException {
-        String encoded = URLEncoder.encode(value, StandardCharsets.UTF_8.toString()); // Encoding standard
-        return encoded.replace("+", "-"); // Sostituzione dei "+" con "-"
+    // Metodo per convertire stringa a intero gestendo i casi di stringa vuota
+    private int parseStringToInt(String str) {
+        String numeriSolo = str.replaceAll("\\D", "");
+        return numeriSolo.isEmpty() ? 0 : Integer.parseInt(numeriSolo);
     }
 }

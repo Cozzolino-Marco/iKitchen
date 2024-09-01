@@ -182,13 +182,13 @@ public class OttieniRicettaControllerGrafico {
 
                     imgBox = new HBox(imageView);
                 } else {
-                    imgBox = new HBox(new Text("Immagine non presente"));
+                    imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
                 }
             } catch (SQLException e) {
-                imgBox = new HBox(new Text("Immagine non presente"));
+                imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
             }
         } else {
-            imgBox = new HBox(new Text("Immagine non presente"));
+            imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
         }
 
         // Creazione del titolo della ricetta
@@ -208,7 +208,12 @@ public class OttieniRicettaControllerGrafico {
         ImageView calorieIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/calorie_icon.png"))));
         calorieIcon.setFitHeight(14);
         calorieIcon.setFitWidth(14);
-        Label calorieLabel = new Label(ricettaBean.getCalorie() + " Kcal");
+        Label calorieLabel;
+        if (ricettaBean.getCalorie() == 0) {
+            calorieLabel = new Label("TBA Kcal");
+        } else {
+            calorieLabel = new Label(ricettaBean.getCalorie() + " Kcal");
+        }
         calorieLabel.setStyle("-fx-font-size: 12px;");
 
         // Creazione di uno spazio vuoto (Region) tra le calorie e la durata

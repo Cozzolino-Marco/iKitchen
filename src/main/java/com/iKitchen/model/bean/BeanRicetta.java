@@ -21,6 +21,10 @@ public class BeanRicetta {
     String passaggi;
     String videoUrl;
     int likes;
+    String linkRicetta;
+
+    // Costruttore di default vuoto usato da scrapeRicette
+    public BeanRicetta() {}
 
     // Passaggio di dati completo per la visualizzazione della ricetta in dettaglio
     public BeanRicetta (String codRicetta, String titolo, String descrizione, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
@@ -110,6 +114,45 @@ public class BeanRicetta {
         this.calorie = calorie;
     }
 
+    // Setter
+    public void setTitolo(String titolo) {
+        if (titolo == null) {
+            this.titolo = "TBA";
+        } else {
+            this.titolo = titolo;
+        }
+    }
+    public void setImmagine(Blob immagine) {
+        /*if (immagine == null) {
+            this.immagine = null;
+            return false;
+        } else {
+            this.immagine = immagine;
+            return true;
+        }*/
+        this.immagine = immagine;
+    }
+    public void setCuoco(String cuoco) {
+        this.cuoco = cuoco;
+    }
+    public void setDurataPreparazione(int durataPreparazione) {
+        this.durataPreparazione = durataPreparazione;
+    }
+    public void setCalorie(int calorie) {
+        if (calorie < 0) {
+            this.calorie = 0;
+        } else {
+            this.calorie = calorie;
+        }
+    }
+    public void setLinkRicetta(String linkRicetta) {
+        if (linkRicetta == null) {
+            this.linkRicetta = "TBA";
+        } else {
+            this.linkRicetta = linkRicetta;
+        }
+    }
+
     // Getter
     public String getCodice() {
         return codRicetta;
@@ -149,5 +192,8 @@ public class BeanRicetta {
     }
     public int getLikes() {
         return likes;
+    }
+    public String getLinkRicetta() {
+        return linkRicetta;
     }
 }

@@ -3,6 +3,7 @@ module com.example.ikitchen {
     requires javafx.fxml;
     requires java.sql;
     requires org.jsoup;
+    requires java.sql.rowset;
 
     exports com.iKitchen;
     opens com.iKitchen to javafx.fxml;
