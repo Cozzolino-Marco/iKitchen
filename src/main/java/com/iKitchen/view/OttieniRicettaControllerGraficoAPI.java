@@ -13,21 +13,32 @@ import javax.sql.rowset.serial.SerialBlob;
 
 public class OttieniRicettaControllerGraficoAPI {
 
+    // Settaggio numero di pagine di ricette del sito web da visualizzare
+    private static final int MAX_PAGES = 3;
+
+    // Alternativa al settagg
+
+    // Metodo per il recupero delle ricette
     public BeanRicette recuperaRicette(BeanRicette infoPerListaRicette) throws IOException, SQLException {
 
-        // Estraggo le informazioni dal bean
+        // Dichiarazioni iniziali
         String categoria = infoPerListaRicette.getCategoria();
-        String url = generateUrl(categoria);
+        BeanRicette resultListRicette = new BeanRicette();
 
-        // Apertura di connessione
-        Document doc = Jsoup.connect(url).get();
+        // Iterazione per il popolamento di ricette di più pagine del sito web
+        for (int i = 1; i <= MAX_PAGES; i++) {
+            String url = generateUrl(categoria, i);
+            Document doc = Jsoup.connect(url).get();
 
-        // Controllo se la pagina è vuota o non contiene i dati attesi
-        if (doc == null) {
-            // TODO: Eccezione
+            // Se la pagina non esiste o è vuota, interrompi l'iterazione
+            if (doc == null || doc.select("article.gz-card.gz-card-horizontal.gz-mBottom3x").isEmpty()) {
+                break;
+            }
+
+            // Chiamata al metodo per web scraping e costruzione lista ricette
+            BeanRicette ricetteDaPagina = scrapeRicette(doc);
+            resultListRicette.getListRicette().addAll(ricetteDaPagina.getListRicette());
         }
-
-        BeanRicette resultListRicette = scrapeRicette(doc);
         return resultListRicette;
     }
 
@@ -74,9 +85,7 @@ public class OttieniRicettaControllerGraficoAPI {
 
             // Estrai l'immagine della ricetta dal web e fai le conversioni opportune
             Element immagineElement = docRicetta.select("div.gz-content-recipe.gz-mBottom4x img").first();
-            String urlImmagine = immagineElement.attr("src");
-            byte[] immagineTemp = Jsoup.connect(urlImmagine).ignoreContentType(true).execute().bodyAsBytes();
-            Blob immagine = new SerialBlob(immagineTemp);
+            Blob immagine = imageControlUrl(docRicetta, immagineElement);
 
             // Costruzione del bean ricetta da restituire alla funzione principale
             beanRicetta.setTitolo(titolo);
@@ -90,41 +99,100 @@ public class OttieniRicettaControllerGraficoAPI {
         return ricetteBean;
     }
 
-    // Metodo che trasforma la categoria passata in base a quelle presenti sul sito web
-    public String generateUrl(String categoria) {
+    // Metodo che genera l'URL al quale connettersi
+    public String generateUrl(String categoria, int pageNumber) {
 
-        String url;
+        String baseUrl;
+        String corruptedUrl;
 
         switch (categoria) {
             case "Colazione":
-                url = "https://www.giallozafferano.it/ricerca-ricette/colazione/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/colazione/";
+                } else {
+                    return baseUrl + "/colazione/";
+                }
             case "Pasto veloce":
-                url = "https://www.giallozafferano.it/ricerca-ricette/panini/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/panini/";
+                } else {
+                    return baseUrl + "/panini/";
+                }
             case "Bevande":
-                url = "https://www.giallozafferano.it/ricette-cat/Bevande/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/Bevande/";
+                } else {
+                    return baseUrl + "/Bevande/";
+                }
             case "Primi piatti":
-                url = "https://www.giallozafferano.it/ricette-cat/Primi/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/Primi/";
+                } else {
+                    return baseUrl + "/Primi/";
+                }
             case "Secondi piatti":
-                url = "https://www.giallozafferano.it/ricette-cat/Secondi-piatti/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/Secondi-piatti/";
+                } else {
+                    return baseUrl + "/Secondi-piatti/";
+                }
             case "Contorni":
-                url = "https://www.giallozafferano.it/ricerca-ricette/contorni/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/contorni/";
+                } else {
+                    return baseUrl + "/contorni/";
+                }
             case "Dolci":
-                url = "https://www.giallozafferano.it/ricette-cat/Dolci-e-Desserts/";
-                break;
+                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
+                if (pageNumber > 1) {
+                    return baseUrl + "page" + pageNumber + "/Dolci-e-Desserts/";
+                } else {
+                    return baseUrl + "/Dolci-e-Desserts/";
+                }
             default:
-                url = "Categoria non riconosciuta";
+                corruptedUrl = "Categoria non riconosciuta";
                 break;
         }
-        return url;
+        return corruptedUrl;
     }
 
-    // Metodo per convertire stringa a intero gestendo i casi di stringa vuota
+    // Metodo che converte gli URL relativi delle immagini in assoluti se necessario
+    public Blob imageControlUrl(Document docRicetta, Element immagineElement) throws SQLException, IOException {
+
+        // Variabili utili
+        byte[] immagineTemp;
+        String newUrlImmagine = null;
+
+        // Estraggo l'attributo "src" dal tag <img> di HTML e lo memorizzo come stringa
+        String urlImmagine = immagineElement.attr("src");
+
+        // Controlla se l'URL è relativo
+        if (!urlImmagine.startsWith("http")) {
+
+            // Siccome l'url è relativo, l'immagine viene presa in un'altra div rispetto alla precedente in cui è presente
+            Element newImmagineElement = docRicetta.select("div.gz-featured-image-video.gz-type-photo img").first();
+            newUrlImmagine = newImmagineElement.attr("src");
+
+            // Crea connessione alla nuova URL image, trattando il contenuto dell'immagine come un file binario
+            immagineTemp = Jsoup.connect(newUrlImmagine).ignoreContentType(true).execute().bodyAsBytes();
+
+        } else {
+            // Crea connessione all'URL image classica, trattando il contenuto dell'immagine come un file binario
+            immagineTemp = Jsoup.connect(urlImmagine).ignoreContentType(true).execute().bodyAsBytes();
+        }
+
+        // Converte l'immagine da array di byte a Blob e la restituisce
+        Blob immagine = new SerialBlob(immagineTemp);
+        return immagine;
+    }
+
+    // Metodo personale per convertire da stringa a intero gestendo i casi di stringa vuota
     private int parseStringToInt(String str) {
         String numeriSolo = str.replaceAll("\\D", "");
         return numeriSolo.isEmpty() ? 0 : Integer.parseInt(numeriSolo);

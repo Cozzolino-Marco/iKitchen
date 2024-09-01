@@ -4,6 +4,7 @@ module com.example.ikitchen {
     requires java.sql;
     requires org.jsoup;
     requires java.sql.rowset;
+    requires java.desktop;
 
     exports com.iKitchen;
     opens com.iKitchen to javafx.fxml;

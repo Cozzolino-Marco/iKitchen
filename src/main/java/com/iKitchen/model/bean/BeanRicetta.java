@@ -123,14 +123,11 @@ public class BeanRicetta {
         }
     }
     public void setImmagine(Blob immagine) {
-        /*if (immagine == null) {
+        if (immagine == null) {
             this.immagine = null;
-            return false;
         } else {
             this.immagine = immagine;
-            return true;
-        }*/
-        this.immagine = immagine;
+        }
     }
     public void setCuoco(String cuoco) {
         this.cuoco = cuoco;

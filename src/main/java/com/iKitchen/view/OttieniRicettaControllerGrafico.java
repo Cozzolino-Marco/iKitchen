@@ -23,7 +23,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +34,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import java.awt.Desktop;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class OttieniRicettaControllerGrafico {
 
@@ -273,8 +275,28 @@ public class OttieniRicettaControllerGrafico {
         element.setPadding(new Insets(10));
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
-        // Gestore di eventi per il click sull'elemento
-        element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
+        // Gestore di eventi per il click sull'elemento in base alla provenienza
+        if (provenienzaScelta.equals("Da chef")) {
+            element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
+        } else {
+            element.setOnMouseClicked(event -> {
+                try {
+                    // Ottieni il link della ricetta
+                    String url = ricettaBean.getLinkRicetta();
+
+                    // Verifica che il sistema supporti la navigazione su web
+                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                        // Apri il link nel browser predefinito
+                        Desktop.getDesktop().browse(new URI(url));
+                    } else {
+                        // Gestisci il caso in cui il sistema non supporti l'apertura di URL
+                        System.out.println("Navigazione web non supportata su questo sistema.");
+                    }
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
         
         return element;
     }
