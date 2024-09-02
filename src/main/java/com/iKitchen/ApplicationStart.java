@@ -7,6 +7,7 @@ import com.iKitchen.model.domain.ListRicette;
 import com.iKitchen.model.domain.Ricetta;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,8 +20,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApplicationStart extends Application {
+
+    private static HostServices hostServices;
+
     @Override
     public void start(Stage stage) throws IOException, DAOException, SQLException {
+
+        hostServices = getHostServices();
 
         String nomeFile = "iKitchen/RicetteUtenti/Primi piatti_Da chef.dat";
         MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
@@ -52,6 +58,10 @@ public class ApplicationStart extends Application {
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    public static HostServices getHostServicesInstance() {
+        return hostServices;
     }
 
     public static void main(String[] args) {

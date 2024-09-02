@@ -11,6 +11,7 @@ import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,6 +40,8 @@ import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static com.iKitchen.ApplicationStart.getHostServicesInstance;
+
 public class OttieniRicettaControllerGrafico {
 
     // Elementi grafici
@@ -66,6 +69,42 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     private VBox categoriesContainer;
 
+    @FXML
+    private VBox comboBoxContainer;
+
+    @FXML
+    private ImageView immagineView;
+
+    @FXML
+    private Label descrizioneLabel;
+
+    @FXML
+    private Label categoriaLabel;
+
+    @FXML
+    private Label provenienzaLabel;
+
+    @FXML
+    private Label cuocoLabel;
+
+    @FXML
+    private Label durataLabel;
+
+    @FXML
+    private Label calorieLabel;
+
+    @FXML
+    private GridPane ingredientiGrid;
+
+    @FXML
+    private VBox passaggiContainer;
+
+    @FXML
+    private Label videoUrlLabel;
+
+    @FXML
+    private Label likesLabel;
+
     // Variabili
     private OttieniRicettaControllerApplicativo ricette = null;
     private OttieniRicettaControllerApplicativo ricetta = null;
@@ -86,10 +125,10 @@ public class OttieniRicettaControllerGrafico {
         if (categoriesContainer != null) {
             loadCategories();
         }
-
-        if (provenienzaComboBox != null) {
-
-
+        if (comboBoxContainer != null) {
+            customDropDownMenu(provenienzaComboBox);
+            customDropDownMenu(filtraggioComboBox);
+            customDropDownMenu(storageComboBox);
         }
     }
 
@@ -246,9 +285,8 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     public void filtriView() throws IOException {
 
-        // Controlla se l'utente ha selezionato una categoria
+        // Mostra un popup di errore se la categoria non è stata selezionata
         if (categoriaScelta == null) {
-            // Mostra un popup di errore se la categoria non è stata selezionata
             Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
         } else {
             // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
@@ -261,6 +299,7 @@ public class OttieniRicettaControllerGrafico {
 
             OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
             controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+            controller.initialize("", "", "", "");
 
             scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
@@ -268,6 +307,13 @@ public class OttieniRicettaControllerGrafico {
             stage.setScene(scene);
             stage.show();
         }
+    }
+
+    // Gestione grafica di un menù a tendina della pagina filtri
+    private void customDropDownMenu(ComboBox<String> comboBox) {
+        // Configura il font e il colore del promptText
+        comboBox.setPromptText("Seleziona l'opzione");
+        comboBox.setStyle("-fx-prompt-text-fill: white; -fx-font-size: 14px;");
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
@@ -457,7 +503,7 @@ public class OttieniRicettaControllerGrafico {
         // Creazione della struttura principale
         HBox mainContent = new HBox(imgBox, titleAndDetailsBox);
         mainContent.setSpacing(10);
-        mainContent.setAlignment(Pos.CENTER_LEFT); // Allinea tutto a sinistra
+        mainContent.setAlignment(Pos.CENTER_LEFT);
 
         // Impostazione dell'elemento grafico
         element.setCenter(mainContent);
@@ -508,14 +554,17 @@ public class OttieniRicettaControllerGrafico {
 
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta
     private void mostraDettagliRicetta(BeanRicetta ricettaBean) {
+
         // Crea un nuovo Stage per il popup
         Stage popupStage = new Stage();
         popupStage.setTitle("Dettagli Ricetta");
 
         // Crea il contenuto del popup
         VBox popupContent = new VBox();
-        popupContent.setSpacing(10);
-        popupContent.setPadding(new Insets(10));
+        popupContent.setSpacing(10);  // Riduci la distanza tra gli elementi
+        popupContent.setPadding(new Insets(20));
+        popupContent.setStyle("-fx-background-color: #FFFFFF;");
+        popupContent.setAlignment(Pos.CENTER);
 
         // Inizializza il controller applicativo per ottenere i dettagli della ricetta
         ricetta = new OttieniRicettaControllerApplicativo();
@@ -524,48 +573,128 @@ public class OttieniRicettaControllerGrafico {
             // Ottieni i dettagli completi della ricetta
             BeanRicetta dettagliRicetta = ricetta.ottieniDettagliRicetta(ricettaBean);
 
-            // Primi dettagli della ricetta al popup
+            // Crea VBox per il titolo e dettagli
+            VBox popupInitialContent = new VBox();
+            popupInitialContent.setAlignment(Pos.CENTER);
+            popupInitialContent.setSpacing(5);
+
+            // Titolo della ricetta
             Label titolo = new Label(dettagliRicetta.getTitolo());
-            titolo.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
-            Label descrizione = new Label("Descrizione: " + dettagliRicetta.getDescrizione());
-            Label cuoco = new Label("Cuoco: " + dettagliRicetta.getCuoco());
-            Label calorie = new Label("Calorie: " + dettagliRicetta.getCalorie() + " Kcal");
-            Label durata = new Label("Durata: " + dettagliRicetta.getDurataPreparazione() + " min");
+            titolo.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
+            titolo.setAlignment(Pos.CENTER);
 
-            // Ciclo for per ottenere la lista di ingredienti
-            StringBuilder ingredientiStringa = new StringBuilder("Ingredienti:\n");
+            // Dettagli sopra l'immagine (categoria, durata, calorie)
+            Label dettagli = new Label("Primi piatti • " + dettagliRicetta.getDurataPreparazione() + " min • " + dettagliRicetta.getCalorie() + " Kcal");
+            dettagli.setStyle("-fx-font-size: 15px; -fx-text-fill: #666666;");
+            dettagli.setAlignment(Pos.CENTER);
+
+            // Gestione grafica dell'immagine della ricetta
+            ImageView immagineRicetta = new ImageView(new Image(dettagliRicetta.getImmagine().getBinaryStream()));
+            immagineRicetta.setFitWidth(250);
+            immagineRicetta.setFitHeight(150);
+            immagineRicetta.setPreserveRatio(true);
+            Rectangle clip = new Rectangle(immagineRicetta.getFitWidth(), immagineRicetta.getFitHeight());
+            clip.setArcWidth(30);
+            clip.setArcHeight(30);
+            immagineRicetta.setClip(clip);
+
+            // StackPane per cuoco e likes
+            StackPane cuocoLikesPane = new StackPane();
+
+            // Informazioni del cuoco
+            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco());
+            cuoco.setStyle("-fx-font-size: 15px;");
+            HBox cuocoBox = new HBox(cuoco);
+            cuocoBox.setAlignment(Pos.CENTER_LEFT);
+
+            // Informazioni dei likes
+            Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " Likes");
+            likes.setStyle("-fx-font-size: 15px;");
+            StackPane.setAlignment(likes, Pos.CENTER_RIGHT); // Allinea a destra nel StackPane
+
+            // Aggiunta degli elementi al StackPane
+            cuocoLikesPane.getChildren().addAll(cuocoBox, likes);
+
+            // Aggiungi gli elementi iniziali al VBox
+            popupInitialContent.getChildren().addAll(titolo, dettagli, immagineRicetta, cuocoLikesPane);
+
+            // Crea VBox per le altre informazioni
+            VBox popupOtherContent = new VBox();
+            popupOtherContent.setAlignment(Pos.CENTER_LEFT);
+            popupOtherContent.setSpacing(10);
+
+            // Descrizione della ricetta
+            Label descrizione = new Label(dettagliRicetta.getDescrizione());
+            descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
+            descrizione.setWrapText(true);
+
+            // Gestione lista ingredienti
+            Label ingredientiLabel = new Label("Ingredienti");
+            ingredientiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            ingredientiLabel.setAlignment(Pos.CENTER_LEFT);
+            VBox.setMargin(ingredientiLabel, new Insets(10, 0, 0, 0));
+            GridPane ingredientiGrid = new GridPane();
+            ingredientiGrid.setHgap(10);
+            ingredientiGrid.setVgap(5);
+            int column = 0;
+            int row = 0;
             for (Ingrediente ingrediente : dettagliRicetta.getIngredienti().getListaIngredienti()) {
-                ingredientiStringa.append("- ")
-                        .append(ingrediente.getNome())
-                        .append(", scadenza: ").append(ingrediente.getScadenza())
-                        .append(", quantità: ").append(ingrediente.getQuantita())
-                        .append(", limite: ").append(ingrediente.getLimite()).append("\n");
+                Label ingredienteLabel = new Label("• " + ingrediente.getNome() + " (" + ingrediente.getQuantita() + " g)");
+                ingredienteLabel.setStyle("-fx-font-size: 13px;");
+                ingredientiGrid.add(ingredienteLabel, column, row);
+                row++;
+                if (row > dettagliRicetta.getIngredienti().getListaIngredienti().size() / 2) {
+                    row = 0;
+                    column = 1;
+                }
             }
-            Label ingredienti = new Label(ingredientiStringa.toString());
 
-            // Ultimi dettagli della ricetta al popup
-            Label passaggi = new Label("Passaggi: " + dettagliRicetta.getPassaggi());
-            Label videoUrl = new Label("Video: " + dettagliRicetta.getVideoUrl());
-            Label likes = new Label("Likes: " + dettagliRicetta.getLikes());
+            // Passaggi della ricetta
+            Label passaggiLabel = new Label("Passaggi");
+            passaggiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
+            VBox passaggiBox = new VBox(10);
+            Label passaggi = new Label(dettagliRicetta.getPassaggi());
+            passaggiBox.getChildren().add(passaggi);
+
+            // Video URL
+            Label videoLabel = new Label("Video Tutorial");
+            videoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
+            Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
+            videoLink.setStyle("-fx-font-size: 14px;");
+            videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
 
             // Pulsante per confermare l'uso della ricetta
             CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
             Button confirmButton = new Button("Usa ricetta");
-            EventHandler confirmHandler = (confirmEvent) -> {
+            confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+            EventHandler<ActionEvent> confirmHandler = (confirmEvent) -> {
                 try {
                     ricetta.usaRicetta(usernameBean, dettagliRicetta);
                     Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
-                } catch (DAOException | SQLException e) {
+                } catch (DAOException | SQLException ex) {
                     Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
                 }
             };
             confirmButton.setOnAction(confirmHandler);
+            HBox buttonBox = new HBox(10);
+            buttonBox.setAlignment(Pos.CENTER);
+            buttonBox.getChildren().add(confirmButton);
 
-            // Aggiungi gli elementi al layout
-            popupContent.getChildren().addAll(titolo, descrizione, cuoco, calorie, durata, ingredienti, passaggi, videoUrl, likes, confirmButton);
+            // Aggiungi le altre informazioni al VBox
+            popupOtherContent.getChildren().addAll(descrizione, ingredientiLabel, ingredientiGrid, passaggiLabel, passaggiBox, videoLabel, videoLink, buttonBox);
+
+            // Aggiungi i due VBox al layout principale
+            popupContent.getChildren().addAll(popupInitialContent, popupOtherContent);
+
+            // Inserisci il contenuto nel ScrollPane
+            ScrollPane scrollPane = new ScrollPane(popupContent);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setVvalue(0); // Imposta la visualizzazione all'inizio
 
             // Imposta il layout come scena del popup
-            Scene popupScene = new Scene(popupContent, ScreenSize.POPUP_WIDTH_GUI1, ScreenSize.POPUP_HEIGHT_GUI1);
+            Scene popupScene = new Scene(scrollPane, 300, 550);
             popupStage.setScene(popupScene);
 
             // Mostra il popup
@@ -573,8 +702,10 @@ public class OttieniRicettaControllerGrafico {
 
         } catch (DAOException | SQLException e) {
             e.printStackTrace();
-            popupContent.getChildren().add(new Label("Errore nel caricamento dei dettagli della ricetta"));
-            Scene popupScene = new Scene(popupContent, ScreenSize.POPUP_WIDTH_GUI1, ScreenSize.POPUP_HEIGHT_GUI1);
+            VBox errorContent = new VBox(new Label("Errore nel caricamento dei dettagli della ricetta"));
+            errorContent.setAlignment(Pos.CENTER);
+            errorContent.setPadding(new Insets(20));
+            Scene popupScene = new Scene(errorContent, 300, 550);
             popupStage.setScene(popupScene);
             popupStage.show();
         }

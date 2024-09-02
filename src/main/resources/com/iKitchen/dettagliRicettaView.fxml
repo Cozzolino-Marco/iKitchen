@@ -4,26 +4,48 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico">
-    <Label fx:id="titoloLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-    <ImageView fx:id="immagineView" fitWidth="200" fitHeight="200" preserveRatio="true" />
-    <Label fx:id="descrizioneLabel" wrapText="true" />
-    <Label text="Categoria:" />
-    <Label fx:id="categoriaLabel" />
-    <Label text="Provenienza:" />
-    <Label fx:id="provenienzaLabel" />
-    <Label text="Cuoco:" />
-    <Label fx:id="cuocoLabel" />
-    <Label text="Durata Preparazione:" />
-    <Label fx:id="durataLabel" />
-    <Label text="Calorie:" />
-    <Label fx:id="calorieLabel" />
-    <Label text="Ingredienti:" />
-    <Label fx:id="ingredientiLabel" wrapText="true" />
-    <Label text="Passaggi:" />
-    <Label fx:id="passaggiLabel" wrapText="true" />
-    <Label text="Video URL:" />
-    <Label fx:id="videoUrlLabel" wrapText="true" />
-    <Label text="Likes:" />
-    <Label fx:id="likesLabel" />
-</VBox>
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico">
+    <VBox spacing="10" padding="15" prefWidth="350">
+
+        <!-- Prima sezione: Informazioni iniziali -->
+        <VBox spacing="10">
+            <Label text="Dettagli ricetta" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Label fx:id="titoloLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Label fx:id="categoriaLabel" />
+            <Label fx:id="durataLabel" />
+            <Label fx:id="calorieLabel" />
+
+            <ImageView fx:id="immagineView" fitWidth="300" fitHeight="150" preserveRatio="true" />
+
+            <HBox spacing="10" alignment="center">
+                <Label fx:id="cuocoLabel" style="-fx-font-size: 14px;" />
+                <Label fx:id="likesLabel" style="-fx-font-size: 14px;" />
+            </HBox>
+
+            <Label text="Descrizione" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="descrizioneLabel" wrapText="true" />
+        </VBox>
+
+        <!-- Sezione Ingredienti -->
+        <VBox spacing="10">
+            <Label text="Ingredienti" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <GridPane fx:id="ingredientiGrid" hgap="10" vgap="10">
+                <!-- Gli ingredienti saranno aggiunti dinamicamente dal controller -->
+            </GridPane>
+        </VBox>
+
+        <!-- Sezione Passaggi -->
+        <VBox spacing="10">
+            <Label text="Passaggi" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <VBox fx:id="passaggiContainer" spacing="10">
+                <!-- I passaggi saranno aggiunti dinamicamente dal controller -->
+            </VBox>
+        </VBox>
+
+        <!-- Sezione Video -->
+        <VBox spacing="10">
+            <Label text="Video" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+            <Label fx:id="videoUrlLabel" wrapText="true" />
+        </VBox>
+    </VBox>
+</ScrollPane>
