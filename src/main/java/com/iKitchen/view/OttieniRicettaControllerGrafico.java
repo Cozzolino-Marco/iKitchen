@@ -1,5 +1,6 @@
 package com.iKitchen.view;
 
+import static com.iKitchen.ApplicationStart.getHostServicesInstance;
 import com.iKitchen.controller.OttieniRicettaControllerApplicativo;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanRicetta;
@@ -10,6 +11,7 @@ import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +27,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,15 +38,9 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static com.iKitchen.ApplicationStart.getHostServicesInstance;
 
 public class OttieniRicettaControllerGrafico {
 
@@ -58,9 +58,6 @@ public class OttieniRicettaControllerGrafico {
     private ComboBox storageComboBox;
 
     @FXML
-    private Label titoloLabel;
-
-    @FXML
     private VBox elementContainer;
 
     @FXML
@@ -71,39 +68,6 @@ public class OttieniRicettaControllerGrafico {
 
     @FXML
     private VBox comboBoxContainer;
-
-    @FXML
-    private ImageView immagineView;
-
-    @FXML
-    private Label descrizioneLabel;
-
-    @FXML
-    private Label categoriaLabel;
-
-    @FXML
-    private Label provenienzaLabel;
-
-    @FXML
-    private Label cuocoLabel;
-
-    @FXML
-    private Label durataLabel;
-
-    @FXML
-    private Label calorieLabel;
-
-    @FXML
-    private GridPane ingredientiGrid;
-
-    @FXML
-    private VBox passaggiContainer;
-
-    @FXML
-    private Label videoUrlLabel;
-
-    @FXML
-    private Label likesLabel;
 
     // Variabili
     private OttieniRicettaControllerApplicativo ricette = null;
@@ -694,8 +658,12 @@ public class OttieniRicettaControllerGrafico {
             scrollPane.setVvalue(0); // Imposta la visualizzazione all'inizio
 
             // Imposta il layout come scena del popup
-            Scene popupScene = new Scene(scrollPane, 300, 550);
+            Scene popupScene = new Scene(scrollPane, 310, 550);
             popupStage.setScene(popupScene);
+
+            // Esecuzione codice passato per forzare lo scroll all'inizio dopo il rendering della GUI
+            popupStage.show();
+            Platform.runLater(() -> scrollPane.setVvalue(0));
 
             // Mostra il popup
             popupStage.show();
@@ -756,9 +724,5 @@ public class OttieniRicettaControllerGrafico {
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();
-    }
-
-    public Label getLabelTitolo() {
-        return this.titoloLabel;
     }
 }

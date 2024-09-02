@@ -14,7 +14,6 @@ public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
         // Parametri
         ListRicette listRicette = new ListRicette();
         CallableStatement cs = null;
-        IngredientiDAO ingredientiDAO = new IngredientiDAO();
         String categoria = (String) params[0];
         String provenienza = (String) params[1];
         String filtraggio = (String) params[2];
