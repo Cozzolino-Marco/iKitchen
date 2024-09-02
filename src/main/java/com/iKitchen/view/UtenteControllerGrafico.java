@@ -270,7 +270,7 @@ public class UtenteControllerGrafico {
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
         OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-        controller.initialize("", "", "");
+        controller.initialize("", "", "", "");
 
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 

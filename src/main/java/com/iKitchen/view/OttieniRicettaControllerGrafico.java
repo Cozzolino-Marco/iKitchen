@@ -10,6 +10,7 @@ import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,6 +52,9 @@ public class OttieniRicettaControllerGrafico {
     private ComboBox filtraggioComboBox;
 
     @FXML
+    private ComboBox storageComboBox;
+
+    @FXML
     private Label titoloLabel;
 
     @FXML
@@ -68,18 +72,24 @@ public class OttieniRicettaControllerGrafico {
     private String categoriaScelta;
     private String provenienzaScelta;
     private String filtraggioScelta;
+    private String storageScelto;
 
     // Configurazione iniziale degli elementi grafici
-    public void initialize(String categoriaScelta, String provenienzaScelta, String filtraggioScelta) {
+    public void initialize(String categoriaScelta, String provenienzaScelta, String filtraggioScelta, String storageScelto) {
         if (elementContainer != null) {
             try {
-                caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta);
+                caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta, storageScelto);
             } catch (DAOException | SQLException | IOException e) {
                 throw new RuntimeException(e);
             }
         }
         if (categoriesContainer != null) {
             loadCategories();
+        }
+
+        if (provenienzaComboBox != null) {
+
+
         }
     }
 
@@ -98,12 +108,173 @@ public class OttieniRicettaControllerGrafico {
     public void setFiltraggio(String filtraggio) {
         this.filtraggioScelta = filtraggio;
     }
+    public void setStorage(String storage) {
+        this.storageScelto = storage;
+    }
+
+    // Metodo per mostrare la pagina della scelta delle categorie
+    public void categorieView() throws IOException {
+
+        FXMLLoader fxmlLoader;
+        Stage stage = ApplicazioneStage.getStage();
+        Scene scene;
+
+        String fxmlFile = "/com/iKitchen/categorieView.fxml";
+        fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+        controller.initialize("", "", "", "");
+
+        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+        stage.setTitle("iKitchen");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // Metodo per aggiornare dinamicamente i bottoni delle categorie
+    @FXML
+    public void loadCategories() {
+        categoriesContainer.getChildren().clear();
+
+        // Creare una LinkedHashMap per mantenere l'ordine di inserimento
+        Map<String, String> categorieConImmagini = new LinkedHashMap<>();
+        categorieConImmagini.put("Colazione", "colazione.png");
+        categorieConImmagini.put("Pasto veloce", "pasto_veloce.png");
+        categorieConImmagini.put("Bevande", "bevande.png");
+        categorieConImmagini.put("Primi piatti", "primi_piatti.png");
+        categorieConImmagini.put("Secondi piatti", "secondi_piatti.png");
+        categorieConImmagini.put("Contorni", "contorni.png");
+        categorieConImmagini.put("Dolci", "dolci.png");
+
+        for (Map.Entry<String, String> entry : categorieConImmagini.entrySet()) {
+            String categoria = entry.getKey();
+            String immaginePath = entry.getValue();
+
+            // Creazione del bottone
+            Button categoriaButton = new Button();
+            categoriaButton.setPrefWidth(250);
+            categoriaButton.setMaxWidth(250);
+
+            // Creazione dell'HBox per contenere testo e immagine
+            HBox buttonContent = new HBox();
+            buttonContent.setAlignment(Pos.CENTER_LEFT);
+            buttonContent.setSpacing(10);
+            HBox.setHgrow(buttonContent, Priority.ALWAYS);
+
+            // Creazione e aggiunta del testo al bottone
+            Label textLabel = new Label(categoria);
+            textLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
+
+            // Creazione e aggiunta dell'immagine al bottone
+            ImageView categoriaImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + immaginePath))));
+
+            // Impostazione della dimensione fissa per l'immagine
+            final double fixedSize = 30;
+            categoriaImageView.setFitHeight(fixedSize);
+            categoriaImageView.setFitWidth(fixedSize);
+            categoriaImageView.setPreserveRatio(false);
+
+            // Creare una maschera quadrata con angoli smussati per rendere l'immagine stondato
+            Rectangle clip = new Rectangle(30, 30);
+            clip.setArcWidth(10);
+            clip.setArcHeight(10);
+            categoriaImageView.setClip(clip);
+
+            // Aggiunta di spazio tra il testo e l'immagine per allineare l'immagine a destra
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            // Aggiunta di testo, spazio e immagine all'HBox
+            buttonContent.getChildren().addAll(textLabel, spacer, categoriaImageView);
+
+            // Aggiunta dell'HBox al bottone
+            categoriaButton.setGraphic(buttonContent);
+
+            // Event handler del bottone
+            categoriaButton.setOnAction(event -> {
+                setCategoria(categoria);
+                try {
+                    filtriView();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            // Stile del bottone con angoli stondati
+            categoriaButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10;");
+
+            // Aggiunta del bottone al contenitore con margini per centratura
+            VBox.setMargin(categoriaButton, new Insets(7, 0, 7, 0));
+            categoriesContainer.getChildren().add(categoriaButton);
+        }
+
+        // Impostazione di padding del VBox per distanziare il primo e ultimo bottone dalle barre di navigazione
+        categoriesContainer.setPadding(new Insets(20, 0, 20, 0));
+        categoriesContainer.setAlignment(Pos.CENTER);
+    }
+
+    // Metodo per cambiare i filtri in base alla provenienza scelta
+    public void verificaProvenienza() {
+        // Aggiungi un listener alla ComboBox della Provenienza
+        ObservableList<String> itemsF = filtraggioComboBox.getItems();
+        ObservableList<String> itemsS = storageComboBox.getItems();
+
+        if (provenienzaComboBox.getValue().equals("Dal web")) {
+            itemsF.remove("Filtrate in base alla dispensa");
+            itemsS.remove("Solo dal database");
+            itemsS.remove("Solo dal file system");
+            itemsS.remove("Da entrambi");
+            if (!itemsS.contains("Nessuno")) {
+                itemsS.add(0, "Nessuno");
+            }
+        } else {
+            itemsS.remove("Nessuno");
+            if (!itemsF.contains("Filtrate in base alla dispensa")) {
+                itemsF.add(1, "Filtrate in base alla dispensa");
+            }
+            if (!itemsS.contains("Solo dal database") && !itemsS.contains("Solo dal file system") && !itemsS.contains("Da entrambi")) {
+                itemsS.add(1, "Solo dal database");
+                itemsS.add(2, "Solo dal file system");
+                itemsS.add(3, "Da entrambi");
+            }
+        }
+    }
+
+    // Metodo per mostrare la pagina dei filtri
+    @FXML
+    public void filtriView() throws IOException {
+
+        // Controlla se l'utente ha selezionato una categoria
+        if (categoriaScelta == null) {
+            // Mostra un popup di errore se la categoria non è stata selezionata
+            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
+        } else {
+            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
+
+            String fxmlFile = "/com/iKitchen/filtriView.fxml";
+            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+
+            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+            stage.setTitle("iKitchen");
+            stage.setScene(scene);
+            stage.show();
+        }
+    }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
-    private void caricaRicette(String categoria, String provenienza, String filtraggio) throws DAOException, SQLException, IOException {
+    private void caricaRicette(String categoria, String provenienza, String filtraggio, String storage) throws DAOException, SQLException, IOException {
 
         // Crea un bean con le informazioni selezionate
-        BeanRicette infoPerListaRicette = new BeanRicette(categoria, provenienza, filtraggio);
+        BeanRicette infoPerListaRicette = new BeanRicette(categoria, provenienza, filtraggio, storage);
 
         // Inizializza il controller applicativo
         ricette = new OttieniRicettaControllerApplicativo();
@@ -133,34 +304,56 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     protected void mostraRicette() throws IOException {
 
-        if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null) {
-            // Mostra un avviso se uno dei campi non è stato selezionato
-            Popup.mostraPopup("Attenzione", "Si prega di selezionare entrambe le opzioni prima di procedere!", "error");
+        /*if (provenienzaComboBox.getValue() != null) {
+            verificaProvenienza();
+        }*/
 
-        } else if("Dal web".equals(provenienzaComboBox.getValue()) && "Filtrate in base alla dispensa".equals(filtraggioComboBox.getValue())) {
+        // Mostra un avviso se anche uno dei campi non è stato selezionato
+        if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null || storageComboBox.getValue() == null) {
+            Popup.mostraPopup("Attenzione", "Si prega di selezionare tutte le opzioni prima di procedere!", "warning");
+
+        } else if ("Dal web".equals(provenienzaComboBox.getValue()) &&
+                ("Filtrate in base alla dispensa".equals(filtraggioComboBox.getValue()) ||
+                        "Solo dal database".equals(storageComboBox.getValue()) ||
+                        "Solo dal file system".equals(storageComboBox.getValue()) ||
+                        "Da entrambi".equals(storageComboBox.getValue()))) {
 
             // Mostra un popup con un messaggio specifico
-            Popup.mostraPopup("Attenzione", "L'opzione 'Filtrate in base alla dispensa' non è disponibile con la provenienza 'Dal web'.", "error");
+            Popup.mostraPopup("Attenzione",
+                    "Con la provenienza 'Dal web', non è possibile selezionare 'Filtrate in base alla dispensa' come filtraggio " +
+                            "e non sono ammesse le selezioni di: 'Solo dal database', 'Solo dal file system', 'Da entrambi' come storage.",
+                    "warning");
+
+        } else if ("Da chef".equals(provenienzaComboBox.getValue()) && "Nessuno".equals(storageComboBox.getValue())) {
+
+            // Mostra un popup con un messaggio specifico
+            Popup.mostraPopup("Attenzione", "Con la provenienza 'Da chef', non è possibile selezionare 'Nessuno' come storage.", "warning");
 
         } else {
+
+            // Salvataggio della categoria scelta
             String categoriaScelta = this.categoriaScelta;
 
+            // Caricamento della scena
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = ApplicazioneStage.getStage();
             Scene scene;
-
             String fxmlFile = "/com/iKitchen/elencoRicetteView.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
+            // Settaggio dei dati
             OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-            controller.setCategoriaLabelTitle(categoriaScelta); // Setta la categoria selezionata al titolo
-            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
-            controller.setProvenienza(provenienzaComboBox.getValue().toString()); // Passa la provenienza selezionata
-            controller.setFiltraggio(filtraggioComboBox.getValue().toString()); // Passa la filtraggio selezionata
-            controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString());
+            controller.setCategoriaLabelTitle(categoriaScelta);
+            controller.setCategoria(categoriaScelta);
+            controller.setProvenienza(provenienzaComboBox.getValue().toString());
+            controller.setFiltraggio(filtraggioComboBox.getValue().toString());
+            controller.setStorage(storageComboBox.getValue().toString());
 
+            // Chiamata al metodo per inizializzare
+            controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString(), storageComboBox.getValue().toString());
+
+            // Ultimi settaggi della scena ed avvio
             scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
             stage.setTitle("iKitchen");
             stage.setScene(scene);
             stage.show();
@@ -401,140 +594,6 @@ public class OttieniRicettaControllerGrafico {
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();
-    }
-
-    // Metodo per mostrare la pagina dei filtri
-    @FXML
-    public void filtriView() throws IOException {
-
-        // Ottieni la categoria selezionata dall'utente
-        //String categoriaScelta = categoriesListView.getSelectionModel().getSelectedItem();
-
-        // Controlla se l'utente ha selezionato una categoria
-        if (categoriaScelta == null) {
-            // Mostra un popup di errore se la categoria non è stata selezionata
-            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
-        } else {
-            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
-
-            String fxmlFile = "/com/iKitchen/filtriView.fxml";
-            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-            OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
-
-            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-            stage.setTitle("iKitchen");
-            stage.setScene(scene);
-            stage.show();
-        }
-    }
-
-    // Metodo per mostrare la pagina della scelta delle categorie
-    public void categorieView() throws IOException {
-
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/categorieView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
-        controller.initialize("", "", "");
-
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    // Metodo per aggiornare dinamicamente i bottoni delle categorie
-    @FXML
-    public void loadCategories() {
-        categoriesContainer.getChildren().clear();
-
-        // Creare una LinkedHashMap per mantenere l'ordine di inserimento
-        Map<String, String> categorieConImmagini = new LinkedHashMap<>();
-        categorieConImmagini.put("Colazione", "colazione.png");
-        categorieConImmagini.put("Pasto veloce", "pasto_veloce.png");
-        categorieConImmagini.put("Bevande", "bevande.png");
-        categorieConImmagini.put("Primi piatti", "primi_piatti.png");
-        categorieConImmagini.put("Secondi piatti", "secondi_piatti.png");
-        categorieConImmagini.put("Contorni", "contorni.png");
-        categorieConImmagini.put("Dolci", "dolci.png");
-
-        for (Map.Entry<String, String> entry : categorieConImmagini.entrySet()) {
-            String categoria = entry.getKey();
-            String immaginePath = entry.getValue();
-
-            // Creazione del bottone
-            Button categoriaButton = new Button();
-            categoriaButton.setPrefWidth(250);
-            categoriaButton.setMaxWidth(250);
-
-            // Creazione dell'HBox per contenere testo e immagine
-            HBox buttonContent = new HBox();
-            buttonContent.setAlignment(Pos.CENTER_LEFT);
-            buttonContent.setSpacing(10);
-            HBox.setHgrow(buttonContent, Priority.ALWAYS);
-
-            // Creazione e aggiunta del testo al bottone
-            Label textLabel = new Label(categoria);
-            textLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
-
-            // Creazione e aggiunta dell'immagine al bottone
-            ImageView categoriaImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + immaginePath))));
-
-            // Impostazione della dimensione fissa per l'immagine
-            final double fixedSize = 30;
-            categoriaImageView.setFitHeight(fixedSize);
-            categoriaImageView.setFitWidth(fixedSize);
-            categoriaImageView.setPreserveRatio(false);
-
-            // Creare una maschera quadrata con angoli smussati per rendere l'immagine stondato
-            Rectangle clip = new Rectangle(30, 30);
-            clip.setArcWidth(10);
-            clip.setArcHeight(10);
-            categoriaImageView.setClip(clip);
-
-            // Aggiunta di spazio tra il testo e l'immagine per allineare l'immagine a destra
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            // Aggiunta di testo, spazio e immagine all'HBox
-            buttonContent.getChildren().addAll(textLabel, spacer, categoriaImageView);
-
-            // Aggiunta dell'HBox al bottone
-            categoriaButton.setGraphic(buttonContent);
-
-            // Event handler del bottone
-            categoriaButton.setOnAction(event -> {
-                setCategoria(categoria);
-                try {
-                    filtriView();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-
-            // Stile del bottone con angoli stondati
-            categoriaButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10;");
-
-            // Aggiunta del bottone al contenitore con margini per centratura
-            VBox.setMargin(categoriaButton, new Insets(7, 0, 7, 0));
-            categoriesContainer.getChildren().add(categoriaButton);
-        }
-
-        // Impostazione di padding del VBox per distanziare il primo e ultimo bottone dalle barre di navigazione
-        categoriesContainer.setPadding(new Insets(20, 0, 20, 0));
-        categoriesContainer.setAlignment(Pos.CENTER);
     }
 
     // Metodo per mostrare la pagina dei preferiti

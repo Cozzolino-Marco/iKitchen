@@ -30,7 +30,7 @@ public class OttieniRicettaControllerApplicativo {
         String categoria = infoPerListaRicette.getCategoria();
         String provenienza = infoPerListaRicette.getProvenienza();
         String filtro = infoPerListaRicette.getFiltraggio();
-        String storage = infoPerListaRicette.getStorage(); // TODO: Implementa il metodo
+        String storage = infoPerListaRicette.getStorage();
 
         // Chiamata alla boundary dell'attore esterno
         if (provenienza.equals("Dal web")) {
@@ -43,7 +43,7 @@ public class OttieniRicettaControllerApplicativo {
         listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro, storage);
 
         // Creo un nuovo bean per restituire le ricette alla vista
-        BeanRicette ricetteBean = new BeanRicette(categoria, provenienza, filtro);
+        BeanRicette ricetteBean = new BeanRicette(categoria, provenienza, filtro, storage);
 
         // Itero attraverso la lista di ricette e le aggiungo al BeanRicette
         for (Ricetta ricetta : listRicette.getListaRicette()) {

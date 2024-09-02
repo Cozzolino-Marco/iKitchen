@@ -43,6 +43,16 @@
                 </FXCollections>
             </items>
         </ComboBox>
+        <ComboBox fx:id="storageComboBox" promptText="Seleziona l'opzione" prefWidth="200.0">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Solo dal database"/>
+                    <String fx:value="Solo dal file system"/>
+                    <String fx:value="Da entrambi"/>
+                    <String fx:value="Nessuno"/>
+                </FXCollections>
+            </items>
+        </ComboBox>
     </VBox>
 
     <!-- Barra di navigazione inferiore -->

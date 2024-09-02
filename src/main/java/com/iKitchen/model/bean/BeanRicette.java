@@ -9,6 +9,7 @@ public class BeanRicette {
     private String categoria;
     private String provenienza;
     private String filtraggio;
+    private String storage;
     private List<BeanRicetta> listRicette;
 
     // Costruttore bean per restituzione lista
@@ -17,10 +18,11 @@ public class BeanRicette {
     }
 
     // Informazioni per il metodo "listaRicette"
-    public BeanRicette(String categoria, String provenienza, String filtraggio) {
+    public BeanRicette(String categoria, String provenienza, String filtraggio, String storage) {
         this.categoria = categoria;
         this.provenienza = provenienza;
         this.filtraggio = filtraggio;
+        this.storage = storage;
         this.listRicette = new ArrayList<>();
     }
 
@@ -33,6 +35,9 @@ public class BeanRicette {
     }
     public String getFiltraggio() {
         return filtraggio;
+    }
+    public String getStorage() {
+        return storage;
     }
 
     // Metodo per la restituzione della lista di ricette

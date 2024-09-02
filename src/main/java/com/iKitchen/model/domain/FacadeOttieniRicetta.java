@@ -39,17 +39,17 @@ public class FacadeOttieniRicetta {
         ListRicette listRicette = new ListRicette();
 
         // Controllo dove recuperare le ricette in base al parametro 'storage'
-        if (storage.equalsIgnoreCase("DB")) {
+        if (storage.equalsIgnoreCase("Solo dal database")) {
             // Mostrare le ricette solo dal DB
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
             listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
         }
-        else if (storage.equalsIgnoreCase("FS")) {
+        else if (storage.equalsIgnoreCase("Solo dal file system")) {
             // Mostrare le ricette solo dal file system
             MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
             listRicette = mostraRicetteFS.recuperaRicetteDaFile(categoria, provenienza, filtro);
         }
-        else if (storage.equalsIgnoreCase("DB+FS")) {
+        else if (storage.equalsIgnoreCase("Da entrambi")) {
             // Mostrare le ricette dal DB e dal file system
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
             listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);

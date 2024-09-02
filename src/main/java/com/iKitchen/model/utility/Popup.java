@@ -33,6 +33,8 @@ public class Popup {
             icon.setImage(new Image(Popup.class.getResourceAsStream("/success_icon.png")));
         } else if (tipo.equalsIgnoreCase("error")) {
             icon.setImage(new Image(Popup.class.getResourceAsStream("/error_icon.png")));
+        } else if (tipo.equalsIgnoreCase("warning")) {
+            icon.setImage(new Image(Popup.class.getResourceAsStream("/warning_icon.png")));
         }
         icon.setFitHeight(50);
         icon.setFitWidth(50);
@@ -54,7 +56,7 @@ public class Popup {
         popupContent.getChildren().addAll(icon, messageLabel, closeButton);
 
         // Imposta il layout come scena del popup
-        Scene popupScene = new Scene(popupContent, 300, 250);
+        Scene popupScene = new Scene(popupContent, 300, 300);
         popupStage.setScene(popupScene);
 
         // Mostra il popup
