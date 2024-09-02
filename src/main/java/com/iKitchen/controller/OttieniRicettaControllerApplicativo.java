@@ -30,20 +30,17 @@ public class OttieniRicettaControllerApplicativo {
         String categoria = infoPerListaRicette.getCategoria();
         String provenienza = infoPerListaRicette.getProvenienza();
         String filtro = infoPerListaRicette.getFiltraggio();
+        String storage = infoPerListaRicette.getStorage(); // TODO: Implementa il metodo
 
+        // Chiamata alla boundary dell'attore esterno
         if (provenienza.equals("Dal web")) {
-
-            // Chiamata alla boundary dell'attore esterno
             OttieniRicettaControllerGraficoAPI controllerAttoreSecondario = new OttieniRicettaControllerGraficoAPI();
             BeanRicette ricetteBean = controllerAttoreSecondario.recuperaRicette(infoPerListaRicette);
             return ricetteBean;
-
-            /* Uso il facade per centralizzare i DAO delle procedure
-            listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro);*/
         }
 
         // Uso il facade per centralizzare i DAO delle procedure
-        listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro);
+        listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro, storage);
 
         // Creo un nuovo bean per restituire le ricette alla vista
         BeanRicette ricetteBean = new BeanRicette(categoria, provenienza, filtro);

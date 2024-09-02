@@ -19,9 +19,6 @@ public abstract class Ricetta implements Serializable {
     String videoUrl;
     int likes;
 
-    // Costruttore di default vuoto
-    public Ricetta() {}
-
     // Getter
     public String getCodice() {
         return codRicetta;

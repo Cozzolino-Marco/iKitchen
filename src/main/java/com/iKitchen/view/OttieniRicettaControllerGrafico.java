@@ -136,6 +136,12 @@ public class OttieniRicettaControllerGrafico {
         if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null) {
             // Mostra un avviso se uno dei campi non è stato selezionato
             Popup.mostraPopup("Attenzione", "Si prega di selezionare entrambe le opzioni prima di procedere!", "error");
+
+        } else if("Dal web".equals(provenienzaComboBox.getValue()) && "Filtrate in base alla dispensa".equals(filtraggioComboBox.getValue())) {
+
+            // Mostra un popup con un messaggio specifico
+            Popup.mostraPopup("Attenzione", "L'opzione 'Filtrate in base alla dispensa' non è disponibile con la provenienza 'Dal web'.", "error");
+
         } else {
             String categoriaScelta = this.categoriaScelta;
 
@@ -167,31 +173,22 @@ public class OttieniRicettaControllerGrafico {
 
         // Creazione dell'immagine del piatto
         HBox imgBox;
-        if (ricettaBean.getImmagine() != null) {
-            try {
+        ImageView imageView;
+        try {
+            Image image;
+            if (ricettaBean.getImmagine() != null && ricettaBean.getImmagine().getBinaryStream() != null) {
                 InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
-                if (inputStream != null) {
-                    Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(70);
-                    imageView.setFitWidth(65);
-
-                    // Creazione di un Rectangle per angoli arrotondati delle immagini
-                    Rectangle clip = new Rectangle(65, 70);
-                    clip.setArcWidth(15);
-                    clip.setArcHeight(15);
-                    imageView.setClip(clip);
-
-                    imgBox = new HBox(imageView);
-                } else {
-                    imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
-                }
-            } catch (SQLException e) {
-                imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
+                image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
+            } else {
+                image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
             }
-        } else {
-            imgBox = new HBox(new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")))));
+            imageView = createStyledImageView(image);
+        } catch (SQLException e) {
+            Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
+            imageView = createStyledImageView(defaultImage);
         }
+        imgBox = new HBox(imageView);
+        element.setLeft(imgBox);
 
         // Creazione del titolo della ricetta
         Label titleLabel = new Label(ricettaBean.getTitolo());
@@ -299,6 +296,21 @@ public class OttieniRicettaControllerGrafico {
         }
         
         return element;
+    }
+
+    // Metodo per creare e stilizzare un ImageView
+    private ImageView createStyledImageView(Image image) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(65);
+
+        // Creazione di un Rectangle per angoli arrotondati delle immagini
+        Rectangle clip = new Rectangle(65, 70);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        imageView.setClip(clip);
+
+        return imageView;
     }
 
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta

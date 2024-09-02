@@ -13,10 +13,8 @@ import javax.sql.rowset.serial.SerialBlob;
 
 public class OttieniRicettaControllerGraficoAPI {
 
-    // Settaggio numero di pagine di ricette del sito web da visualizzare
+    // Settaggio manuale del numero di pagine di ricette del sito web da visualizzare
     private static final int MAX_PAGES = 3;
-
-    // Alternativa al settagg
 
     // Metodo per il recupero delle ricette
     public BeanRicette recuperaRicette(BeanRicette infoPerListaRicette) throws IOException, SQLException {

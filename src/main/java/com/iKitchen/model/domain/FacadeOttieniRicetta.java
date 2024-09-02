@@ -1,10 +1,7 @@
 package com.iKitchen.model.domain;
 
 import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.dao.MostraRicetteDAO;
-import com.iKitchen.model.dao.OttieniDettagliRicettaDAO;
-import com.iKitchen.model.dao.RecuperaIngredientiDispensaDAO;
-import com.iKitchen.model.dao.UsaRicettaDAO;
+import com.iKitchen.model.dao.*;
 
 import java.sql.SQLException;
 
@@ -22,15 +19,43 @@ public class FacadeOttieniRicetta {
         return listProdottiDispensa;
     }
 
-    // Metodo per mostrare le ricette
+    /* Metodo per mostrare le ricette
     public ListRicette mostraRicette(String categoria, String provenienza, String filtro) throws DAOException, SQLException {
 
-        // Istanzia il DAO per mostrare la lista di ricette filtrate
+        // Istanzia il DAO per mostrare la lista di ricette filtrate ed eseguo la query usando il DAO
         MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-
-        // Eseguo la query usando il DAO e ottengo il risultato
         ListRicette listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
 
+        // Istanzia il File System per mostrare la lista di ricette filtrate
+        MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
+
+        return listRicette;
+    }*/
+
+    // Metodo per mostrare le ricette
+    public ListRicette mostraRicette(String categoria, String provenienza, String filtro, String storage) throws DAOException, SQLException {
+
+        // Istazio lista di ricette
+        ListRicette listRicette = new ListRicette();
+
+        // Controllo dove recuperare le ricette in base al parametro 'storage'
+        if (storage.equalsIgnoreCase("DB")) {
+            // Mostrare le ricette solo dal DB
+            MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
+            listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
+        }
+        else if (storage.equalsIgnoreCase("FS")) {
+            // Mostrare le ricette solo dal file system
+            MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
+            listRicette = mostraRicetteFS.recuperaRicetteDaFile(categoria, provenienza, filtro);
+        }
+        else if (storage.equalsIgnoreCase("DB+FS")) {
+            // Mostrare le ricette dal DB e dal file system
+            MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
+            listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
+            MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
+            listRicette = mostraRicetteFS.recuperaRicetteDaFile(categoria, provenienza, filtro, listRicette);
+        }
         return listRicette;
     }
 
