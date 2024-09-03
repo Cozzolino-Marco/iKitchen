@@ -12,9 +12,12 @@ public class BeanIngrediente {
     private int quantita;
     private int limite;
     private Blob immagine;
+    private String tipo;
+
+    public BeanIngrediente() {}
 
     // Per mandare i dati dal controller grafico a quello applicativo
-    public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite, Blob immagine) {
+    public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite, Blob immagine, String tipo) {
 
         // Controllo della consistenza del nome
         if (nome.length() < 3) {
@@ -31,6 +34,11 @@ public class BeanIngrediente {
             throw new IllegalArgumentException("La soglia limite deve essere almeno positiva!");
         }
 
+        // Controllo della validità del parametro tipo
+        if (!tipo.equals("cibo") && !tipo.equals("drink")) {
+            throw new IllegalArgumentException("Il tipo non è valido!");
+        }
+
         // Assegnazioni
         this.codIngrediente = codIngrediente;
         this.nome = nome;
@@ -38,6 +46,21 @@ public class BeanIngrediente {
         this.quantita = quantita;
         this.limite = limite;
         this.immagine = immagine;
+        this.tipo = tipo;
+    }
+
+    // Setter
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setScadenza(Date scadenza) {
+        this.scadenza = scadenza;
+    }
+    public void setQuantita(int quantita) {
+        this.quantita = quantita;
+    }
+    public void setLimite(int limite) {
+        this.limite = limite;
     }
 
     // Getter
@@ -58,5 +81,8 @@ public class BeanIngrediente {
     }
     public Blob getImmagine() {
         return immagine;
+    }
+    public String getTipo() {
+        return tipo;
     }
 }

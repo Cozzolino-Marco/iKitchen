@@ -37,6 +37,7 @@ public class RecuperaIngredientiDispensaDAO {
                     ingrediente.setQuantita(rs.getInt("quantita"));
                     ingrediente.setLimite(rs.getInt("limite"));
                     ingrediente.setImmagine(rs.getBlob("immagine"));
+                    ingrediente.setTipo(rs.getString("tipo"));
                     listIngredienti.addIngrediente(ingrediente);
                 }
             }

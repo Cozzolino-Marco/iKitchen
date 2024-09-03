@@ -42,7 +42,8 @@ public class OttieniIngredientiControllerApplicativo {
                     ingrediente.getScadenza(),
                     ingrediente.getQuantita(),
                     ingrediente.getLimite(),
-                    ingrediente.getImmagine()
+                    ingrediente.getImmagine(),
+                    ingrediente.getTipo()
                 );
                 ingredientiValidi.addIngrediente(beanIngrediente);
             }
@@ -72,7 +73,8 @@ public class OttieniIngredientiControllerApplicativo {
                         ingrediente.getScadenza(),
                         ingrediente.getQuantita(),
                         ingrediente.getLimite(),
-                        ingrediente.getImmagine()
+                        ingrediente.getImmagine(),
+                        ingrediente.getTipo()
                 );
                 ingredientiNonValidi.addIngrediente(beanIngrediente);
             }

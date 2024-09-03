@@ -3,9 +3,7 @@ package com.iKitchen.view;
 import static com.iKitchen.ApplicationStart.getHostServicesInstance;
 import com.iKitchen.controller.OttieniRicettaControllerApplicativo;
 import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.bean.BeanRicetta;
-import com.iKitchen.model.bean.BeanRicette;
-import com.iKitchen.model.bean.CredentialsBean;
+import com.iKitchen.model.bean.*;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Ingrediente;
@@ -19,9 +17,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -32,13 +33,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.awt.Desktop;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -534,7 +537,7 @@ public class OttieniRicettaControllerGrafico {
         ricetta = new OttieniRicettaControllerApplicativo();
 
         try {
-            // Ottieni i dettagli completi della ricetta
+            // Ottieni i dettagli completi della ricetta (metodo per mostrare gli ingredienti)
             BeanRicetta dettagliRicetta = ricetta.ottieniDettagliRicetta(ricettaBean);
 
             // Crea VBox per il titolo e dettagli
@@ -574,7 +577,7 @@ public class OttieniRicettaControllerGrafico {
             // Informazioni dei likes
             Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " Likes");
             likes.setStyle("-fx-font-size: 15px;");
-            StackPane.setAlignment(likes, Pos.CENTER_RIGHT); // Allinea a destra nel StackPane
+            StackPane.setAlignment(likes, Pos.CENTER_RIGHT);
 
             // Aggiunta degli elementi al StackPane
             cuocoLikesPane.getChildren().addAll(cuocoBox, likes);
@@ -592,6 +595,10 @@ public class OttieniRicettaControllerGrafico {
             descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
             descrizione.setWrapText(true);
 
+            // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
+            CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
+            BeanIngredienti beanIngredienti = ricetta.verificaQuantita(usernameBean, dettagliRicetta);
+
             // Gestione lista ingredienti
             Label ingredientiLabel = new Label("Ingredienti");
             ingredientiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
@@ -602,10 +609,64 @@ public class OttieniRicettaControllerGrafico {
             ingredientiGrid.setVgap(5);
             int column = 0;
             int row = 0;
+            int validIngredientCount = 0;  // Contatore degli ingredienti validi
+            Date currentDate = new Date();
+
+            // Controlla se l'ingrediente è nella lista degli ingredienti validi
+            String tipoIngrediente = null;
             for (Ingrediente ingrediente : dettagliRicetta.getIngredienti().getListaIngredienti()) {
-                Label ingredienteLabel = new Label("• " + ingrediente.getNome() + " (" + ingrediente.getQuantita() + " g)");
-                ingredienteLabel.setStyle("-fx-font-size: 13px;");
-                ingredientiGrid.add(ingredienteLabel, column, row);
+                boolean ingredienteValido = false;
+                for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
+                    if (beanIngrediente.getNome().equals(ingrediente.getNome()) && beanIngrediente.getQuantita() >= ingrediente.getQuantita() && beanIngrediente.getScadenza().after(currentDate)) {
+                        ingredienteValido = true;
+                        validIngredientCount++;
+                        break;
+                    }
+                }
+
+                // Recupera il tipo di ingrediente
+                if (ingrediente.getTipo().equals("cibo")) {
+                    tipoIngrediente = "g";
+                } else if (ingrediente.getTipo().equals("drink")) {
+                    tipoIngrediente = "l";
+                }
+
+                // Crea la label per l'ingrediente
+                Label ingredienteLabel = new Label(ingrediente.getNome() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
+                ingredienteLabel.setStyle("-fx-font-size: 12px;");
+
+                // Aggiungi un'icona di successo o di errore accanto all'ingrediente
+                ImageView iconView;
+                if (ingredienteValido) {
+                    iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
+                } else {
+                    iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
+
+                    // Rendi l'icona cliccabile
+                    iconView.setOnMouseClicked(event -> {
+                        // Crea un Alert per spiegare perché l'ingrediente non è valido
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Ingrediente Non Valido");
+                        alert.setHeaderText(null);
+                        alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
+                                "- Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " g, disponibile " /*+ getQuantitaDisponibile(ingrediente, beanIngredienti)*/ + " g.\n" +
+                                "- Oppure l'ingrediente è scaduto.");
+                        alert.showAndWait();
+                    });
+
+                    // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile
+                    iconView.setCursor(Cursor.HAND);
+                }
+
+                // Imposta la dimensione dell'icona success/error
+                iconView.setFitWidth(14);
+                iconView.setFitHeight(14);
+
+                // Aggiungi l'icona e la label all'ingrediente nella griglia
+                HBox ingredienteBox = new HBox(5, iconView, ingredienteLabel);
+                ingredientiGrid.add(ingredienteBox, column, row);
+
+                // Gestione cambio colonne della griglia
                 row++;
                 if (row > dettagliRicetta.getIngredienti().getListaIngredienti().size() / 2) {
                     row = 0;
@@ -630,18 +691,31 @@ public class OttieniRicettaControllerGrafico {
             videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
 
             // Pulsante per confermare l'uso della ricetta
-            CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
             Button confirmButton = new Button("Usa ricetta");
-            confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+
+            // Controlla se tutti gli ingredienti sono validi per abilitare o disabilitare il pulsante
+            if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size()) {
+                confirmButton.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
+                confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+                confirmButton.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato
+            } else {
+                confirmButton.setDisable(true);   // Disabilita il pulsante se non tutti gli ingredienti sono validi
+                confirmButton.setStyle("-fx-background-color: #9e0606; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+                confirmButton.setCursor(Cursor.DEFAULT); // Cursore standard se disabilitato
+            }
+
+            // Invocazione del metodo per scalare le quantità degli ingredienti al click del bottone "usa ricetta"
             EventHandler<ActionEvent> confirmHandler = (confirmEvent) -> {
                 try {
-                    ricetta.usaRicetta(usernameBean, dettagliRicetta);
+                    ricetta.usaRicetta(dettagliRicetta);
                     Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
                 } catch (DAOException | SQLException ex) {
                     Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
                 }
             };
             confirmButton.setOnAction(confirmHandler);
+
+            // Allineamento bottone "usa ricetta"
             HBox buttonBox = new HBox(10);
             buttonBox.setAlignment(Pos.CENTER);
             buttonBox.getChildren().add(confirmButton);

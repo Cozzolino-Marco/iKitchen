@@ -1,9 +1,7 @@
 package com.iKitchen.controller;
 
 import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.bean.BeanRicetta;
-import com.iKitchen.model.bean.BeanRicette;
-import com.iKitchen.model.bean.CredentialsBean;
+import com.iKitchen.model.bean.*;
 import com.iKitchen.model.domain.*;
 import com.iKitchen.view.OttieniRicettaControllerGraficoAPI;
 
@@ -23,7 +21,7 @@ public class OttieniRicettaControllerApplicativo {
         facadeOttieniRicetta = new FacadeOttieniRicetta();
     }
 
-    // Restituisce la lista di ricette in base ai filtri scelti
+    // Restituisce al controller grafico la lista di ricette in base ai filtri scelti
     public BeanRicette mostraRicette(BeanRicette infoPerListaRicette) throws DAOException, SQLException, IOException {
 
         // Estraggo le informazioni dal bean
@@ -35,8 +33,7 @@ public class OttieniRicettaControllerApplicativo {
         // Chiamata alla boundary dell'attore esterno
         if (provenienza.equals("Dal web")) {
             OttieniRicettaControllerGraficoAPI controllerAttoreSecondario = new OttieniRicettaControllerGraficoAPI();
-            BeanRicette ricetteBean = controllerAttoreSecondario.recuperaRicette(infoPerListaRicette);
-            return ricetteBean;
+            return controllerAttoreSecondario.recuperaRicette(infoPerListaRicette);
         }
 
         // Uso il facade per centralizzare i DAO delle procedure
@@ -61,6 +58,7 @@ public class OttieniRicettaControllerApplicativo {
         return ricetteBean;
     }
 
+    // Restituisce al controller grafico tutte le informazioni di una ricetta specifica
     public BeanRicetta ottieniDettagliRicetta(BeanRicetta infoPerRicetta) throws DAOException, SQLException {
         // Estraggo le informazioni dal bean
         String codRicetta = infoPerRicetta.getCodice();
@@ -70,7 +68,7 @@ public class OttieniRicettaControllerApplicativo {
         ricetta = facadeOttieniRicetta.ottieniDettagliRicetta(codRicetta, categoria);
 
         // Creo un nuovo bean completo per restituire la ricetta alla vista
-        BeanRicetta beanRicetta = new BeanRicetta(
+        return new BeanRicetta(
                 ricetta.getCodice(),
                 ricetta.getTitolo(),
                 ricetta.getDescrizione(),
@@ -84,44 +82,50 @@ public class OttieniRicettaControllerApplicativo {
                 ricetta.getVideoUrl(),
                 ricetta.getLikes()
         );
-        return beanRicetta;
     }
 
-    public void usaRicetta(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
+    // Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
+    public BeanIngredienti verificaQuantita(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
 
         // Estraggo le informazioni dal bean
         String username = credentials.getUsername();
 
-        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente (centralizzo DAO con il facade)
+        // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
 
         // Ottieni la data corrente
         Date currentDate = new Date();
 
+        // Crea un BeanIngredienti per contenere gli ingredienti validi
+        BeanIngredienti ingredientiValidi = new BeanIngredienti();
+
         // Itera attraverso gli ingredienti della ricetta
         for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
-            boolean ingredienteTrovato = false;
 
             // Cerca l'ingrediente richiesto nella dispensa dell'utente
             for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
                 if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
-                    ingredienteTrovato = true;
 
                     // Verifica se la quantità è insufficiente oppure se è scaduto
-                    if (ingredienteDispensa.getQuantita() < ingredienteRichiesto.getQuantita() || ingredienteDispensa.getScadenza().before(currentDate)) {
-                        throw new IllegalArgumentException("La quantità è insufficiente oppure è scaduto!");
+                    if (ingredienteDispensa.getQuantita() >= ingredienteRichiesto.getQuantita() && ingredienteDispensa.getScadenza().after(currentDate)) {
+                        BeanIngrediente beanIngredienteValido = new BeanIngrediente();
+                        beanIngredienteValido.setNome(ingredienteDispensa.getNome());
+                        beanIngredienteValido.setQuantita(ingredienteDispensa.getQuantita());
+                        beanIngredienteValido.setScadenza(ingredienteDispensa.getScadenza());
+                        ingredientiValidi.getListIngredienti().add(beanIngredienteValido);
                     }
-                    break;  // Esci dal loop interno poiché l'ingrediente è stato trovato
-                }
-            }
 
-            // Se l'ingrediente non è stato trovato nella dispensa allora lancia l'eccezione
-            if (!ingredienteTrovato) {
-                throw new IllegalArgumentException("L'ingrediente non è stato trovato nella dispensa!");
+                    break;  // Esci dal loop interno poiché l'ingrediente è stato trovato e aggiunto
+                }
             }
         }
 
-        // Se tutti gli ingredienti sono sufficienti, aggiorna le quantità richiamando il DAO con il facade
+        // Ritorna il BeanIngredienti contenente gli ingredienti validi
+        return ingredientiValidi;
+    }
+
+    // Metodo che aggiorna le quantità richiamando il DAO con il facade
+    public void usaRicetta(BeanRicetta beanRicetta) throws DAOException, SQLException {
         facadeOttieniRicetta.usaRicetta(beanRicetta.getCodice());
     }
 }

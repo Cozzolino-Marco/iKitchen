@@ -26,6 +26,7 @@ public class ApplicationStart extends Application {
     @Override
     public void start(Stage stage) throws IOException, DAOException, SQLException {
 
+        // Gestione servizio link web della ricetta
         hostServices = getHostServices();
 
         String nomeFile = "iKitchen/RicetteUtenti/Primi piatti_Da chef.dat";
@@ -60,6 +61,7 @@ public class ApplicationStart extends Application {
         }
     }
 
+    // Ritorno l'istanza utile al servizio link web della ricetta
     public static HostServices getHostServicesInstance() {
         return hostServices;
     }

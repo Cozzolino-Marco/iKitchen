@@ -31,9 +31,6 @@ import java.util.Objects;
 public class UtenteControllerGrafico {
 
     @FXML
-    private BorderPane root;
-
-    @FXML
     private VBox elementContainerValidi; // Contenitore per gli ingredienti validi
 
     @FXML
@@ -56,9 +53,6 @@ public class UtenteControllerGrafico {
 
     @FXML
     public ScrollPane scrollPaneNonValidi;
-
-    // Variabili
-    private OttieniIngredientiControllerApplicativo ingredienti = null;
 
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
@@ -92,20 +86,17 @@ public class UtenteControllerGrafico {
         CredentialsBean infoPerListaIngredienti = new CredentialsBean(username);
 
         // Inizializza il controller applicativo per ottenere gli ingredienti
-        ingredienti = new OttieniIngredientiControllerApplicativo();
+        OttieniIngredientiControllerApplicativo ingredienti = new OttieniIngredientiControllerApplicativo();
 
         // Gestisci la visualizzazione degli ingredienti validi
         BeanIngredienti validi = ingredienti.mostraIngredientiValidi(infoPerListaIngredienti);
         if (validi.getListIngredienti().isEmpty()) {
-            // Mostra il messaggio se la lista degli ingredienti validi è vuota
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));
             emptyMessage.setStyle("-fx-text-fill: grey;");
-            //elementContainerValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
             elementContainerValidi.getChildren().add(emptyMessage);
         } else {
             // Aggiungi gli ingredienti validi al VBox
-            //elementContainerValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
             for (BeanIngrediente ingrediente : validi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
                 elementContainerValidi.getChildren().add(element);
@@ -114,18 +105,12 @@ public class UtenteControllerGrafico {
 
         // Gestisci la visualizzazione degli ingredienti non validi
         BeanIngredienti nonValidi = ingredienti.mostraIngredientiNonValidi(infoPerListaIngredienti);
-        //BorderPane root = (BorderPane) scrollPaneNonValidi.getParent().getParent().getParent().getParent().getParent();
         if (nonValidi.getListIngredienti().isEmpty()) {
-            // Mostra il messaggio se la lista degli ingredienti non validi è vuota
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));
             emptyMessage.setStyle("-fx-text-fill: grey;");
-            //elementContainerNonValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
-            //root.setCenter(emptyMessage);
-
         } else {
             // Aggiungi gli ingredienti non validi al VBox
-            //elementContainerNonValidi.getChildren().clear(); // Rimuovi eventuali elementi precedenti
             for (BeanIngrediente ingrediente : nonValidi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
                 elementContainerNonValidi.getChildren().add(element);
@@ -209,8 +194,16 @@ public class UtenteControllerGrafico {
         titleAndIconsBox.setSpacing(10); // Spazio tra il titolo e le icone
         titleAndIconsBox.setAlignment(Pos.CENTER_LEFT);
 
+        // Recupera il tipo di ingrediente
+        String tipoIngrediente = null;
+        if (ingrediente.getTipo().equals("cibo")) {
+            tipoIngrediente = "g";
+        } else if (ingrediente.getTipo().equals("drink")) {
+            tipoIngrediente = "l";
+        }
+
         // Dettagli dell'ingrediente (quantità)
-        Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " g");
+        Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " " + tipoIngrediente);
         quantitaLabel.setStyle("-fx-font-size: 12px;");
 
         // Formattazione della data di scadenza
@@ -231,7 +224,7 @@ public class UtenteControllerGrafico {
         HBox mainContent = new HBox(imgBox, detailsBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
-        mainContent.setPadding(new Insets(5)); // Padding per distanziare l'elemento dal bordo del BorderPane
+        mainContent.setPadding(new Insets(5));
 
         // Impostazione dell'elemento grafico
         element.setCenter(mainContent);

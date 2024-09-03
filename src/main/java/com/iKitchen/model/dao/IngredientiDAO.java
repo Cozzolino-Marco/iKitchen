@@ -33,6 +33,7 @@ public class IngredientiDAO {
                     ingrediente.setScadenza(rs.getDate("scadenza"));
                     ingrediente.setQuantita(rs.getInt("quantitaRichiesta"));
                     ingrediente.setLimite(rs.getInt("limite"));
+                    ingrediente.setTipo(rs.getString("tipo"));
                     listIngredienti.addIngrediente(ingrediente);
                 }
             }
