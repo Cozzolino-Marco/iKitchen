@@ -4,7 +4,10 @@ public class Credentials {
 
     static String username;
     static String password;
+    static String ripetiPassword;
     static Role role;
+    static String nome;
+    static String cognome;
 
     public Credentials(String username, String password, Role role) {
         Credentials.username = username;
@@ -17,19 +20,53 @@ public class Credentials {
         Credentials.password = password;
     }
 
+    // TODO: Costruttore temporaneo da vedere
+    public Credentials(String username, String password, String ripetiPassword, Role role, String nome, String cognome) {
+        Credentials.username = username;
+        Credentials.password = password;
+        Credentials.ripetiPassword = ripetiPassword;
+        Credentials.role = role;
+        Credentials.nome = nome;
+        Credentials.cognome = cognome;
+    }
+
     // Getter
+    public static String getNome() {
+        return nome;
+    }
+    public static String getCognome() {
+        return cognome;
+    }
+    public static Role getRole() {
+        return role;
+    }
     public static String getUsername() {
         return username;
     }
     public static String getPassword() {
         return password;
     }
-    public Role getRole() {
-        return role;
+    public static String getRipetiPassword() {
+        return ripetiPassword;
     }
 
     // Setter
-    public void setRole(Role role){
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+    public static void setRole(Role role){
         Credentials.role = role;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setRipetiPassword(String ripetiPassword) {
+        this.ripetiPassword = ripetiPassword;
     }
 }

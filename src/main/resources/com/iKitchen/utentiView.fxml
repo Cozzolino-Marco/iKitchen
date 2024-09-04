@@ -21,7 +21,7 @@
     <top>
         <VBox prefWidth="500.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
-                <Label text="Dispensa" style="-fx-text-fill: white;">
+                <Label fx:id="labelTitle" style="-fx-text-fill: white;">
                     <font>
                         <Font name="System Bold" size="20.0"/>
                     </font>
@@ -36,7 +36,6 @@
             <padding>
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>
-
             <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" prefWidth="500.0">
                 <Tab fx:id="tabValidi" text="Disponibili">
                     <!-- ScrollPane per Ingredienti Validi -->
@@ -47,7 +46,6 @@
                     </VBox>
                 </Tab>
                 <Tab fx:id="tabNonValidi" text="Da acquistare">
-                    <!-- ScrollPane per Ingredienti Non Validi -->
                     <VBox spacing="10.0">
                         <ScrollPane fx:id="scrollPaneNonValidi" fitToWidth="true" fitToHeight="true">
                             <VBox fx:id="elementContainerNonValidi" spacing="10"/>
@@ -60,9 +58,10 @@
 
     <!-- Barra di navigazione inferiore -->
     <bottom>
-        <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
-            <Button text="🏠" onAction="#homePageUtente"/>
+        <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
+            <Button text="⏪" onAction="#loginView"/>
             <Button text="🌍" onAction="#categorieView"/>
+            <Button text="🏠" onAction="#homePageUtente"/>
             <Button text="❤" onAction="#preferitiView"/>
             <Button text="➕" onAction="#aggiungiProdotto"/>
         </HBox>

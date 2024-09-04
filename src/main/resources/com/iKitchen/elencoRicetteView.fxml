@@ -11,13 +11,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.iKitchen.view.OttieniRicettaControllerGrafico">
 
     <!-- Barra di navigazione superiore -->
     <top>
-        <VBox prefWidth="500.0" spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <VBox prefWidth="500.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
                 <Label fx:id="categoriaLabelTitle" text="Categoria" style="-fx-text-fill: white;">
                     <font>
@@ -30,7 +31,7 @@
 
     <!-- Lista delle ricette -->
     <center>
-        <VBox fx:id="topControls" spacing="10.0">
+        <VBox spacing="10.0">
             <padding>
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>

@@ -4,9 +4,11 @@ import com.iKitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanIngredienti;
+import com.iKitchen.model.bean.BeanRegistrazione;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
+import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,10 +33,13 @@ import java.util.Objects;
 public class UtenteControllerGrafico {
 
     @FXML
-    private VBox elementContainerValidi; // Contenitore per gli ingredienti validi
+    private Label labelTitle;
 
     @FXML
-    private VBox elementContainerNonValidi; // Contenitore per gli ingredienti non validi
+    private VBox elementContainerValidi;
+
+    @FXML
+    private VBox elementContainerNonValidi;
 
     @FXML
     private TabPane tabPane;
@@ -54,11 +59,20 @@ public class UtenteControllerGrafico {
     @FXML
     public ScrollPane scrollPaneNonValidi;
 
+    // Setta il titolo della categoria della barra di navigazione superiore
+    public void setLabelTitle(String title) {
+        labelTitle.setText(title);
+    }
+
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
         if (elementContainerValidi != null) {
             caricaIngredienti(Credentials.getUsername());
         }
+
+        // TODO: Modifica la logica di recupero del nome
+        BeanRegistrazione beanRegistrazione = new BeanRegistrazione();
+        setLabelTitle("Dispensa di " + beanRegistrazione.getNome());
 
         // Centrare il TabPane orizzontalmente
         tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
@@ -69,8 +83,8 @@ public class UtenteControllerGrafico {
         tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
 
         // Configurazione dei Tab
-        configureTab(tabValidi); // Colori per i tab "Validi"
-        configureTab(tabNonValidi); // Colori per i tab "Non validi"
+        configureTab(tabValidi);
+        configureTab(tabNonValidi);
 
         // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> updateTabStyles());
@@ -272,39 +286,26 @@ public class UtenteControllerGrafico {
         stage.show();
     }
 
-    public void preferitiView() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/preferitiView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
+    public void preferitiView() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
-    public void aggiungiProdotto() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
+    public void aggiungiProdotto() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+    }
 
-        String fxmlFile = "/com/iKitchen/aggiungiProdottoView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
+    // Chiamata al controller del login
+    public void loginView() throws IOException {
+        boolean confermato = Popup.mostraPopupConferma("Conferma Logout", "Sei sicuro di voler effettuare il logout?", "warning");
+        if (confermato) {
+            //Credentials.setRole(""); // TODO: Evitare eccezione DAO per il ruolo
+            LoginGrafico loginGrafico = new LoginGrafico();
+            loginGrafico.loginView();
+        }
     }
 
     // Metodo per configurare lo stile base dei tab
     private void configureTab(Tab tab) {
-        // Usa solo stili di base che sono applicabili direttamente
         tab.setStyle("-fx-background-color: " + "#00A5A5" + ";"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"

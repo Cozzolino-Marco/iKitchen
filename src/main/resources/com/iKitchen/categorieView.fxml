@@ -28,7 +28,7 @@
     <!-- Sezione centrale con i bottoni per le categorie -->
     <center>
         <VBox fx:id="categoriesContainer" spacing="10.0" BorderPane.alignment="CENTER">
-            <!-- I bottoni delle categorie verranno aggiunti dinamicamente -->
+            <!-- I bottoni delle categorie vengono aggiunti dinamicamente -->
             <VBox.margin>
                 <Insets top="20.0" bottom="20.0"/>
             </VBox.margin>

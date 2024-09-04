@@ -27,7 +27,7 @@
     </VBox>
 
     <!-- Sezione centrale con i menu a tendina -->
-    <VBox fx:id="comboBoxContainer" spacing="50.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="50.0" alignment="CENTER">
+    <VBox fx:id="comboBoxContainer" spacing="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="50.0" alignment="CENTER">
 
         <!-- Titolo e ComboBox per provenienza, dentro una VBox visibile -->
         <VBox spacing="10.0" alignment="CENTER" style="-fx-background-color: #E0E0E0; -fx-background-radius: 15; -fx-padding: 20; -fx-border-radius: 15;">
@@ -36,7 +36,7 @@
                     <Font name="Calibri" size="20.0"/>
                 </font>
             </Label>
-            <ComboBox fx:id="provenienzaComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 30; -fx-border-radius: 30; -fx-border-color: #D1D1D1; -fx-border-width: 2; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
+            <ComboBox fx:id="provenienzaComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #D1D1D1; -fx-border-width: 1; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Da chef"/>
@@ -53,7 +53,7 @@
                     <Font name="Calibri" size="20.0"/>
                 </font>
             </Label>
-            <ComboBox fx:id="filtraggioComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D1D1D1; -fx-border-width: 2; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
+            <ComboBox fx:id="filtraggioComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #D1D1D1; -fx-border-width: 1; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Tutte le ricette"/>
@@ -70,7 +70,7 @@
                     <Font name="Calibri" size="20.0"/>
                 </font>
             </Label>
-            <ComboBox fx:id="storageComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D1D1D1; -fx-border-width: 2; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
+            <ComboBox fx:id="storageComboBox" promptText="Seleziona l'opzione" prefWidth="300.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-border-radius: 15; -fx-border-color: #D1D1D1; -fx-border-width: 1; -fx-padding: 10; -fx-text-fill: #2C3E50; -fx-font-size: 16; -fx-font-family: 'Calibri';">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Solo dal database"/>

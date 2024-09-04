@@ -9,10 +9,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
 
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.iKitchen.view.RegistratiGrafico"
-            prefHeight="400.0" prefWidth="600.0">
+            style="-fx-background-color: #d4cdcd;">
 
     <!-- Grafica form di registrazione -->
     <VBox fx:id="mainContainer" alignment="TOP_CENTER" spacing="20.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
@@ -34,7 +36,14 @@
                 </ImageView>
             </StackPane>
             <StackPane alignment="CENTER_LEFT">
-                <TextField fx:id="textFieldRuolo" promptText="Ruolo" style="-fx-pref-width: 250px; -fx-pref-height: 38px; -fx-background-color: white; -fx-text-fill: #333; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-border-color: white; -fx-padding: 0 0 0 40px;"/>
+                <ComboBox fx:id="comboBoxRuolo" promptText="Seleziona il ruolo" style="-fx-pref-width: 250px; -fx-pref-height: 38px; -fx-background-color: white; -fx-text-fill: #333; -fx-background-radius: 10px; -fx-border-radius: 10px; -fx-border-width: 2px; -fx-border-color: white; -fx-padding: 0 0 0 30px;">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Utente domestico"/>
+                            <String fx:value="Chef"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
                 <ImageView fitWidth="40.0" fitHeight="20.0" preserveRatio="true">
                     <Image url="@/ruolo_icon.png"/>
                 </ImageView>

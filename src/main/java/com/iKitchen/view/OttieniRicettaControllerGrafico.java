@@ -33,7 +33,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,9 +68,6 @@ public class OttieniRicettaControllerGrafico {
     @FXML
     private VBox categoriesContainer;
 
-    @FXML
-    private VBox comboBoxContainer;
-
     // Variabili
     private OttieniRicettaControllerApplicativo ricette = null;
     private OttieniRicettaControllerApplicativo ricetta = null;
@@ -91,11 +87,6 @@ public class OttieniRicettaControllerGrafico {
         }
         if (categoriesContainer != null) {
             loadCategories();
-        }
-        if (comboBoxContainer != null) {
-            customDropDownMenu(provenienzaComboBox);
-            customDropDownMenu(filtraggioComboBox);
-            customDropDownMenu(storageComboBox);
         }
     }
 
@@ -276,13 +267,6 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
-    // Gestione grafica di un menù a tendina della pagina filtri
-    private void customDropDownMenu(ComboBox<String> comboBox) {
-        // Configura il font e il colore del promptText
-        comboBox.setPromptText("Seleziona l'opzione");
-        comboBox.setStyle("-fx-prompt-text-fill: white; -fx-font-size: 14px;");
-    }
-
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
     private void caricaRicette(String categoria, String provenienza, String filtraggio, String storage) throws DAOException, SQLException, IOException {
 
@@ -377,22 +361,29 @@ public class OttieniRicettaControllerGrafico {
     private BorderPane createElement(BeanRicetta ricettaBean) {
         BorderPane element = new BorderPane();
 
-        // Creazione dell'immagine del piatto
+        // Gestione dell'immagine della ricetta
         HBox imgBox;
         ImageView imageView;
+        Image image;
         try {
-            Image image;
             if (ricettaBean.getImmagine() != null && ricettaBean.getImmagine().getBinaryStream() != null) {
                 InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
                 image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
             } else {
                 image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
             }
-            imageView = createStyledImageView(image);
         } catch (SQLException e) {
-            Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
-            imageView = createStyledImageView(defaultImage);
+            image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
         }
+
+        // Settaggi grafici per l'immagine
+        imageView = new ImageView(image);
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(65);
+        Rectangle clip = new Rectangle(65, 70);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        imageView.setClip(clip);
         imgBox = new HBox(imageView);
         element.setLeft(imgBox);
 
@@ -500,23 +491,7 @@ public class OttieniRicettaControllerGrafico {
                 }
             });
         }
-        
         return element;
-    }
-
-    // Metodo per creare e stilizzare un ImageView
-    private ImageView createStyledImageView(Image image) {
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(70);
-        imageView.setFitWidth(65);
-
-        // Creazione di un Rectangle per angoli arrotondati delle immagini
-        Rectangle clip = new Rectangle(65, 70);
-        clip.setArcWidth(15);
-        clip.setArcHeight(15);
-        imageView.setClip(clip);
-
-        return imageView;
     }
 
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta
@@ -781,33 +756,7 @@ public class OttieniRicettaControllerGrafico {
     }
 
     // Metodo per mostrare la pagina dei preferiti
-    public void preferitiView() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/preferitiView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void aggiungiProdotto() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/aggiungiProdottoView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
+    public void preferitiView() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 }
