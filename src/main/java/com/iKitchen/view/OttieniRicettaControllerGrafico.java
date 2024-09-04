@@ -611,6 +611,7 @@ public class OttieniRicettaControllerGrafico {
             int row = 0;
             int validIngredientCount = 0;  // Contatore degli ingredienti validi
             Date currentDate = new Date();
+            int quantitaDisponibile = 0;
 
             // Controlla se l'ingrediente è nella lista degli ingredienti validi
             String tipoIngrediente = null;
@@ -621,6 +622,8 @@ public class OttieniRicettaControllerGrafico {
                         ingredienteValido = true;
                         validIngredientCount++;
                         break;
+                    } else {
+                        quantitaDisponibile = beanIngrediente.getQuantita();
                     }
                 }
 
@@ -643,15 +646,23 @@ public class OttieniRicettaControllerGrafico {
                     iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
 
                     // Rendi l'icona cliccabile
+                    int finalQuantitaDisponibile = quantitaDisponibile;
+                    String finalTipoIngrediente = tipoIngrediente;
                     iconView.setOnMouseClicked(event -> {
+
                         // Crea un Alert per spiegare perché l'ingrediente non è valido
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Ingrediente Non Valido");
+                        alert.setTitle("Ingrediente non valido");
                         alert.setHeaderText(null);
-                        alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
-                                "- Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " g, disponibile " /*+ getQuantitaDisponibile(ingrediente, beanIngredienti)*/ + " g.\n" +
-                                "- Oppure l'ingrediente è scaduto.");
-                        alert.showAndWait();
+                        if (ingrediente.getQuantita() <= finalQuantitaDisponibile) {
+                            alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
+                                    "Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " " + finalTipoIngrediente + ", disponibile " + finalQuantitaDisponibile + " " + finalTipoIngrediente + ".\n");
+                            alert.showAndWait();
+                        } else {
+                            alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché è scaduto.");
+                            alert.showAndWait();
+                        }
+
                     });
 
                     // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile

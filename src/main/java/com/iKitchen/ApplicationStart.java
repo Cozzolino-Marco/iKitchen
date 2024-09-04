@@ -29,6 +29,7 @@ public class ApplicationStart extends Application {
         // Gestione servizio link web della ricetta
         hostServices = getHostServices();
 
+        // TODO: Rimuovere il riempimento del file system
         String nomeFile = "iKitchen/RicetteUtenti/Primi piatti_Da chef.dat";
         MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
         ListRicette listRicette = new ListRicette();
@@ -40,8 +41,6 @@ public class ApplicationStart extends Application {
         }
         salvaEventiSuFile(ricetteToAdd, nomeFile);
 
-
-
         ApplicazioneStage.setStage(stage);
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
@@ -50,6 +49,7 @@ public class ApplicationStart extends Application {
         stage.show();
     }
 
+    // TODO: Rimuovere il metodo per il file system
     public void salvaEventiSuFile(List<Ricetta> ricette, String nomeFile) {
         try (FileOutputStream fos = new FileOutputStream(nomeFile);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -66,6 +66,7 @@ public class ApplicationStart extends Application {
         return hostServices;
     }
 
+    // MAIN
     public static void main(String[] args) {
         launch();
     }
