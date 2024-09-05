@@ -1,6 +1,8 @@
 package com.iKitchen.view;
 
+import com.iKitchen.ApplicationStart;
 import com.iKitchen.model.domain.ApplicazioneStage;
+import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,14 +47,62 @@ public class LoginGrafico {
     protected void onLoginButtonClick(){
         CredentialsBean credB;
         credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+
         try {
             LoginController loginController = new LoginController();
-            loginController.start(credB);
+            Credentials cred = loginController.start(credB);
+
+            // Recupera il nome associato allo username
+            loginController.recuperaNome(credB);
+
+            // Settaggi di caricamento scena ed FXML
+            FXMLLoader fxmlLoader;
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
+
+            // Controlla il ruolo dell'utente e carica la view appropriata
+            if (cred.getRole() != null) {
+                cambiaViewDopoLogin(cred, stage);
+            } else {
+                fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
+                scene = new Scene(fxmlLoader.load(), ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+            }
+
         } catch (DAOException | IOException e) {
             throw new IllegalArgumentException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Metodo che gestisce il caricamento della view in base al ruolo
+    private void cambiaViewDopoLogin(Credentials credentials, Stage stage) throws IOException, DAOException, SQLException {
+
+        String fxmlFile;
+        FXMLLoader fxmlLoader = new FXMLLoader();
+
+        if (credentials.getRole().getId() == 1) {
+            fxmlFile = "/com/iKitchen/utentiView.fxml"; // View per utenti domestici
+        } else {
+            fxmlFile = "/com/iKitchen/chefView.fxml"; // View per chef
+        }
+
+        // Carica l'FXML
+        fxmlLoader.setLocation(getClass().getResource(fxmlFile));
+        Parent rootNode = fxmlLoader.load();
+
+        // Ottieni il controller dall'FXMLLoader
+        UtenteControllerGrafico controller = fxmlLoader.getController();
+
+        // Chiama l'inizializzatore del controller grafico di utente
+        controller.initialize();
+
+        // Imposta la scena
+        Scene scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        stage.setTitle("iKitchen");
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        stage.show();
     }
 
     // Chiamata al controller della registrazione
@@ -61,8 +111,10 @@ public class LoginGrafico {
         registratiGrafico.registratiView();
     }
 
+    // Metodo per il cambio della grafica
     public void cambiaGrafica()throws IOException{
 
+        // Invoca il metodo per il cambio grafica
         ScreenSize.changeGUI();
 
         FXMLLoader fxmlLoader;
@@ -94,6 +146,7 @@ public class LoginGrafico {
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
+        stage.centerOnScreen();
         stage.show();
     }
 }

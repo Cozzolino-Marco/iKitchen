@@ -1,6 +1,9 @@
 package com.iKitchen.model.dao;
 
 import com.iKitchen.exception.DAOException;
+import com.iKitchen.model.domain.Credentials;
+import com.iKitchen.model.domain.Role;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,20 +14,16 @@ public class RegistrazioneDAO {
 
         // Parametri
         CallableStatement cs = null;
-        String nome = (String) params[0];
-        String cognome = (String) params[1];
-        String ruolo = (String) params[2];
-        String username = (String) params[3];
-        String password = (String) params[4];
+        Credentials cred = (Credentials) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call registrazione(?, ?, ?, ?, ?)}");
-            cs.setString(1, nome);
-            cs.setString(2, cognome);
-            cs.setString(3, ruolo);
-            cs.setString(4, username);
-            cs.setString(5, password);
+            cs.setString(1, cred.getNome());
+            cs.setString(2, cred.getCognome());
+            cs.setInt(3, cred.getRole().getId());
+            cs.setString(4, cred.getUsername());
+            cs.setString(5, cred.getPassword());
 
             // Esegui la stored procedure
             cs.execute();

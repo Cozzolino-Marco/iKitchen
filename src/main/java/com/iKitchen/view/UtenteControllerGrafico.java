@@ -4,10 +4,10 @@ import com.iKitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanIngredienti;
-import com.iKitchen.model.bean.BeanRegistrazione;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
+import com.iKitchen.model.domain.Role;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
@@ -70,9 +70,8 @@ public class UtenteControllerGrafico {
             caricaIngredienti(Credentials.getUsername());
         }
 
-        // TODO: Modifica la logica di recupero del nome
-        BeanRegistrazione beanRegistrazione = new BeanRegistrazione();
-        setLabelTitle("Dispensa di " + beanRegistrazione.getNome());
+        // Inizializza il titolo con il messaggio interattivo
+        setLabelTitle("Dispensa di " + Credentials.getNome());
 
         // Centrare il TabPane orizzontalmente
         tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
@@ -252,7 +251,7 @@ public class UtenteControllerGrafico {
         return element;
     }
 
-    public void homePageUtente() throws IOException {
+    public void homePageUtente() throws IOException, DAOException, SQLException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
@@ -260,6 +259,11 @@ public class UtenteControllerGrafico {
         String fxmlFile = "/com/iKitchen/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        // Forzo la chiamata al controller stesso per rinizializzare la pagina
+        UtenteControllerGrafico controller = fxmlLoader.getController();
+        controller.initialize();
+
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");

@@ -2,11 +2,12 @@ package com.iKitchen.view;
 
 import com.iKitchen.controller.RegistratiController;
 import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.bean.BeanRegistrazione;
+import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
-import com.iKitchen.model.domain.Credentials;
+import com.iKitchen.model.domain.Role;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,11 +15,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class RegistratiGrafico {
+
+    @FXML
+    private VBox mainContainer;
 
     @FXML
     private TextField textFieldNome;
@@ -27,7 +32,7 @@ public class RegistratiGrafico {
     private TextField textFieldCognome;
 
     @FXML
-    private ComboBox comboBoxRuolo;
+    private ComboBox<Role> comboBoxRuolo;
 
     @FXML
     private TextField textFieldUsername;
@@ -37,6 +42,11 @@ public class RegistratiGrafico {
 
     @FXML
     private PasswordField textFieldRipetiPassword;
+
+    public void initialize() {
+        // Configura la ComboBox con i valori dell'enum Role
+        comboBoxRuolo.setItems(FXCollections.observableArrayList(Role.values()));
+    }
 
     // Caricamento del file FXML della registrazione
     public void registratiView() throws IOException {
@@ -61,28 +71,29 @@ public class RegistratiGrafico {
         loginGrafico.loginView();
     }
 
+    // Metodo per effettuare la registrazione chiamato dalla view
     @FXML
     public void confermaRegistrazione() {
 
         // Prendo i dati dai campi di testo della view registrazione
         String nome = textFieldNome.getText();
         String cognome = textFieldCognome.getText();
-        String ruolo = (String) comboBoxRuolo.getValue();
+        Role ruolo = comboBoxRuolo.getValue();
         String username = textFieldUsername.getText();
         String password = textFieldPassword.getText();
         String ripetiPassword = textFieldRipetiPassword.getText();
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
-        if (nome.isEmpty() || cognome.isEmpty() || ruolo.isEmpty() || username.isEmpty() || password.isEmpty() || ripetiPassword.isEmpty()) {
+        if (nome.isEmpty() || cognome.isEmpty() || ruolo == null || username.isEmpty() || password.isEmpty() || ripetiPassword.isEmpty()) {
             Popup.mostraPopup("Attenzione", "Si prega di selezionare tutte le opzioni prima di procedere!", "warning");
             return;
         }
 
-        // Creazione di un oggetto BeanRegistrazione e riempimento con i dati acquisiti
-        BeanRegistrazione beanRegistrazione = new BeanRegistrazione();
+        // Creazione di un oggetto bean e riempimento con i dati acquisiti
+        CredentialsBean beanRegistrazione = new CredentialsBean();
         beanRegistrazione.setNome(nome);
         beanRegistrazione.setCognome(cognome);
-        beanRegistrazione.setRuolo(ruolo);
+        beanRegistrazione.setRole(ruolo);
         beanRegistrazione.setUsername(username);
         beanRegistrazione.setPassword(password);
         beanRegistrazione.setRipetiPassword(ripetiPassword);
@@ -92,7 +103,7 @@ public class RegistratiGrafico {
 
         // Mostra il popup in base all'esito della query
         try {
-            controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
+            controllerRegistrati.effettuaRegistrazione();
             LoginGrafico loginGrafico = new LoginGrafico();
             loginGrafico.loginView();
             Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");
