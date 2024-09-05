@@ -1,0 +1,61 @@
+/* Global Styles */
+.root {
+    -fx-background-color: #000000; /* Black background */
+}
+
+/* Login Label */
+#loginLabel {
+    -fx-font-size: 50px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff; /* White text */
+}
+
+/* TextField Styles */
+#textFieldUsername, #textFieldPassword {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 60px;
+    -fx-background-color: #ffffff; /* White background */
+    -fx-text-fill: #000000; /* Black text */
+    -fx-border-color: #000000; /* Black border */
+    -fx-border-width: 2px;
+    -fx-background-radius: 0; /* No border radius */
+    -fx-border-radius: 0; /* No border radius */
+    -fx-padding: 0 0 0 40px; /* Padding for text inside the fields */
+}
+
+/* Button Styles */
+#buttonEntra {
+    -fx-pref-width: 150px;
+    -fx-pref-height: 50px;
+    -fx-text-fill: #000000; /* Black text */
+    -fx-border-color: #000000; /* Black border */
+    -fx-border-width: 2px;
+    -fx-background-radius: 0; /* No border radius */
+    -fx-border-radius: 0; /* No border radius */
+}
+
+Button {
+    -fx-pref-width: 150px;
+    -fx-pref-height: 30px;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* VBox Padding and Spacing */
+VBox {
+    -fx-padding: 50px;
+    -fx-spacing: 40px;
+}
+
+/* HBox Margins */
+HBox {
+    -fx-spacing: 110px; /* Horizontal spacing between elements */
+}
+
+HBox .margin {
+    -fx-margin-left: 15px; /* Left margin */
+}

@@ -1,4 +1,4 @@
-package com.iKitchen.view;
+package com.iKitchen.viewIpovision;
 
 import com.iKitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.iKitchen.exception.DAOException;
@@ -30,8 +30,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-public class UtenteControllerGrafico {
+public class UtenteControllerGrafico2 {
 
+    /*
     @FXML
     private Label labelTitle;
 
@@ -330,5 +331,5 @@ public class UtenteControllerGrafico {
                         + "-fx-background-radius: 10px;");
             }
         }
-    }
+    }*/
 }

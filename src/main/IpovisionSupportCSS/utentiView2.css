@@ -1,0 +1,103 @@
+/* Imposta il background generale dell'interfaccia */
+.root {
+    -fx-background-color: #ffffff;
+}
+
+/* Stile per l'etichetta del titolo (Dispensa di ...) */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Colore testo: Grigio scuro */
+    -fx-padding: 20;
+}
+
+/* Stile per il TabPane */
+.tab-pane {
+    -fx-background-color: white;
+    -fx-border-color: #00A5A5;
+    -fx-border-width: 2;
+}
+
+/* Stile per i Tab selezionati */
+.tab-pane .tab:selected {
+    -fx-background-color: #8ee8e4; /* Colore del tab selezionato */
+    -fx-text-fill: white;
+}
+
+/* Stile per i Tab non selezionati */
+.tab-pane .tab {
+    -fx-background-color: #00A5A5; /* Colore dei tab non selezionati */
+    -fx-text-fill: white;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Contenitori degli ingredienti */
+.ingredient-container {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 20;
+    -fx-border-color: #dddddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* Stile per i bottoni dell'interfaccia (Logout, Preferiti, ecc.) */
+.action-button {
+    -fx-background-color: #00A5A5;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+/* Hover effect per i bottoni */
+.action-button:hover {
+    -fx-background-color: #008f8f;
+}
+
+/* Stile per gli elementi degli ingredienti (verranno aggiunti dinamicamente dal controller) */
+.ingredient-item {
+    -fx-border-color: gray;
+    -fx-border-width: 1;
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+
+/* Stile per le immagini degli ingredienti */
+.ingredient-image {
+    -fx-border-color: gray;
+    -fx-border-width: 1;
+    -fx-background-color: white;
+    -fx-border-radius: 15;
+}
+
+/* Stile per il titolo degli ingredienti */
+.ingredient-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+/* Stile per i dettagli degli ingredienti (quantità, scadenza, ecc.) */
+.ingredient-details {
+    -fx-font-size: 12px;
+    -fx-text-fill: #333333;
+}
+
+/* Stile per le icone di modifica e cancellazione */
+.ingredient-icons {
+    -fx-alignment: top-right;
+    -fx-spacing: 10;
+}
+
+/* Stile per il messaggio di lista vuota */
+.empty-message {
+    -fx-font-size: 20px;
+    -fx-text-fill: grey;
+}

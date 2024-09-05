@@ -49,8 +49,8 @@
                     <Insets left="15.0" />
                 </HBox.margin>
             </ImageView>
-            <ImageView fx:id="chefIcon" fitWidth="50.0" fitHeight="50.0" onMouseClicked="#onLoginButtonClick">
-                <Image url="@/chef_icon.png" />
+            <ImageView fx:id="chefIcon" fitWidth="50.0" fitHeight="53.0" onMouseClicked="#cambiaGrafica">
+                <Image url="@/changeGUI_icon.png" />
                 <HBox.margin>
                     <Insets left="70.0" />
                 </HBox.margin>

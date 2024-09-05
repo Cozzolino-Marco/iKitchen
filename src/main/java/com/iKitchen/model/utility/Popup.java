@@ -77,7 +77,7 @@ public class Popup {
         popupStage.showAndWait();
     }
 
-    public static boolean mostraPopupConferma(String titolo, String messaggio, String tipo) {
+    public static boolean mostraPopupConferma(String titolo, String messaggio) {
         AtomicBoolean confermato = new AtomicBoolean(false);
 
         // Crea un nuovo Stage per il popup
@@ -98,17 +98,7 @@ public class Popup {
 
         // Aggiunge un'icona in base al tipo di popup
         ImageView icon = new ImageView();
-        if (tipo.equalsIgnoreCase("success")) {
-            icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/success_icon.png"))));
-        } else if (tipo.equalsIgnoreCase("error")) {
-            icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/error_icon.png"))));
-        } else if (tipo.equalsIgnoreCase("warning")) {
-            icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/warning_icon.png"))));
-        } else if (tipo.equalsIgnoreCase("construction")) {
-            icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/construction_icon.jpg"))));
-            icon.setFitHeight(160);
-            icon.setFitWidth(160);
-        }
+        icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/warning_icon.png"))));
         icon.setFitHeight(50);
         icon.setFitWidth(50);
 
@@ -118,23 +108,25 @@ public class Popup {
         messageLabel.setTextAlignment(TextAlignment.CENTER);
         messageLabel.setStyle("-fx-text-fill: #001818; -fx-font-size: 14px; -fx-padding: 10px; -fx-alignment: center;");
 
-        // Aggiunge i pulsanti di conferma e annullamento
+        // Gestione bottone di cancellazione
+        Button cancelButton = new Button("Annulla");
+        cancelButton.setStyle("-fx-background-color: #A50000; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-pref-width: 80px; -fx-padding: 5px 10px; -fx-background-radius: 5px;");
+        cancelButton.setOnMouseEntered(event -> cancelButton.setStyle("-fx-background-color: #c20000; -fx-pref-width: 80px; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
+        cancelButton.setOnMouseExited(event -> cancelButton.setStyle("-fx-background-color: #A50000; -fx-pref-width: 80px; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
+        cancelButton.setOnAction(event -> popupStage.close());
+
+        // Gestion bottone di conferma
         Button confirmButton = new Button("Conferma");
-        confirmButton.setStyle("-fx-background-color: #00A5A5; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;");
-        confirmButton.setOnMouseEntered(event -> confirmButton.setStyle("-fx-background-color: #00c2c2; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
-        confirmButton.setOnMouseExited(event -> confirmButton.setStyle("-fx-background-color: #00A5A5; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
+        confirmButton.setStyle("-fx-background-color: #00A5A5; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-pref-width: 80px; -fx-padding: 5px 10px; -fx-background-radius: 5px;");
+        confirmButton.setOnMouseEntered(event -> confirmButton.setStyle("-fx-background-color: #00c2c2; -fx-pref-width: 80px; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
+        confirmButton.setOnMouseExited(event -> confirmButton.setStyle("-fx-background-color: #00A5A5; -fx-pref-width: 80px; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
         confirmButton.setOnAction(event -> {
             confermato.set(true);
             popupStage.close();
         });
 
-        Button cancelButton = new Button("Annulla");
-        cancelButton.setStyle("-fx-background-color: #A50000; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;");
-        cancelButton.setOnMouseEntered(event -> cancelButton.setStyle("-fx-background-color: #c20000; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
-        cancelButton.setOnMouseExited(event -> cancelButton.setStyle("-fx-background-color: #A50000; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-padding: 5px 10px; -fx-background-radius: 5px;"));
-        cancelButton.setOnAction(event -> popupStage.close());
-
-        HBox buttons = new HBox(10, confirmButton, cancelButton);
+        // Box orizzontale per ospitare i due bottoni
+        HBox buttons = new HBox(10, cancelButton, confirmButton);
         buttons.setAlignment(Pos.CENTER);
 
         // Aggiunge gli elementi al layout

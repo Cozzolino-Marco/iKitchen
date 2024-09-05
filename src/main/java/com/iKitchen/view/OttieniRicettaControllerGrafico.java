@@ -245,7 +245,7 @@ public class OttieniRicettaControllerGrafico {
 
         // Mostra un popup di errore se la categoria non è stata selezionata
         if (categoriaScelta == null) {
-            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "error");
+            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "warning");
         } else {
             // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
             FXMLLoader fxmlLoader = new FXMLLoader();

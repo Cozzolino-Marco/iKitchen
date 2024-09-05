@@ -1,21 +1,22 @@
-package com.iKitchen.view;
+package com.iKitchen.viewIpovision;
 
+import com.iKitchen.controller.LoginController;
+import com.iKitchen.exception.DAOException;
+import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.utility.ScreenSize;
+import com.iKitchen.view.RegistratiGrafico;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import com.iKitchen.controller.LoginController;
-import com.iKitchen.exception.DAOException;
-import com.iKitchen.model.bean.CredentialsBean;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class LoginGrafico {
+public class LoginGrafico2 {
 
     @FXML
     private TextField textFieldUsername;
@@ -59,41 +60,5 @@ public class LoginGrafico {
     public void registratiView() throws IOException {
         RegistratiGrafico registratiGrafico = new RegistratiGrafico();
         registratiGrafico.registratiView();
-    }
-
-    public void cambiaGrafica()throws IOException{
-
-        ScreenSize.changeGUI();
-
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile;
-        if (ScreenSize.getGUI() == 0){
-            /*if(Credentials.getRole().getId() == 1) {
-                fxmlFile = "/com/iKitchen/utentiView.fxml";
-            }else{
-                fxmlFile = "/com/iKitchen/chefView.fxml";
-            }*/
-            fxmlFile = "/com/iKitchen/login.fxml";
-
-        } else {
-            /*if(Credentials.getRole().getId() == 1) {
-                fxmlFile = "/com/iKitchen/utentiView2.fxml";
-            }else{
-                fxmlFile = "/com/iKitchen/chefView2.fxml";
-            }*/
-            fxmlFile = "/com/IpovisionGUI/login2.fxml";
-        }
-
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        scene.getStylesheets().add(getClass().getResource("/utentiView2.css").toExternalForm());
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
     }
 }
