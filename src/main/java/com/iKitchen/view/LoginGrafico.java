@@ -44,7 +44,7 @@ public class LoginGrafico {
 
     // Acquisizione credienziali e passaggio al controller del login
     @FXML
-    protected void onLoginButtonClick(){
+    protected void onLoginButtonClick() {
         CredentialsBean credB;
         credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
 
@@ -112,7 +112,7 @@ public class LoginGrafico {
     }
 
     // Metodo per il cambio della grafica
-    public void cambiaGrafica()throws IOException{
+    public void cambiaGrafica()throws IOException {
 
         // Invoca il metodo per il cambio grafica
         ScreenSize.changeGUI();

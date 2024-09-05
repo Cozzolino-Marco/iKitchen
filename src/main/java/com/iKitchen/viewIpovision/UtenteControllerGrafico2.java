@@ -4,25 +4,31 @@ import com.iKitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanIngredienti;
-import com.iKitchen.model.bean.BeanRegistrazione;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
+import com.iKitchen.view.LoginGrafico;
+import com.iKitchen.view.OttieniRicettaControllerGrafico;
+import com.iKitchen.view.UtenteControllerGrafico;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -32,15 +38,8 @@ import java.util.Objects;
 
 public class UtenteControllerGrafico2 {
 
-    /*
     @FXML
     private Label labelTitle;
-
-    @FXML
-    private VBox elementContainerValidi;
-
-    @FXML
-    private VBox elementContainerNonValidi;
 
     @FXML
     private TabPane tabPane;
@@ -52,7 +51,10 @@ public class UtenteControllerGrafico2 {
     private Tab tabNonValidi;
 
     @FXML
-    public VBox mainContainer;
+    private GridPane gridContainerValidi; // GridPane per ingredienti validi
+
+    @FXML
+    private GridPane gridContainerNonValidi; // GridPane per ingredienti non validi
 
     @FXML
     public ScrollPane scrollPaneValidi;
@@ -67,21 +69,15 @@ public class UtenteControllerGrafico2 {
 
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
-        if (elementContainerValidi != null) {
-            caricaIngredienti(Credentials.getUsername());
-        }
+        caricaIngredienti(Credentials.getUsername());
 
-        // TODO: Modifica la logica di recupero del nome
-        BeanRegistrazione beanRegistrazione = new BeanRegistrazione();
-        setLabelTitle("Dispensa di " + beanRegistrazione.getNome());
-
-        // Centrare il TabPane orizzontalmente
-        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
-        tabPane.setTabMinWidth(130); // Larghezza minima dei tab
-        tabPane.setTabMaxWidth(150); // Larghezza massima dei tab
+        // Inizializza il titolo con il messaggio interattivo
+        setLabelTitle("DISPENSA DI " + Credentials.getNome());
 
         // Configurazione del TabPane
-        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
+        tabPane.setStyle("-fx-background-color: white;");
+        tabPane.setTabMinWidth(130);
+        tabPane.setTabMaxWidth(150);
 
         // Configurazione dei Tab
         configureTab(tabValidi);
@@ -97,38 +93,74 @@ public class UtenteControllerGrafico2 {
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
     private void caricaIngredienti(String username) throws DAOException, SQLException {
 
-        // Crea un bean con le informazioni selezionate
         CredentialsBean infoPerListaIngredienti = new CredentialsBean(username);
 
-        // Inizializza il controller applicativo per ottenere gli ingredienti
-        OttieniIngredientiControllerApplicativo ingredienti = new OttieniIngredientiControllerApplicativo();
+        OttieniIngredientiControllerApplicativo ingredientiController = new OttieniIngredientiControllerApplicativo();
 
-        // Gestisci la visualizzazione degli ingredienti validi
-        BeanIngredienti validi = ingredienti.mostraIngredientiValidi(infoPerListaIngredienti);
+        // Definisci il numero di colonne che vuoi usare per il GridPane
+        int numColumns = 4;
+
+        // Gestisci gli ingredienti validi
+        BeanIngredienti validi = ingredientiController.mostraIngredientiValidi(infoPerListaIngredienti);
         if (validi.getListIngredienti().isEmpty()) {
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));
             emptyMessage.setStyle("-fx-text-fill: grey;");
-            elementContainerValidi.getChildren().add(emptyMessage);
+            gridContainerValidi.add(emptyMessage, 0, 0); // Aggiunge il messaggio alla prima posizione della griglia
         } else {
-            // Aggiungi gli ingredienti validi al VBox
+            int row = 0;
+            int col = 0;
             for (BeanIngrediente ingrediente : validi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
-                elementContainerValidi.getChildren().add(element);
+
+                // Imposta la larghezza massima per ciascun elemento
+                element.setMaxWidth(1200); // Aumenta questa dimensione se vuoi elementi più larghi
+
+                // Aggiunge l'elemento alla griglia nella posizione calcolata
+                gridContainerValidi.add(element, col, row);
+
+                // Imposta larghezza minima al GridPane
+                gridContainerValidi.setMinWidth(1200);
+                gridContainerValidi.setMaxWidth(1200);
+
+                // Avanza di colonna; se raggiungi l'ultima colonna, passa alla riga successiva
+                col++;
+                if (col >= numColumns) {
+                    col = 0;
+                    row++;
+                }
             }
         }
 
-        // Gestisci la visualizzazione degli ingredienti non validi
-        BeanIngredienti nonValidi = ingredienti.mostraIngredientiNonValidi(infoPerListaIngredienti);
+        // Gestisci gli ingredienti non validi
+        BeanIngredienti nonValidi = ingredientiController.mostraIngredientiNonValidi(infoPerListaIngredienti);
         if (nonValidi.getListIngredienti().isEmpty()) {
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));
             emptyMessage.setStyle("-fx-text-fill: grey;");
+            gridContainerNonValidi.add(emptyMessage, 0, 0); // Aggiunge il messaggio alla prima posizione della griglia
         } else {
-            // Aggiungi gli ingredienti non validi al VBox
+            int row = 0;
+            int col = 0;
             for (BeanIngrediente ingrediente : nonValidi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
-                elementContainerNonValidi.getChildren().add(element);
+
+                // Imposta la larghezza massima per ciascun elemento
+                element.setMaxWidth(1200); // Aumenta questa dimensione se vuoi elementi più larghi
+
+                // Imposta larghezza minima al GridPane
+                gridContainerNonValidi.setMinWidth(1200);
+                gridContainerNonValidi.setMaxWidth(1200);
+
+                // Aggiunge l'elemento alla griglia nella posizione calcolata
+                gridContainerNonValidi.add(element, col, row);
+
+                // Avanza di colonna; se raggiungi l'ultima colonna, passa alla riga successiva
+                col++;
+                if (col >= numColumns) {
+                    col = 0;
+                    row++;
+                }
             }
         }
     }
@@ -140,120 +172,68 @@ public class UtenteControllerGrafico2 {
         // Creazione dell'immagine dell'ingrediente
         HBox imgBox;
         ImageView imageView = new ImageView();
-        imageView.setFitHeight(70);
-        imageView.setFitWidth(65);
+        imageView.setFitHeight(80);
+        imageView.setFitWidth(75);
 
         // Imposta l'immagine
         try {
             if (ingrediente.getImmagine() != null) {
                 InputStream inputStream = ingrediente.getImmagine().getBinaryStream();
                 if (inputStream != null) {
-                    Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
+                    Image image = new Image(inputStream, 100, 100, true, true);
                     imageView.setImage(image);
                 } else {
-                    // Carica immagine di default
                     Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
                     imageView.setImage(defaultImage);
                 }
             } else {
-                // Carica immagine di default
                 Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
                 imageView.setImage(defaultImage);
             }
         } catch (SQLException e) {
-            // Carica immagine di default
             Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
             imageView.setImage(defaultImage);
         }
 
         // Creazione di un Rectangle per angoli arrotondati delle immagini
-        Rectangle clip = new Rectangle(65, 70);
-        clip.setArcWidth(15);
-        clip.setArcHeight(15);
+        Rectangle clip = new Rectangle(75, 80);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
         imageView.setClip(clip);
 
-        // Impostazione dello stile dell'immagine
-        imageView.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 15;");
-
-        // Predisposizione immagine
         imgBox = new HBox(imageView);
 
-        // Creazione del titolo dell'ingrediente e icone
+        // Creazione del titolo dell'ingrediente
         Label titleLabel = new Label(ingrediente.getNome());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        // Icone matita e cestino
-        ImageView pencilIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pencil_icon.png"))));
-        pencilIcon.setFitHeight(20);
-        pencilIcon.setFitWidth(20);
-        ImageView trashIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/trash_icon.png"))));
-        trashIcon.setFitHeight(20);
-        trashIcon.setFitWidth(20);
-
-        // Creazione di un AnchorPane per gestire la posizione delle icone
-        AnchorPane iconsAnchorPane = new AnchorPane();
-        iconsAnchorPane.getChildren().addAll(pencilIcon, trashIcon);
-
-        // Posizionamento delle icone all'interno dell'AnchorPane con uno spazio tra di esse
-        AnchorPane.setTopAnchor(pencilIcon, 0.0);
-        AnchorPane.setRightAnchor(pencilIcon, 25.0); // Spazio tra matita e cestino
-        AnchorPane.setTopAnchor(trashIcon, 0.0);
-        AnchorPane.setRightAnchor(trashIcon, 0.0); // Posizione del cestino vicino al bordo
-
-        // StackPane per contenere le icone
-        StackPane editingIcons = new StackPane(iconsAnchorPane);
-        StackPane.setAlignment(editingIcons, Pos.TOP_RIGHT);
-
-        // Combina titolo e icone in un unico HBox
-        HBox titleAndIconsBox = new HBox(titleLabel, editingIcons);
-        titleAndIconsBox.setSpacing(10); // Spazio tra il titolo e le icone
-        titleAndIconsBox.setAlignment(Pos.CENTER_LEFT);
-
-        // Recupera il tipo di ingrediente
-        String tipoIngrediente = null;
-        if (ingrediente.getTipo().equals("cibo")) {
-            tipoIngrediente = "g";
-        } else if (ingrediente.getTipo().equals("drink")) {
-            tipoIngrediente = "l";
-        }
-
-        // Dettagli dell'ingrediente (quantità)
+        // Quantità e data di scadenza
+        String tipoIngrediente = ingrediente.getTipo().equals("cibo") ? "g" : "l";
         Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " " + tipoIngrediente);
         quantitaLabel.setStyle("-fx-font-size: 12px;");
 
-        // Formattazione della data di scadenza
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
-        String formattedDate = "";
-        if (ingrediente.getScadenza() != null) {
-            formattedDate = sdf.format(ingrediente.getScadenza());
-        }
+        String formattedDate = ingrediente.getScadenza() != null ? sdf.format(ingrediente.getScadenza()) : "";
         Label scadenzaLabel = new Label("Scadenza: " + formattedDate);
         scadenzaLabel.setStyle("-fx-font-size: 12px;");
 
-        // VBox per contenere i dettagli dell'ingrediente
-        VBox detailsBox = new VBox(titleAndIconsBox, quantitaLabel, scadenzaLabel);
+        VBox detailsBox = new VBox(titleLabel, quantitaLabel, scadenzaLabel);
         detailsBox.setSpacing(5);
         detailsBox.setAlignment(Pos.CENTER_LEFT);
 
-        // Creazione della struttura principale
         HBox mainContent = new HBox(imgBox, detailsBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
         mainContent.setPadding(new Insets(5));
 
-        // Impostazione dell'elemento grafico
         element.setCenter(mainContent);
-        element.setRight(editingIcons);
         element.setPadding(new Insets(10));
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
-
-        // Gestore di eventi per il click sull'elemento
-        element.setOnMouseClicked(event -> {});
 
         return element;
     }
 
-    public void homePageUtente() throws IOException {
+    public void homePageUtente() throws IOException, DAOException, SQLException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
@@ -261,6 +241,11 @@ public class UtenteControllerGrafico2 {
         String fxmlFile = "/com/iKitchen/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        // Forzo la chiamata al controller stesso per rinizializzare la pagina
+        UtenteControllerGrafico controller = fxmlLoader.getController();
+        controller.initialize();
+
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
@@ -307,7 +292,7 @@ public class UtenteControllerGrafico2 {
 
     // Metodo per configurare lo stile base dei tab
     private void configureTab(Tab tab) {
-        tab.setStyle("-fx-background-color: " + "#00A5A5" + ";"
+        tab.setStyle("-fx-background-color: #00A5A5;"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"
                 + "-fx-background-radius: 10px;");
@@ -317,19 +302,18 @@ public class UtenteControllerGrafico2 {
     private void updateTabStyles() {
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
 
-        // Aggiorna gli stili dei tab
         for (Tab tab : tabPane.getTabs()) {
             if (tab.equals(selectedTab)) {
-                tab.setStyle("-fx-background-color: #8ee8e4;" // Colore per il tab selezionato
+                tab.setStyle("-fx-background-color: #8ee8e4;"
                         + "-fx-text-fill: white;"
                         + "-fx-border-radius: 10px;"
                         + "-fx-background-radius: 10px;");
             } else {
-                tab.setStyle("-fx-background-color: #00A5A5;" // Colore per i tab non selezionati
+                tab.setStyle("-fx-background-color: #00A5A5;"
                         + "-fx-text-fill: white;"
                         + "-fx-border-radius: 10px;"
                         + "-fx-background-radius: 10px;");
             }
         }
-    }*/
+    }
 }

@@ -1,37 +1,34 @@
 /* Global Styles */
 .root {
-    -fx-background-color: #000000; /* Black background */
+    -fx-background-color: #000000;
 }
 
 /* Login Label */
 #loginLabel {
     -fx-font-size: 50px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff; /* White text */
+    -fx-text-fill: #ffffff;
 }
 
 /* TextField Styles */
 #textFieldUsername, #textFieldPassword {
     -fx-pref-width: 250px;
     -fx-pref-height: 60px;
-    -fx-background-color: #ffffff; /* White background */
-    -fx-text-fill: #000000; /* Black text */
-    -fx-border-color: #000000; /* Black border */
-    -fx-border-width: 2px;
-    -fx-background-radius: 0; /* No border radius */
-    -fx-border-radius: 0; /* No border radius */
-    -fx-padding: 0 0 0 40px; /* Padding for text inside the fields */
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-border-color: #000000;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 0 0 0 40px;
 }
 
 /* Button Styles */
 #buttonEntra {
     -fx-pref-width: 150px;
     -fx-pref-height: 50px;
-    -fx-text-fill: #000000; /* Black text */
-    -fx-border-color: #000000; /* Black border */
-    -fx-border-width: 2px;
-    -fx-background-radius: 0; /* No border radius */
-    -fx-border-radius: 0; /* No border radius */
+    -fx-text-fill: #000000;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
 }
 
 Button {
@@ -39,10 +36,9 @@ Button {
     -fx-pref-height: 30px;
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
-    -fx-border-color: #000000;
     -fx-border-width: 2px;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
 }
 
 /* VBox Padding and Spacing */
