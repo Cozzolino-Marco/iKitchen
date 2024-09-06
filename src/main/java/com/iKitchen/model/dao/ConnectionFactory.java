@@ -13,7 +13,6 @@ public class ConnectionFactory {
     private static Connection connection;
 
     private ConnectionFactory() {}
-    // TODO: modificare questo statement in linea con il singleton
 
     public static Connection getConnection(){
         if(connection == null){
@@ -49,6 +48,13 @@ public class ConnectionFactory {
             connection = DriverManager.getConnection(connectionUrl, user, pass);
         } catch (IOException | SQLException e) {
             throw new IllegalArgumentException(e);
+        }
+    }
+
+    public static void closeConnection() throws SQLException {
+        if (connection != null) {
+            connection.close();
+            connection = null;
         }
     }
 }

@@ -18,12 +18,21 @@ public class LoginProcedureDAO{
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call login(?,?,?)}");
+
+            // Imposta i parametri IN
             cs.setString(1, cred.getUsername());
             cs.setString(2, cred.getPassword());
+
+            // Registra il parametro OUT
             cs.registerOutParameter(3, Types.NUMERIC);
+
+            // Esegui la chiamata
             cs.executeQuery();
+
+            // Ottieni il valore del parametro OUT
             role = cs.getInt(3);
             cred.setRole(Role.fromInt(role));
+
         } catch (SQLException e) {
             throw new DAOException("Login error: " + e.getMessage());
         } finally {

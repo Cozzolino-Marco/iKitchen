@@ -1,0 +1,49 @@
+/* Sfondo della barra di navigazione superiore */
+.vbox {
+    -fx-background-color: black;
+}
+
+.hbox {
+    -fx-background-color: #E5E5E5;
+    -fx-alignment: center;
+    -fx-spacing: 200;
+    -fx-min-height: 60px;
+}
+
+.label-titolo {
+    -fx-text-fill: white;
+    -fx-font-family: 'System';
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+/* Stili comuni ai ComboBox e alle Label */
+.vbox-filtro {
+    -fx-background-color: #E0E0E0;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-border-radius: 15;
+    -fx-spacing: 10;
+    -fx-alignment: center;
+    -fx-max-width: 600px;
+}
+
+.label-filtro {
+    -fx-text-fill: #2C3E50;
+    -fx-font-family: 'Calibri';
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.combo-box {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #D1D1D1;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 16;
+    -fx-font-family: 'Calibri';
+    -fx-pref-width: 300px;
+}

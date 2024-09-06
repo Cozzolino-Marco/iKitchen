@@ -1,16 +1,16 @@
-/* Global Styles */
+/* Stili Globali */
 .root {
-    -fx-background-color: #000000;
+    -fx-background-color: black;
 }
 
-/* Login Label */
+/* Etichetta di Login */
 #loginLabel {
     -fx-font-size: 50px;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
 }
 
-/* TextField Styles */
+/* Stili TextField */
 #textFieldUsername, #textFieldPassword {
     -fx-pref-width: 250px;
     -fx-pref-height: 60px;
@@ -22,7 +22,6 @@
     -fx-padding: 0 0 0 40px;
 }
 
-/* Button Styles */
 #buttonEntra {
     -fx-pref-width: 150px;
     -fx-pref-height: 50px;
@@ -31,27 +30,29 @@
     -fx-border-radius: 15;
 }
 
+/* Stili per tutti i bottoni */
 Button {
     -fx-pref-width: 150px;
     -fx-pref-height: 30px;
     -fx-background-color: #ffffff;
     -fx-text-fill: #000000;
     -fx-border-width: 2px;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
 }
 
-/* VBox Padding and Spacing */
+/* Padding e Spaziatura per VBox */
 VBox {
     -fx-padding: 50px;
     -fx-spacing: 40px;
 }
 
-/* HBox Margins */
+/* Spaziatura orizzontale tra gli elementi */
 HBox {
-    -fx-spacing: 110px; /* Horizontal spacing between elements */
+    -fx-spacing: 110px;
 }
 
+/* Margine sinistro */
 HBox .margin {
-    -fx-margin-left: 15px; /* Left margin */
+    -fx-margin-left: 15px;
 }

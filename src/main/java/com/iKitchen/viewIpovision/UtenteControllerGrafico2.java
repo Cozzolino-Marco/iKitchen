@@ -5,13 +5,11 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanIngredienti;
 import com.iKitchen.model.bean.CredentialsBean;
+import com.iKitchen.model.dao.ConnectionFactory;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
-import com.iKitchen.view.LoginGrafico;
-import com.iKitchen.view.OttieniRicettaControllerGrafico;
-import com.iKitchen.view.UtenteControllerGrafico;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,7 +26,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -45,16 +42,10 @@ public class UtenteControllerGrafico2 {
     private TabPane tabPane;
 
     @FXML
-    private Tab tabValidi;
+    private GridPane gridContainerValidi;
 
     @FXML
-    private Tab tabNonValidi;
-
-    @FXML
-    private GridPane gridContainerValidi; // GridPane per ingredienti validi
-
-    @FXML
-    private GridPane gridContainerNonValidi; // GridPane per ingredienti non validi
+    private GridPane gridContainerNonValidi;
 
     @FXML
     public ScrollPane scrollPaneValidi;
@@ -69,32 +60,26 @@ public class UtenteControllerGrafico2 {
 
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
-        caricaIngredienti(Credentials.getUsername());
 
-        // Inizializza il titolo con il messaggio interattivo
-        setLabelTitle("DISPENSA DI " + Credentials.getNome());
+        // Inizializza il titolo caps lock con il messaggio interattivo
+        setLabelTitle("DISPENSA DI " + Credentials.getNome().toUpperCase());
 
-        // Configurazione del TabPane
-        tabPane.setStyle("-fx-background-color: white;");
-        tabPane.setTabMinWidth(130);
-        tabPane.setTabMaxWidth(150);
+        // Invoca il metodo per caricare i prodotti della dispensa a griglia
+        if (gridContainerValidi != null) {
+            caricaIngredienti(Credentials.getUsername());
+        }
 
-        // Configurazione dei Tab
-        configureTab(tabValidi);
-        configureTab(tabNonValidi);
-
-        // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> updateTabStyles());
-
-        // Imposta lo stile iniziale
-        updateTabStyles();
+        // Invoca il metodo per configurare lo stile personalizzato dei tab
+        configuraCustomTab();
     }
 
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
     private void caricaIngredienti(String username) throws DAOException, SQLException {
 
+        // Crea un bean con le informazioni selezionate
         CredentialsBean infoPerListaIngredienti = new CredentialsBean(username);
 
+        // Inizializza il controller applicativo per ottenere gli ingredienti
         OttieniIngredientiControllerApplicativo ingredientiController = new OttieniIngredientiControllerApplicativo();
 
         // Definisci il numero di colonne che vuoi usare per il GridPane
@@ -113,15 +98,11 @@ public class UtenteControllerGrafico2 {
             for (BeanIngrediente ingrediente : validi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
 
-                // Imposta la larghezza massima per ciascun elemento
-                element.setMaxWidth(1200); // Aumenta questa dimensione se vuoi elementi più larghi
+                // Imposta la larghezza minima per ciascun elemento
+                element.setMinWidth(270);
 
                 // Aggiunge l'elemento alla griglia nella posizione calcolata
                 gridContainerValidi.add(element, col, row);
-
-                // Imposta larghezza minima al GridPane
-                gridContainerValidi.setMinWidth(1200);
-                gridContainerValidi.setMaxWidth(1200);
 
                 // Avanza di colonna; se raggiungi l'ultima colonna, passa alla riga successiva
                 col++;
@@ -145,12 +126,8 @@ public class UtenteControllerGrafico2 {
             for (BeanIngrediente ingrediente : nonValidi.getListIngredienti()) {
                 BorderPane element = createIngredientElement(ingrediente);
 
-                // Imposta la larghezza massima per ciascun elemento
-                element.setMaxWidth(1200); // Aumenta questa dimensione se vuoi elementi più larghi
-
-                // Imposta larghezza minima al GridPane
-                gridContainerNonValidi.setMinWidth(1200);
-                gridContainerNonValidi.setMaxWidth(1200);
+                // Imposta la larghezza minima per ciascun elemento
+                element.setMinWidth(270);
 
                 // Aggiunge l'elemento alla griglia nella posizione calcolata
                 gridContainerNonValidi.add(element, col, row);
@@ -197,35 +174,39 @@ public class UtenteControllerGrafico2 {
 
         // Creazione di un Rectangle per angoli arrotondati delle immagini
         Rectangle clip = new Rectangle(75, 80);
-        clip.setArcWidth(20);
-        clip.setArcHeight(20);
+        clip.setArcWidth(30);
+        clip.setArcHeight(30);
         imageView.setClip(clip);
 
         imgBox = new HBox(imageView);
 
         // Creazione del titolo dell'ingrediente
-        Label titleLabel = new Label(ingrediente.getNome());
+        Label titleLabel = new Label(ingrediente.getNome().toUpperCase());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
-        // Quantità e data di scadenza
+        // Quantità
         String tipoIngrediente = ingrediente.getTipo().equals("cibo") ? "g" : "l";
-        Label quantitaLabel = new Label("Quantità: " + ingrediente.getQuantita() + " " + tipoIngrediente);
+        Label quantitaLabel = new Label("QUANTITÀ: " + ingrediente.getQuantita() + " " + tipoIngrediente);
         quantitaLabel.setStyle("-fx-font-size: 12px;");
 
+        // Data di scadenza
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALIAN);
         String formattedDate = ingrediente.getScadenza() != null ? sdf.format(ingrediente.getScadenza()) : "";
-        Label scadenzaLabel = new Label("Scadenza: " + formattedDate);
+        Label scadenzaLabel = new Label("SCADENZA: " + formattedDate);
         scadenzaLabel.setStyle("-fx-font-size: 12px;");
 
+        // Settaggi del box verticale
         VBox detailsBox = new VBox(titleLabel, quantitaLabel, scadenzaLabel);
         detailsBox.setSpacing(5);
         detailsBox.setAlignment(Pos.CENTER_LEFT);
 
+        // Settaggi del box orizzontale
         HBox mainContent = new HBox(imgBox, detailsBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
         mainContent.setPadding(new Insets(5));
 
+        // Impostazione dell'elemento grafico
         element.setCenter(mainContent);
         element.setPadding(new Insets(10));
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -233,36 +214,39 @@ public class UtenteControllerGrafico2 {
         return element;
     }
 
+    // Visualizzazione della pagina dell'utente
     public void homePageUtente() throws IOException, DAOException, SQLException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/iKitchen/utentiView.fxml";
+        String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
         // Forzo la chiamata al controller stesso per rinizializzare la pagina
-        UtenteControllerGrafico controller = fxmlLoader.getController();
+        UtenteControllerGrafico2 controller = fxmlLoader.getController();
         controller.initialize();
 
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
+        stage.setResizable(true);
         stage.show();
     }
 
+    // Visualizzazione della pagina delle possibili categorie di ricette
     public void categorieView() throws IOException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/iKitchen/categorieView.fxml";
+        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
-        OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
+        OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
         controller.initialize("", "", "", "");
 
         scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
@@ -272,48 +256,87 @@ public class UtenteControllerGrafico2 {
         stage.show();
     }
 
+    // Visualizzazione lista delle ricette preferite
     public void preferitiView() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
+    // Metodo per aggiungere un ingrediente alla propria dispensa
     public void aggiungiProdotto() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
-    // Chiamata al controller del login
-    public void loginView() throws IOException {
+    // Metodo per effettuare il logout
+    public void logout() throws IOException, SQLException {
+
+        // Ottieni la scelta dell'utente al popup
         boolean confermato = Popup.mostraPopupConferma("Conferma Logout", "Sei sicuro di voler effettuare il logout?");
+
         if (confermato) {
-            //Credentials.setRole(""); // TODO: Evitare eccezione DAO per il ruolo
-            LoginGrafico loginGrafico = new LoginGrafico();
-            loginGrafico.loginView();
+
+            // Azzera le credenziali dell'utente
+            Credentials.setUsername(null);
+            Credentials.setPassword(null);
+            Credentials.setRole(null);
+
+            // Chiude la connessione
+            ConnectionFactory.closeConnection();
+
+            // Carica il file FXML per la vista del login
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Ottieni lo stage attuale dalla classe ApplicazioneStage
+            Stage stage = ApplicazioneStage.getStage();
+
+            // Imposta la nuova scena con il layout caricato
+            Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+            // Cambia la scena dello stage
+            stage.setScene(scene);
+            stage.show();
         }
     }
 
-    // Metodo per configurare lo stile base dei tab
-    private void configureTab(Tab tab) {
-        tab.setStyle("-fx-background-color: #00A5A5;"
+    // Metodo per la gestione grafica dei tab
+    private void configuraCustomTab() {
+
+        // Configurazione del colore e larghezza del TabPane
+        tabPane.setStyle("-fx-background-color: black;");
+        tabPane.setTabMinWidth(621);
+
+        // Stile base per i tab
+        String baseStyle = "-fx-background-color: #a69a9a;"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"
-                + "-fx-background-radius: 10px;");
-    }
+                + "-fx-background-radius: 10px;";
 
-    // Metodo per aggiornare gli stili dei tab in base alla selezione
-    private void updateTabStyles() {
-        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        // Stile per il tab selezionato
+        String selectedStyle = "-fx-background-color: #4d4949;"
+                + "-fx-text-fill: white;"
+                + "-fx-border-radius: 10px;"
+                + "-fx-background-radius: 10px;";
 
+        // Configura tutti i tab con lo stile base
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.equals(selectedTab)) {
-                tab.setStyle("-fx-background-color: #8ee8e4;"
-                        + "-fx-text-fill: white;"
-                        + "-fx-border-radius: 10px;"
-                        + "-fx-background-radius: 10px;");
-            } else {
-                tab.setStyle("-fx-background-color: #00A5A5;"
-                        + "-fx-text-fill: white;"
-                        + "-fx-border-radius: 10px;"
-                        + "-fx-background-radius: 10px;");
+            tab.setStyle(baseStyle);
+        }
+
+        // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.equals(newTab)) {
+                    tab.setStyle(selectedStyle); // Applica lo stile al tab selezionato
+                } else {
+                    tab.setStyle(baseStyle); // Applica lo stile base agli altri
+                }
             }
+        });
+
+        // Imposta lo stile iniziale per il tab attualmente selezionato
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null) {
+            selectedTab.setStyle(selectedStyle);
         }
     }
 }

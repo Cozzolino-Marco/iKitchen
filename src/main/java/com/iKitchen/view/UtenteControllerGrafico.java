@@ -5,6 +5,7 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.BeanIngrediente;
 import com.iKitchen.model.bean.BeanIngredienti;
 import com.iKitchen.model.bean.CredentialsBean;
+import com.iKitchen.model.dao.ConnectionFactory;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.utility.Popup;
@@ -44,12 +45,6 @@ public class UtenteControllerGrafico {
     private TabPane tabPane;
 
     @FXML
-    private Tab tabValidi;
-
-    @FXML
-    private Tab tabNonValidi;
-
-    @FXML
     public VBox mainContainer;
 
     @FXML
@@ -65,30 +60,17 @@ public class UtenteControllerGrafico {
 
     // Metodo per inizializzare e configurare gli stili dei componenti
     public void initialize() throws DAOException, SQLException {
-        if (elementContainerValidi != null) {
-            caricaIngredienti(Credentials.getUsername());
-        }
 
         // Inizializza il titolo con il messaggio interattivo
         setLabelTitle("Dispensa di " + Credentials.getNome());
 
-        // Centrare il TabPane orizzontalmente
-        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
-        tabPane.setTabMinWidth(130); // Larghezza minima dei tab
-        tabPane.setTabMaxWidth(150); // Larghezza massima dei tab
+        // Invoca il metodo per caricare i prodotti della dispensa ad elenco
+        if (elementContainerValidi != null) {
+            caricaIngredienti(Credentials.getUsername());
+        }
 
-        // Configurazione del TabPane
-        tabPane.setStyle("-fx-background-color: white;"); // Sfondo bianco per il TabPane
-
-        // Configurazione dei Tab
-        configureTab(tabValidi);
-        configureTab(tabNonValidi);
-
-        // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> updateTabStyles());
-
-        // Imposta lo stile iniziale
-        updateTabStyles();
+        // Invoca il metodo per configurare lo stile personalizzato dei tab
+        configuraCustomTab();
     }
 
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
@@ -250,6 +232,7 @@ public class UtenteControllerGrafico {
         return element;
     }
 
+    // Visualizzazione della pagina dell'utente
     public void homePageUtente() throws IOException, DAOException, SQLException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
@@ -270,6 +253,7 @@ public class UtenteControllerGrafico {
         stage.show();
     }
 
+    // Visualizzazione della pagina delle possibili categorie di ricette
     public void categorieView() throws IOException {
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
@@ -289,49 +273,87 @@ public class UtenteControllerGrafico {
         stage.show();
     }
 
+    // Visualizzazione lista delle ricette preferite
     public void preferitiView() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
+    // Metodo per aggiungere un ingrediente alla propria dispensa
     public void aggiungiProdotto() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
-    // Chiamata al controller del login
-    public void loginView() throws IOException {
+    // Metodo per effettuare il logout
+    public void logout() throws IOException, SQLException {
+
+        // Ottieni la scelta dell'utente al popup
         boolean confermato = Popup.mostraPopupConferma("Conferma Logout", "Sei sicuro di voler effettuare il logout?");
+
         if (confermato) {
-            //Credentials.setRole(""); // TODO: Evitare eccezione DAO per il ruolo
-            LoginGrafico loginGrafico = new LoginGrafico();
-            loginGrafico.loginView();
+
+            // Azzera le credenziali dell'utente
+            Credentials.setUsername(null);
+            Credentials.setPassword(null);
+            Credentials.setRole(null);
+
+            // Chiude la connessione
+            ConnectionFactory.closeConnection();
+
+            // Carica il file FXML per la vista del login
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/iKitchen/login.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Ottieni lo stage attuale dalla classe ApplicazioneStage
+            Stage stage = ApplicazioneStage.getStage();
+
+            // Imposta la nuova scena con il layout caricato
+            Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+            // Cambia la scena dello stage
+            stage.setScene(scene);
+            stage.show();
         }
     }
 
-    // Metodo per configurare lo stile base dei tab
-    private void configureTab(Tab tab) {
-        tab.setStyle("-fx-background-color: " + "#00A5A5" + ";"
+    // Metodo per la gestione grafica dei tab
+    private void configuraCustomTab() {
+
+        // Configurazione del colore e larghezza del TabPane
+        tabPane.setStyle("-fx-background-color: white;");
+        tabPane.setTabMinWidth(130);
+
+        // Stile base per i tab
+        String baseStyle = "-fx-background-color: #8ee8e4;"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"
-                + "-fx-background-radius: 10px;");
-    }
+                + "-fx-background-radius: 10px;";
 
-    // Metodo per aggiornare gli stili dei tab in base alla selezione
-    private void updateTabStyles() {
-        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        // Stile per il tab selezionato
+        String selectedStyle = "-fx-background-color: #00A5A5;"
+                + "-fx-text-fill: white;"
+                + "-fx-border-radius: 10px;"
+                + "-fx-background-radius: 10px;";
 
-        // Aggiorna gli stili dei tab
+        // Configura tutti i tab con lo stile base
         for (Tab tab : tabPane.getTabs()) {
-            if (tab.equals(selectedTab)) {
-                tab.setStyle("-fx-background-color: #8ee8e4;" // Colore per il tab selezionato
-                        + "-fx-text-fill: white;"
-                        + "-fx-border-radius: 10px;"
-                        + "-fx-background-radius: 10px;");
-            } else {
-                tab.setStyle("-fx-background-color: #00A5A5;" // Colore per i tab non selezionati
-                        + "-fx-text-fill: white;"
-                        + "-fx-border-radius: 10px;"
-                        + "-fx-background-radius: 10px;");
+            tab.setStyle(baseStyle);
+        }
+
+        // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            for (Tab tab : tabPane.getTabs()) {
+                if (tab.equals(newTab)) {
+                    tab.setStyle(selectedStyle); // Applica lo stile al tab selezionato
+                } else {
+                    tab.setStyle(baseStyle); // Applica lo stile base agli altri
+                }
             }
+        });
+
+        // Imposta lo stile iniziale per il tab attualmente selezionato
+        Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
+        if (selectedTab != null) {
+            selectedTab.setStyle(selectedStyle);
         }
     }
 }

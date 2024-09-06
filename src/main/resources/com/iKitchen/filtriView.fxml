@@ -22,7 +22,6 @@
                     <Font name="System Bold" size="20.0"/>
                 </font>
             </Label>
-            <!-- Aggiungi pulsanti icone per ricerca e menu se necessario -->
         </HBox>
     </VBox>
 

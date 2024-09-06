@@ -91,12 +91,6 @@ public class LoginGrafico {
         fxmlLoader.setLocation(getClass().getResource(fxmlFile));
         Parent rootNode = fxmlLoader.load();
 
-        // Ottieni il controller dall'FXMLLoader
-        UtenteControllerGrafico controller = fxmlLoader.getController();
-
-        // Chiama l'inizializzatore del controller grafico di utente
-        controller.initialize();
-
         // Imposta la scena
         Scene scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
         stage.setTitle("iKitchen");
@@ -142,7 +136,7 @@ public class LoginGrafico {
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        scene.getStylesheets().add(getClass().getResource("/utentiView2.css").toExternalForm());
+        //scene.getStylesheets().add(getClass().getResource("/utentiView2.css").toExternalForm());
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);

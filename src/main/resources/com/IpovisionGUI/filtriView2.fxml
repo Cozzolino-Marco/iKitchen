@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.iKitchen.viewIpovision.OttieniRicettaControllerGrafico2"
+            stylesheets="@/filtriView2.css">
+
+    <!-- Barra di navigazione superiore -->
+    <top>
+        <VBox prefWidth="500.0" styleClass="vbox">
+
+            <!-- Titolo -->
+            <HBox styleClass="vbox" alignment="CENTER" minHeight="80.0">
+                <Label text="SELEZIONA I FILTRI" styleClass="label-titolo"/>
+            </HBox>
+
+            <!-- Nav bar -->
+            <HBox styleClass="hbox" alignment="CENTER">
+                <Button text="INDIETRO" onAction="#categorieView"/>
+                <Button text="HOME" onAction="#homePageUtente"/>
+                <Button text="AVANTI" onAction="#mostraRicette"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Sezione centrale con i menu a tendina -->
+    <center>
+        <VBox spacing="20.0" alignment="CENTER" styleClass="vbox">
+
+            <!-- Titolo e ComboBox per provenienza -->
+            <VBox styleClass="vbox-filtro">
+                <Label text="Provenienza" styleClass="label-filtro"/>
+                <ComboBox fx:id="provenienzaComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Da chef"/>
+                            <String fx:value="Dal web"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+
+            <!-- Titolo e ComboBox per filtraggio -->
+            <VBox styleClass="vbox-filtro">
+                <Label text="Filtraggio" styleClass="label-filtro"/>
+                <ComboBox fx:id="filtraggioComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Tutte le ricette"/>
+                            <String fx:value="Filtrate in base alla dispensa"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+
+            <!-- Titolo e ComboBox per storage -->
+            <VBox styleClass="vbox-filtro">
+                <Label text="Storage" styleClass="label-filtro"/>
+                <ComboBox fx:id="storageComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Solo dal database"/>
+                            <String fx:value="Solo dal file system"/>
+                            <String fx:value="Da entrambi"/>
+                            <String fx:value="Nessuno"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

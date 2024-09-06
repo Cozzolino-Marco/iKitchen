@@ -13,18 +13,13 @@ public class Credentials {
     // Costruttore usato dal DAO per il recupero del nome
     public Credentials () {}
 
-    public Credentials(String username, String password, Role role) {
-        Credentials.username = username;
-        Credentials.password = password;
-        Credentials.role = role;
-    }
-
+    // Usato dal controller applicativo del login per passare i dati al DAO
     public Credentials(String username, String password) {
         Credentials.username = username;
         Credentials.password = password;
     }
 
-    // TODO: Costruttore temporaneo da vedere
+    // Usato dal controller applicativo della registrazione per passare i dati al DAO
     public Credentials(String username, String password, String ripetiPassword, Role role, String nome, String cognome) {
         Credentials.username = username;
         Credentials.password = password;
@@ -61,14 +56,14 @@ public class Credentials {
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
-    public void setRole(Role role){
-        this.role = role;
+    public static void setRole(Role role){
+        Credentials.role = role;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public static void setUsername(String username) {
+        Credentials.username = username;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    public static void setPassword(String password) {
+        Credentials.password = password;
     }
     public void setRipetiPassword(String ripetiPassword) {
         this.ripetiPassword = ripetiPassword;

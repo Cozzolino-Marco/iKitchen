@@ -1,0 +1,36 @@
+/* Imposta lo sfondo nero per l'intero contenitore VBox */
+.vbox {
+    -fx-background-color: black;
+}
+
+/* Stile per il titolo con testo bianco */
+.label {
+    -fx-text-fill: white;
+}
+
+/* Imposta lo stile del titolo del testo grande e in grassetto */
+.label .font {
+    -fx-font-size: 40.0px;
+    -fx-font-family: "System";
+    -fx-font-weight: bold;
+}
+
+/* Stile per la barra di navigazione */
+.hbox {
+    -fx-background-color: #E5E5E5;
+    -fx-alignment: center;
+    -fx-spacing: 200.0;
+    -fx-min-height: 60.0;
+}
+
+/* Stile per la sezione centrale con i bottoni delle categorie */
+#categoriesContainer {
+    -fx-spacing: 10.0;
+    -fx-background-color: black;
+    -fx-alignment: center;
+}
+
+/* Margini per i bottoni delle categorie */
+#categoriesContainer {
+    -fx-padding: 20.0 0 20.0 0;
+}

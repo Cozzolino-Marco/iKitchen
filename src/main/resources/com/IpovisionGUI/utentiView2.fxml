@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -19,18 +18,20 @@
 
     <!-- Barra di navigazione superiore -->
     <top>
-        <VBox prefWidth="500.0" spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <HBox style="-fx-background-color: #D3D3D3;" alignment="CENTER" spacing="0" prefHeight="80.0">
-                <Label fx:id="labelTitle" style="-fx-text-fill: black;">
+        <VBox prefWidth="500.0">
+
+            <!-- Titolo -->
+            <HBox style="-fx-background-color: black;" alignment="CENTER" minHeight="80.0">
+                <Label fx:id="labelTitle" style="-fx-text-fill: white;">
                     <font>
                         <Font name="System Bold" size="40.0"/>
                     </font>
                 </Label>
             </HBox>
 
-            <!-- Barra di navigazione inferiore spostata subito sotto la barra del titolo -->
-            <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="200.0" prefHeight="70.0">
-                <Button text="INDIETRO" onAction="#loginView"/>
+            <!-- Nav bar -->
+            <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="200.0" minHeight="60.0">
+                <Button text="INDIETRO" onAction="#logout"/>
                 <Button text="CATEGORIE" onAction="#categorieView"/>
                 <Button text="HOME" onAction="#homePageUtente"/>
                 <Button text="PREFERITI" onAction="#preferitiView"/>
@@ -41,20 +42,23 @@
 
     <!-- Sezione per i tab Validi/Non Validi -->
     <center>
-        <VBox fx:id="mainContainer" spacing="0">
-            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" prefWidth="500.0">
-                <Tab fx:id="tabValidi" text="Disponibili">
-                    <!-- ScrollPane per Ingredienti Validi in Griglia -->
-                    <ScrollPane fx:id="scrollPaneValidi" fitToWidth="true" fitToHeight="true">
-                        <GridPane fx:id="gridContainerValidi" hgap="25" vgap="25" minWidth="1200" maxWidth="1200">
+        <VBox style="-fx-background-color: black;" alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+            <!-- TabPane con crescita dinamica -->
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                <Tab text="DISPONIBILI" style="-fx-background-color: black;">
+                    <ScrollPane fx:id="scrollPaneValidi" fitToWidth="true" fitToHeight="true"
+                                style="-fx-background-color: black;">
+                        <GridPane fx:id="gridContainerValidi" hgap="25" vgap="25" alignment="TOP_CENTER"
+                                  style="-fx-background-color: black;">
                             <!-- Gli ingredienti dinamici saranno caricati qui -->
                         </GridPane>
                     </ScrollPane>
                 </Tab>
-                <Tab fx:id="tabNonValidi" text="Da acquistare">
-                    <!-- ScrollPane per Ingredienti Non Validi in Griglia -->
-                    <ScrollPane fx:id="scrollPaneNonValidi" fitToWidth="true" fitToHeight="true">
-                        <GridPane fx:id="gridContainerNonValidi" hgap="25" vgap="25" minWidth="1200" maxWidth="1200">
+                <Tab text="DA ACQUISTARE">
+                    <ScrollPane fx:id="scrollPaneNonValidi" fitToWidth="true" fitToHeight="true"
+                                style="-fx-background-color: black;">
+                        <GridPane fx:id="gridContainerNonValidi" hgap="25" vgap="25" alignment="TOP_CENTER"
+                                  style="-fx-background-color: black;">
                             <!-- Gli ingredienti dinamici saranno caricati qui -->
                         </GridPane>
                     </ScrollPane>
@@ -62,5 +66,4 @@
             </TabPane>
         </VBox>
     </center>
-
 </BorderPane>

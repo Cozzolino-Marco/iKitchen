@@ -27,6 +27,7 @@ public class LoginGrafico2 {
 
     @FXML
     public void loginView() throws IOException {
+
         // Carica il file FXML per la vista del login
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/iKitchen/login.fxml"));
         Parent root = fxmlLoader.load();
@@ -84,7 +85,7 @@ public class LoginGrafico2 {
         if (credentials.getRole().getId() == 1) {
             fxmlFile = "/com/IpovisionGUI/utentiView2.fxml"; // View per utenti domestici
         } else {
-            fxmlFile = "/com/iKitchen/chefView.fxml"; // View per chef
+            fxmlFile = "/com/IpovisionGUI/chefView2.fxml"; // View per chef
         }
 
         // Carica l'FXML
