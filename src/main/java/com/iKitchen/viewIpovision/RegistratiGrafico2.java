@@ -15,15 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class RegistratiGrafico2 {
-
-    @FXML
-    private VBox mainContainer;
 
     @FXML
     private TextField textFieldNome;
@@ -48,27 +44,22 @@ public class RegistratiGrafico2 {
         comboBoxRuolo.setItems(FXCollections.observableArrayList(Role.values()));
     }
 
-    // Caricamento del file FXML della registrazione
-    public void registratiView() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/iKitchen/registratiView.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
     // Chiamata al controller del login
     public void loginView() throws IOException {
-        LoginGrafico2 loginGrafico = new LoginGrafico2();
-        loginGrafico.loginView();
+
+        // Carica il file FXML per la vista del login
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        Stage stage = ApplicazioneStage.getStage();
+
+        // Imposta la nuova scena con il layout caricato
+        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+        // Cambia la scena dello stage
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Metodo per effettuare la registrazione chiamato dalla view

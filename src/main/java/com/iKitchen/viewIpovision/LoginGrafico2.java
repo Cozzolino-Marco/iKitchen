@@ -29,7 +29,7 @@ public class LoginGrafico2 {
     public void loginView() throws IOException {
 
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/iKitchen/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
         Parent root = fxmlLoader.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
@@ -65,7 +65,7 @@ public class LoginGrafico2 {
             if (cred.getRole() != null) {
                 cambiaViewDopoLogin(cred, stage);
             } else {
-                fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
+                fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login2.fxml"));
                 scene = new Scene(fxmlLoader.load(), ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
             }
 
@@ -108,8 +108,19 @@ public class LoginGrafico2 {
 
     // Chiamata al controller della registrazione
     public void registratiView() throws IOException {
-        RegistratiGrafico2 registratiGrafico = new RegistratiGrafico2();
-        registratiGrafico.registratiView();
+        // Carica il file FXML per la vista del login
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/registratiView2.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        Stage stage = ApplicazioneStage.getStage();
+
+        // Imposta la nuova scena con il layout caricato
+        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+        // Cambia la scena dello stage
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Metodo per il cambio della grafica

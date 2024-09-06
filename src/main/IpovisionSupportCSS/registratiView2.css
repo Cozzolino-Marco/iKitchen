@@ -1,0 +1,52 @@
+/* Stile principale per il background nero */
+.root {
+    -fx-background-color: black;
+}
+
+/* Stile per l'intestazione "REGISTRATI" */
+#labelRegistrati {
+    -fx-text-fill: white;
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+/* Stile per i TextField */
+.text-field, .password-field {
+    -fx-pref-width: 700px;
+    -fx-pref-height: 38px;
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-padding: 0 0 0 40px;
+}
+
+/* Stile per il menu del ruolo */
+.combo-box {
+    -fx-pref-width: 700px;
+    -fx-pref-height: 38px;
+    -fx-background-color: white;
+    -fx-text-fill: #333;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: white;
+    -fx-padding: 0 0 0 35px;
+    -fx-translate-x: 270px;
+}
+#imageRuoloIcon {
+    -fx-translate-x: 270px;
+}
+
+/* Stile per i bottoni */
+.button {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 38px;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-font-weight: bold;
+}

@@ -101,8 +101,20 @@ public class LoginGrafico {
 
     // Chiamata al controller della registrazione
     public void registratiView() throws IOException {
-        RegistratiGrafico registratiGrafico = new RegistratiGrafico();
-        registratiGrafico.registratiView();
+
+        // Carica il file FXML per la vista del login
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/iKitchen/registratiView.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        Stage stage = ApplicazioneStage.getStage();
+
+        // Imposta la nuova scena con il layout caricato
+        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+
+        // Cambia la scena dello stage
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Metodo per il cambio della grafica
