@@ -177,7 +177,6 @@ public class UtenteControllerGrafico2 {
         clip.setArcWidth(30);
         clip.setArcHeight(30);
         imageView.setClip(clip);
-
         imgBox = new HBox(imageView);
 
         // Creazione del titolo dell'ingrediente

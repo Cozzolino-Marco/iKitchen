@@ -1,0 +1,41 @@
+/* Stili Globali */
+.root {
+    -fx-background-color: black;
+}
+
+/* Stile per il contenitore del titolo */
+#titleContainer {
+    -fx-background-color: black;
+}
+
+/* Stile per il contenitore del titolo */
+#categoriaLabelTitle {
+    -fx-text-fill: white;
+    -fx-font-family: 'System';
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+}
+
+/* Stile per la barra di navigazione */
+#navBar {
+    -fx-background-color: #E5E5E5;
+}
+
+/* Stile per la griglia delle ricette */
+#scrollPaneRicette {
+    -fx-background-color: black;
+}
+
+#gridContainerRicette {
+    -fx-background-color: black;
+    -fx-padding: 25px;
+}
+
+#gridContainerRicette .border-pane {
+    -fx-max-width: Infinity;
+    -fx-pref-width: 100%;
+}
+
+.image-view {
+    -fx-opacity: 0.8;
+}

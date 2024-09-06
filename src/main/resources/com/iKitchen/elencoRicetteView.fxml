@@ -29,13 +29,12 @@
         </VBox>
     </top>
 
-    <!-- Lista delle ricette -->
+    <!-- Lista delle ricette caricate dinamicamente -->
     <center>
         <VBox spacing="10.0">
             <padding>
                 <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
             </padding>
-
             <ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true">
                 <VBox fx:id="elementContainer" spacing="10" />
             </ScrollPane>

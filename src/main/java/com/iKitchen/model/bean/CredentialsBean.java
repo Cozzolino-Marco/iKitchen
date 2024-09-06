@@ -1,6 +1,5 @@
 package com.iKitchen.model.bean;
 
-import com.iKitchen.model.domain.Credentials;
 import com.iKitchen.model.domain.Role;
 
 public class CredentialsBean {
@@ -13,13 +12,16 @@ public class CredentialsBean {
     static String nome;
     static String cognome;
 
+    // Usato dal controller grafico della registrazione per popolare i dati utente
     public CredentialsBean() {}
 
+    // Usato dal controller grafico di login per passare i dati al suo applicativo
     public CredentialsBean(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    // Usato dai controller grafici di ottieni ricetta e utente controller
     public CredentialsBean(String username) {
         this.username = username;
     }

@@ -59,10 +59,10 @@ public class OttieniRicettaControllerGrafico2 {
     private ComboBox storageComboBox;
 
     @FXML
-    private VBox elementContainer;
+    private GridPane gridContainerRicette;
 
     @FXML
-    private ScrollPane scrollPane;
+    private ScrollPane scrollPaneRicette;
 
     @FXML
     private VBox categoriesContainer;
@@ -77,7 +77,7 @@ public class OttieniRicettaControllerGrafico2 {
 
     // Configurazione iniziale degli elementi grafici
     public void initialize(String categoriaScelta, String provenienzaScelta, String filtraggioScelta, String storageScelto) {
-        if (elementContainer != null) {
+        if (gridContainerRicette != null) {
             try {
                 caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta, storageScelto);
             } catch (DAOException | SQLException | IOException e) {
@@ -278,7 +278,7 @@ public class OttieniRicettaControllerGrafico2 {
         BeanRicette listaRicette = ricette.mostraRicette(infoPerListaRicette);
 
         // Trova il BorderPane principale (root) della view
-        BorderPane root = (BorderPane) scrollPane.getParent().getParent();
+        BorderPane root = (BorderPane) scrollPaneRicette.getParent().getParent();
 
         // Se la lista è vuota, mostra il messaggio relativo
         if (listaRicette.getListRicette().isEmpty()) {
@@ -288,9 +288,30 @@ public class OttieniRicettaControllerGrafico2 {
             root.setCenter(emptyMessage);
         } else {
             // Ciclo che itera la creazione di un elemento ricetta per la lista ricette
+            int column = 0;
+            int row = 0;
+            int maxColumns = 3;
+
             for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
                 BorderPane element = createElement(beanRicetta);
-                elementContainer.getChildren().add(element);
+
+                // Imposta la larghezza minima per ciascun elemento
+                element.setMinWidth(180);
+                element.setMaxWidth(Double.MAX_VALUE);
+
+                // Forzatura all'espansione orizzontale dell'elemento
+                GridPane.setHgrow(element, Priority.ALWAYS);
+
+                // Aggiungi l'elemento alla griglia in base a riga e colonna
+                gridContainerRicette.add(element, column, row);
+
+                column++;
+
+                // Se abbiamo riempito la riga, resetta la colonna e passa alla riga successiva
+                if (column == maxColumns) {
+                    column = 0;
+                    row++;
+                }
             }
         }
     }
@@ -333,7 +354,7 @@ public class OttieniRicettaControllerGrafico2 {
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = ApplicazioneStage.getStage();
             Scene scene;
-            String fxmlFile = "/com/iKitchen/elencoRicetteView.fxml";
+            String fxmlFile = "/com/IpovisionGUI/elencoRicetteView2.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
             // Settaggio dei dati
@@ -386,14 +407,14 @@ public class OttieniRicettaControllerGrafico2 {
         element.setLeft(imgBox);
 
         // Creazione del titolo della ricetta
-        Label titleLabel = new Label(ricettaBean.getTitolo());
+        Label titleLabel = new Label(ricettaBean.getTitolo().toUpperCase());
         titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         // Creazione dell'icona del cuoco e del nome del cuoco
         ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
         cuocoIcon.setFitHeight(14);
         cuocoIcon.setFitWidth(14);
-        Label cuocoLabel = new Label(ricettaBean.getCuoco());
+        Label cuocoLabel = new Label(ricettaBean.getCuoco().toUpperCase());
         cuocoLabel.setStyle("-fx-font-size: 10px;");
         HBox cuocoBox = new HBox(cuocoIcon, cuocoLabel);
         cuocoBox.setSpacing(5);
@@ -404,9 +425,9 @@ public class OttieniRicettaControllerGrafico2 {
         calorieIcon.setFitWidth(14);
         Label calorieLabel;
         if (ricettaBean.getCalorie() == 0) {
-            calorieLabel = new Label("TBA Kcal");
+            calorieLabel = new Label("TBA KCAL");
         } else {
-            calorieLabel = new Label(ricettaBean.getCalorie() + " Kcal");
+            calorieLabel = new Label(ricettaBean.getCalorie() + " KCAL");
         }
         calorieLabel.setStyle("-fx-font-size: 12px;");
 
@@ -418,7 +439,7 @@ public class OttieniRicettaControllerGrafico2 {
         ImageView durataIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/duration_icon.png"))));
         durataIcon.setFitHeight(14);
         durataIcon.setFitWidth(14);
-        Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " min");
+        Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " MIN");
         durataLabel.setStyle("-fx-font-size: 12px;");
 
         // Parte bottom per info calorie e durata
@@ -464,7 +485,7 @@ public class OttieniRicettaControllerGrafico2 {
         // Impostazione dell'elemento grafico
         element.setCenter(mainContent);
         element.setRight(likePane);
-        element.setPadding(new Insets(10));
+        element.setPadding(new Insets(20));
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         // Gestore di eventi per il click sull'elemento in base alla provenienza

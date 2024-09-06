@@ -3,20 +3,20 @@ package com.iKitchen.model.domain;
 public class FactoryRicetta {
 
     public Ricetta createRicetta(String categoria) {
-        switch (categoria) {
-            case "Colazione":
+        switch (categoria.toLowerCase()) {
+            case "colazione":
                 return new RicettaColazione();
-            case "Pasto veloce":
+            case "pasto veloce":
                 return new RicettaPastoVeloce();
-            case "Bevande":
+            case "bevande":
                 return new RicettaBevande();
-            case "Primi piatti":
+            case "primi piatti":
                 return new RicettaPrimiPiatti();
-            case "Secondi piatti":
+            case "secondi piatti":
                 return new RicettaSecondiPiatti();
-            case "Contorni":
+            case "contorni":
                 return new RicettaContorni();
-            case "Dolci":
+            case "dolci":
                 return new RicettaDolci();
             default:
                 throw new IllegalArgumentException("Categoria non valida: " + categoria);

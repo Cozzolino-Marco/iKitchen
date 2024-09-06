@@ -33,8 +33,8 @@
 
             <!-- Titolo e ComboBox per provenienza -->
             <VBox styleClass="vbox-filtro">
-                <Label text="Provenienza" styleClass="label-filtro"/>
-                <ComboBox fx:id="provenienzaComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                <Label text="PROVENIENZA" styleClass="label-filtro"/>
+                <ComboBox fx:id="provenienzaComboBox" promptText="SELEZIONA L'OPZIONE" styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Da chef"/>
@@ -46,8 +46,8 @@
 
             <!-- Titolo e ComboBox per filtraggio -->
             <VBox styleClass="vbox-filtro">
-                <Label text="Filtraggio" styleClass="label-filtro"/>
-                <ComboBox fx:id="filtraggioComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                <Label text="FILTRAGGIO" styleClass="label-filtro"/>
+                <ComboBox fx:id="filtraggioComboBox" promptText="SELEZIONA L'OPZIONE" styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Tutte le ricette"/>
@@ -59,8 +59,8 @@
 
             <!-- Titolo e ComboBox per storage -->
             <VBox styleClass="vbox-filtro">
-                <Label text="Storage" styleClass="label-filtro"/>
-                <ComboBox fx:id="storageComboBox" promptText="Seleziona l'opzione" styleClass="combo-box">
+                <Label text="STORAGE" styleClass="label-filtro"/>
+                <ComboBox fx:id="storageComboBox" promptText="SELEZIONA L'OPZIONE" styleClass="combo-box">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Solo dal database"/>

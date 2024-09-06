@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.iKitchen.viewIpovision.OttieniRicettaControllerGrafico2"
+            stylesheets="@/elencoRicetteView.css">
+
+    <!-- Barra di navigazione superiore -->
+    <top>
+        <VBox prefWidth="500.0">
+
+            <!-- Titolo -->
+            <HBox fx:id="titleContainer" alignment="CENTER" minHeight="80.0">
+                <Label fx:id="categoriaLabelTitle" text="CATEGORIA" />
+            </HBox>
+
+            <!-- Nav bar -->
+            <HBox fx:id="navBar" alignment="CENTER" spacing="200.0" minHeight="60.0">
+                <Button text="CATEGORIE" onAction="#categorieView"/>
+                <Button text="HOME" onAction="#homePageUtente"/>
+                <Button text="PREFERITI" onAction="#preferitiView"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Sezione centrale per la visualizzazione delle ricette -->
+    <center>
+        <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+            <ScrollPane fx:id="scrollPaneRicette" fitToWidth="true" fitToHeight="true">
+                <GridPane fx:id="gridContainerRicette" hgap="25" vgap="25" alignment="TOP_CENTER" GridPane.hgrow="ALWAYS">
+                    <!-- Le ricette dinamiche saranno caricate qui -->
+                </GridPane>
+            </ScrollPane>
+        </VBox>
+    </center>
+
+</BorderPane>
