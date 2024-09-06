@@ -518,13 +518,13 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Crea un nuovo Stage per il popup
         Stage popupStage = new Stage();
-        popupStage.setTitle("Dettagli Ricetta");
+        popupStage.setTitle("DETTAGLI RICETTA");
 
         // Crea il contenuto del popup
         VBox popupContent = new VBox();
-        popupContent.setSpacing(10);  // Riduci la distanza tra gli elementi
+        popupContent.setSpacing(10);
         popupContent.setPadding(new Insets(20));
-        popupContent.setStyle("-fx-background-color: #FFFFFF;");
+        popupContent.setStyle("-fx-background-color: black;");
         popupContent.setAlignment(Pos.CENTER);
 
         // Inizializza il controller applicativo per ottenere i dettagli della ricetta
@@ -540,13 +540,13 @@ public class OttieniRicettaControllerGrafico2 {
             popupInitialContent.setSpacing(5);
 
             // Titolo della ricetta
-            Label titolo = new Label(dettagliRicetta.getTitolo());
-            titolo.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
+            Label titolo = new Label(dettagliRicetta.getTitolo().toUpperCase());
+            titolo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 22px;");
             titolo.setAlignment(Pos.CENTER);
 
             // Dettagli sopra l'immagine (categoria, durata, calorie)
-            Label dettagli = new Label("Primi piatti • " + dettagliRicetta.getDurataPreparazione() + " min • " + dettagliRicetta.getCalorie() + " Kcal");
-            dettagli.setStyle("-fx-font-size: 15px; -fx-text-fill: #666666;");
+            Label dettagli = new Label(dettagliRicetta.getCategoria().toUpperCase() + " • " + dettagliRicetta.getDurataPreparazione() + " MIN • " + dettagliRicetta.getCalorie() + " KCAL");
+            dettagli.setStyle("-fx-text-fill: grey; -fx-font-size: 15px; -fx-text-fill: #666666;");
             dettagli.setAlignment(Pos.CENTER);
 
             // Gestione grafica dell'immagine della ricetta
@@ -563,14 +563,14 @@ public class OttieniRicettaControllerGrafico2 {
             StackPane cuocoLikesPane = new StackPane();
 
             // Informazioni del cuoco
-            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco());
-            cuoco.setStyle("-fx-font-size: 15px;");
+            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco().toUpperCase());
+            cuoco.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
             HBox cuocoBox = new HBox(cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
 
             // Informazioni dei likes
-            Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " Likes");
-            likes.setStyle("-fx-font-size: 15px;");
+            Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " LIKES");
+            likes.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
             StackPane.setAlignment(likes, Pos.CENTER_RIGHT);
 
             // Aggiunta degli elementi al StackPane
@@ -585,8 +585,8 @@ public class OttieniRicettaControllerGrafico2 {
             popupOtherContent.setSpacing(10);
 
             // Descrizione della ricetta
-            Label descrizione = new Label(dettagliRicetta.getDescrizione());
-            descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
+            Label descrizione = new Label(dettagliRicetta.getDescrizione().toUpperCase());
+            descrizione.setStyle("-fx-text-fill: white; -fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
             descrizione.setWrapText(true);
 
             // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
@@ -594,8 +594,8 @@ public class OttieniRicettaControllerGrafico2 {
             BeanIngredienti beanIngredienti = ricetta.verificaQuantita(usernameBean, dettagliRicetta);
 
             // Gestione lista ingredienti
-            Label ingredientiLabel = new Label("Ingredienti");
-            ingredientiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            Label ingredientiLabel = new Label("INGREDIENTI");
+            ingredientiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
             ingredientiLabel.setAlignment(Pos.CENTER_LEFT);
             VBox.setMargin(ingredientiLabel, new Insets(10, 0, 0, 0));
             GridPane ingredientiGrid = new GridPane();
@@ -603,7 +603,7 @@ public class OttieniRicettaControllerGrafico2 {
             ingredientiGrid.setVgap(5);
             int column = 0;
             int row = 0;
-            int validIngredientCount = 0;  // Contatore degli ingredienti validi
+            int validIngredientCount = 0;
             Date currentDate = new Date();
             int quantitaDisponibile = 0;
 
@@ -629,8 +629,8 @@ public class OttieniRicettaControllerGrafico2 {
                 }
 
                 // Crea la label per l'ingrediente
-                Label ingredienteLabel = new Label(ingrediente.getNome() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
-                ingredienteLabel.setStyle("-fx-font-size: 12px;");
+                Label ingredienteLabel = new Label(ingrediente.getNome().toUpperCase() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
+                ingredienteLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px;");
 
                 // Aggiungi un'icona di successo o di errore accanto all'ingrediente
                 ImageView iconView;
@@ -681,18 +681,18 @@ public class OttieniRicettaControllerGrafico2 {
 
             // Passaggi della ricetta
             Label passaggiLabel = new Label("Passaggi");
-            passaggiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            passaggiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
             VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
             VBox passaggiBox = new VBox(10);
-            Label passaggi = new Label(dettagliRicetta.getPassaggi());
+            Label passaggi = new Label(dettagliRicetta.getPassaggi().toUpperCase());
             passaggiBox.getChildren().add(passaggi);
 
             // Video URL
             Label videoLabel = new Label("Video Tutorial");
-            videoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+            videoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
             VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
             Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
-            videoLink.setStyle("-fx-font-size: 14px;");
+            videoLink.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
             videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
 
             // Pulsante per confermare l'uso della ricetta
@@ -734,10 +734,12 @@ public class OttieniRicettaControllerGrafico2 {
             // Inserisci il contenuto nel ScrollPane
             ScrollPane scrollPane = new ScrollPane(popupContent);
             scrollPane.setFitToWidth(true);
-            scrollPane.setVvalue(0); // Imposta la visualizzazione all'inizio
+
+            // Imposta la visualizzazione all'inizio
+            scrollPane.setVvalue(0);
 
             // Imposta il layout come scena del popup
-            Scene popupScene = new Scene(scrollPane, 310, 550);
+            Scene popupScene = new Scene(scrollPane, 600, 600);
             popupStage.setScene(popupScene);
 
             // Esecuzione codice passato per forzare lo scroll all'inizio dopo il rendering della GUI

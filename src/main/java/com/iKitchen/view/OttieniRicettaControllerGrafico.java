@@ -503,7 +503,7 @@ public class OttieniRicettaControllerGrafico {
 
         // Crea il contenuto del popup
         VBox popupContent = new VBox();
-        popupContent.setSpacing(10);  // Riduci la distanza tra gli elementi
+        popupContent.setSpacing(10);
         popupContent.setPadding(new Insets(20));
         popupContent.setStyle("-fx-background-color: #FFFFFF;");
         popupContent.setAlignment(Pos.CENTER);
@@ -526,7 +526,7 @@ public class OttieniRicettaControllerGrafico {
             titolo.setAlignment(Pos.CENTER);
 
             // Dettagli sopra l'immagine (categoria, durata, calorie)
-            Label dettagli = new Label("Primi piatti • " + dettagliRicetta.getDurataPreparazione() + " min • " + dettagliRicetta.getCalorie() + " Kcal");
+            Label dettagli = new Label(dettagliRicetta.getCategoria() + " • " + dettagliRicetta.getDurataPreparazione() + " min • " + dettagliRicetta.getCalorie() + " Kcal");
             dettagli.setStyle("-fx-font-size: 15px; -fx-text-fill: #666666;");
             dettagli.setAlignment(Pos.CENTER);
 
@@ -584,7 +584,7 @@ public class OttieniRicettaControllerGrafico {
             ingredientiGrid.setVgap(5);
             int column = 0;
             int row = 0;
-            int validIngredientCount = 0;  // Contatore degli ingredienti validi
+            int validIngredientCount = 0;
             Date currentDate = new Date();
             int quantitaDisponibile = 0;
 
@@ -715,7 +715,9 @@ public class OttieniRicettaControllerGrafico {
             // Inserisci il contenuto nel ScrollPane
             ScrollPane scrollPane = new ScrollPane(popupContent);
             scrollPane.setFitToWidth(true);
-            scrollPane.setVvalue(0); // Imposta la visualizzazione all'inizio
+
+            // Imposta la visualizzazione all'inizio
+            scrollPane.setVvalue(0);
 
             // Imposta il layout come scena del popup
             Scene popupScene = new Scene(scrollPane, 310, 550);
