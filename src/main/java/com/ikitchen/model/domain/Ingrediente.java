@@ -14,9 +14,6 @@ public class Ingrediente {
     transient Blob immagine;
     private String tipo;
 
-    // Costruttore di default vuoto
-    public Ingrediente() {}
-
     // Getter
     public String getCodIngrediente() {
         return codIngrediente;

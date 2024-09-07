@@ -1,8 +1,8 @@
 package com.ikitchen.viewIpovision;
 
-import com.ikitchen.ApplicationStart;
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,27 +46,20 @@ public class LoginGrafico2 {
     // Acquisizione credienziali e passaggio al controller del login
     @FXML
     protected void onLoginButtonClick() {
-        CredentialsBean credB;
-        credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+        CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
 
         try {
             LoginController loginController = new LoginController();
-            Credentials cred = loginController.start(credB);
+            loginController.start(credB);
 
             // Recupera il nome associato allo username
             loginController.recuperaNome(credB);
 
-            // Settaggi di caricamento scena ed FXML
-            FXMLLoader fxmlLoader;
-            Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
-
             // Controlla il ruolo dell'utente e carica la view appropriata
-            if (cred.getRole() != null) {
-                cambiaViewDopoLogin(cred, stage);
+            if (Credentials.getRole() != null) {
+                cambiaViewDopoLogin();
             } else {
-                fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login2.fxml"));
-                scene = new Scene(fxmlLoader.load(), ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
             }
 
         } catch (DAOException | IOException e) {
@@ -77,12 +70,13 @@ public class LoginGrafico2 {
     }
 
     // Metodo che gestisce il caricamento della view in base al ruolo
-    private void cambiaViewDopoLogin(Credentials credentials, Stage stage) throws IOException, DAOException, SQLException {
+    private void cambiaViewDopoLogin() throws IOException, DAOException, SQLException {
 
         String fxmlFile;
+        Stage stage = ApplicazioneStage.getStage();
         FXMLLoader fxmlLoader = new FXMLLoader();
 
-        if (credentials.getRole().getId() == 1) {
+        if (Credentials.getRole().getId() == 1) {
             fxmlFile = "/com/IpovisionGUI/utentiView2.fxml"; // View per utenti domestici
         } else {
             fxmlFile = "/com/IpovisionGUI/chefView2.fxml"; // View per chef

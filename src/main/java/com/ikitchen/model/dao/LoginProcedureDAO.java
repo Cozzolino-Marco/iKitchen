@@ -31,10 +31,10 @@ public class LoginProcedureDAO {
             // Ottieni il valore del parametro OUT (ruolo)
             role = cs.getInt(3);
 
-            /* Verifica se il ruolo è valido
-            if (role == -1) {  // Supponiamo che -1 sia l'indicatore di credenziali non valide
+            // Verifica se il ruolo è valido
+            if (role == 3) {
                 throw new DAOException("Credenziali non valide: username o password errati.");
-            }*/
+            }
 
             // Imposta il ruolo nelle credenziali
             Credentials.setRole(Role.fromInt(role));

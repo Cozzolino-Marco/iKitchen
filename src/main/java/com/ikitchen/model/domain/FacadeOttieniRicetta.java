@@ -13,10 +13,8 @@ public class FacadeOttieniRicetta {
         // Istanzia il DAO per recuperare gli ingredienti della dispensa
         RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
 
-        // Eseguo la query usando il DAO e ottengo il risultato
-        ListIngredienti listProdottiDispensa = recuperaIngredientiDispensaDAO.execute(username);
-
-        return listProdottiDispensa;
+        // Eseguo la query usando il DAO e restituisco il risultato
+        return recuperaIngredientiDispensaDAO.execute(username);
     }
 
     // Metodo per mostrare le ricette
@@ -52,10 +50,8 @@ public class FacadeOttieniRicetta {
         // Istanzia il DAO per mostrare i dettagli della ricetta
         OttieniDettagliRicettaDAO ottieniDettagliRicettaDAO = new OttieniDettagliRicettaDAO();
 
-        // Eseguo la query usando il DAO e ottengo il risultato
-        Ricetta recipe = ottieniDettagliRicettaDAO.execute(ricetta);
-
-        return recipe;
+        // Eseguo la query usando il DAO e restituisco il risultato
+        return ottieniDettagliRicettaDAO.execute(ricetta);
     }
 
     // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta

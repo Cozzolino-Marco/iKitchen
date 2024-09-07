@@ -10,26 +10,21 @@ import java.sql.SQLException;
 
 public class LoginController {
 
-    // Dichiarazione
-    private final RecuperaNomeDaUsernameDAO recuperaNomeDaUsernameDAO;
-
     // Costruttore per inizializzare il DAO
+    private final RecuperaNomeDaUsernameDAO recuperaNomeDaUsernameDAO;
     public LoginController() {
         this.recuperaNomeDaUsernameDAO = new RecuperaNomeDaUsernameDAO();
     }
 
     // Metodo per effettuare il login
-    public Credentials start(CredentialsBean credentialsBean) throws DAOException, SQLException {
+    public void start(CredentialsBean credB) throws DAOException, SQLException {
 
-        // Crea un'istanza di Credentials con i dati di login
-        Credentials credentials = new Credentials(credentialsBean.getUsername(), credentialsBean.getPassword());
+        // Setta le credenziali dal bean
+        Credentials.setUsername(credB.getUsername());
+        Credentials.setPassword(credB.getPassword());
 
         // Esegui la procedura di login nel database
-        try {
-            new LoginProcedureDAO().execute();
-        } catch (DAOException | SQLException e) {
-            throw new IllegalArgumentException(e);
-        }
+        new LoginProcedureDAO().execute();
 
         // Cambia il ruolo della connessione in base al ruolo dell'utente
         if (Credentials.getRole() != null) {
@@ -39,9 +34,6 @@ public class LoginController {
                 throw new IllegalArgumentException(e);
             }
         }
-
-        // Restituisci le credenziali con il ruolo impostato
-        return credentials;
     }
 
     // Metodo per recuperare il nome associato allo username

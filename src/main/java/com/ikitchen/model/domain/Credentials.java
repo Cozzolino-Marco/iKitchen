@@ -10,24 +10,8 @@ public class Credentials {
     private static String nome;
     private static String cognome;
 
-    // Costruttore usato dal DAO per il recupero del nome
-    public Credentials () {}
-
-    // Usato dal controller applicativo del login per passare i dati al DAO
-    public Credentials(String username, String password) {
-        Credentials.username = username;
-        Credentials.password = password;
-    }
-
-    // Usato dal controller applicativo della registrazione per passare i dati al DAO
-    public Credentials(String username, String password, String ripetiPassword, Role role, String nome, String cognome) {
-        Credentials.username = username;
-        Credentials.password = password;
-        Credentials.ripetiPassword = ripetiPassword;
-        Credentials.role = role;
-        Credentials.nome = nome;
-        Credentials.cognome = cognome;
-    }
+    // Costruttore privato
+    private Credentials () {}
 
     // Getter
     public static String getNome() {

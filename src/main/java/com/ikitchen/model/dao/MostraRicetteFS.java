@@ -3,8 +3,13 @@ package com.ikitchen.model.dao;
 import com.ikitchen.model.domain.ListRicette;
 import com.ikitchen.model.domain.Ricetta;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MostraRicetteFS {
+
+    // Inizializzazione del logger
+    private static final Logger logger = Logger.getLogger(MostraRicetteFS.class.getName());
 
     // Metodo per recuperare ricette dal file system, gestendo il caso di lista esistente o creazione di una nuova lista
     public ListRicette recuperaRicetteDaFile(Ricetta ricetta, ListRicette... existingList) {
@@ -26,9 +31,21 @@ public class MostraRicetteFS {
         File file = new File(nomeFile);
         if (!file.exists()) {
             try {
-                // Crea il file se non esiste e le directory necessarie
-                file.getParentFile().mkdirs();
-                file.createNewFile();
+                // Crea le directory necessarie, se non esistono
+                File parentDir = file.getParentFile();
+                if (parentDir != null && !parentDir.exists()) {
+                    boolean dirsCreated = parentDir.mkdirs();
+                    if (!dirsCreated) {
+                        throw new IOException("Impossibile creare le directory necessarie per il file: " + nomeFile);
+                    }
+                }
+
+                // Crea il file se non esiste
+                boolean fileCreated = file.createNewFile();
+                if (fileCreated) {
+                    logger.log(Level.INFO, "File creato con successo: " + nomeFile);
+                }
+
             } catch (IOException e) {
                 throw new IllegalArgumentException("Impossibile creare il file: " + nomeFile, e);
             }

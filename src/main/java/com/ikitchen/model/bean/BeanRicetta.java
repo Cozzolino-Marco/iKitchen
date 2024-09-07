@@ -4,6 +4,7 @@ import com.ikitchen.model.domain.ListIngredienti;
 import java.sql.Blob;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class BeanRicetta {
 
@@ -13,7 +14,6 @@ public class BeanRicetta {
     String descrizione;
     Blob immagine;
     String categoria;
-    String provenienza;
     String cuoco;
     int durataPreparazione;
     int calorie;
@@ -61,17 +61,12 @@ public class BeanRicetta {
         }
 
         // Assegnazioni
-        this.codRicetta = codRicetta;
         this.titolo = titolo;
         this.descrizione = descrizione;
-        this.immagine = immagine;
         this.categoria = categoria;
-        this.cuoco = cuoco;
         this.durataPreparazione = durataPreparazione;
         this.calorie = calorie;
         this.ingredienti = ingredienti;
-        this.passaggi = passaggi;
-        this.videoUrl = videoUrl;
         this.likes = likes;
     }
 
@@ -114,18 +109,10 @@ public class BeanRicetta {
         this.codRicetta = codRicetta;
     }
     public void setTitolo(String titolo) {
-        if (titolo == null) {
-            this.titolo = "TBA";
-        } else {
-            this.titolo = titolo;
-        }
+        this.titolo = Objects.requireNonNullElse(titolo, "TBA");
     }
     public void setImmagine(Blob immagine) {
-        if (immagine == null) {
-            this.immagine = null;
-        } else {
-            this.immagine = immagine;
-        }
+        this.immagine = immagine;
     }
     public void setCuoco(String cuoco) {
         this.cuoco = cuoco;
@@ -134,11 +121,7 @@ public class BeanRicetta {
         this.durataPreparazione = durataPreparazione;
     }
     public void setCalorie(int calorie) {
-        if (calorie < 0) {
-            this.calorie = 0;
-        } else {
-            this.calorie = calorie;
-        }
+        this.calorie = Math.max(calorie, 0);
     }
     public void setPassaggi(String passaggi) {
         this.passaggi = passaggi;
@@ -147,11 +130,7 @@ public class BeanRicetta {
         this.videoUrl = videoUrl;
     }
     public void setLinkRicetta(String linkRicetta) {
-        if (linkRicetta == null) {
-            this.linkRicetta = "TBA";
-        } else {
-            this.linkRicetta = linkRicetta;
-        }
+        this.linkRicetta = Objects.requireNonNullElse(linkRicetta, "TBA");
     }
 
     // Getter
@@ -169,9 +148,6 @@ public class BeanRicetta {
     }
     public String getCategoria() {
         return categoria;
-    }
-    public String getProvenienza() {
-        return provenienza;
     }
     public String getCuoco() {
         return cuoco;

@@ -1,9 +1,8 @@
 package com.ikitchen.controller;
 
+import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.bean.BeanIngredienti;
-import com.ikitchen.exception.DAOException;
-import com.ikitchen.model.bean.CredentialsBean;
 import com.ikitchen.model.dao.RecuperaIngredientiDispensaDAO;
 import com.ikitchen.model.domain.Credentials;
 import com.ikitchen.model.domain.Ingrediente;
