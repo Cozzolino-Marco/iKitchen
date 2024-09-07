@@ -31,11 +31,10 @@ public class OttieniDettagliRicettaDAO {
             // Controllo esecuzione
             if(status) {
                 ResultSet rs = cs.getResultSet();
-                FactoryRicetta factoryRicetta = new FactoryRicetta();
 
                 // Popola la ricetta
                 if (rs.next()) {
-                    recipe = factoryRicetta.createRicetta(rs.getString("categoria"));
+                    recipe = FactoryRicetta.createRicetta(rs.getString("categoria"));
                     recipe.setCodice(rs.getString("codRicetta"));
                     recipe.setTitolo(rs.getString("titolo"));
                     recipe.setDescrizione(rs.getString("descrizione"));

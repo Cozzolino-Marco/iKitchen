@@ -26,7 +26,7 @@ public class UsaRicettaDAO {
             boolean valoreRestituito = cs.getBoolean(2);
 
             // Gestione restituzione del valore di ritorno
-            if(valoreRestituito == false) {
+            if(!valoreRestituito) {
                 throw new IllegalArgumentException("Errore query!");
             }
 

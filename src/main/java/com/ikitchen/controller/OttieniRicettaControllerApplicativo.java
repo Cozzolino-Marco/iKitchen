@@ -4,7 +4,6 @@ import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
 import com.ikitchen.model.domain.*;
 import com.ikitchen.view.OttieniRicettaControllerGraficoAPI;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -14,7 +13,6 @@ public class OttieniRicettaControllerApplicativo {
     // Variabili
     FacadeOttieniRicetta facadeOttieniRicetta;
     ListRicette listRicette;
-    Ricetta ricetta;
 
     // Gestione pattern Facade
     public OttieniRicettaControllerApplicativo() {
@@ -76,28 +74,21 @@ public class OttieniRicettaControllerApplicativo {
         // Uso il facade per centralizzare i DAO delle procedure
         Ricetta recipe = facadeOttieniRicetta.ottieniDettagliRicetta(ricetta);
 
-        // Creo un nuovo bean completo per restituire la ricetta alla vista
-        return new BeanRicetta(
-                recipe.getCodice(),
-                recipe.getTitolo(),
-                recipe.getDescrizione(),
-                recipe.getImmagine(),
-                recipe.getCategoria(),
-                recipe.getCuoco(),
-                recipe.getDurataPreparazione(),
-                recipe.getCalorie(),
-                recipe.getIngredienti(),
-                recipe.getPassaggi(),
-                recipe.getVideoUrl(),
-                recipe.getLikes()
-        );
+        // Creo un nuovo bean completo per restituire la ricetta alla vista (max 7 parametri + settaggi manuali)
+        BeanRicetta beanRicetta = new BeanRicetta(recipe.getTitolo(), recipe.getDescrizione(), recipe.getCategoria(), recipe.getDurataPreparazione(), recipe.getCalorie(), recipe.getIngredienti(), recipe.getLikes());
+        beanRicetta.setCodice(recipe.getCodice());
+        beanRicetta.setImmagine(recipe.getImmagine());
+        beanRicetta.setCuoco(recipe.getCuoco());
+        beanRicetta.setPassaggi(recipe.getPassaggi());
+        beanRicetta.setVideoUrl(recipe.getVideoUrl());
+        return beanRicetta;
     }
 
     // Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
-    public BeanIngredienti verificaQuantita(CredentialsBean credentials, BeanRicetta beanRicetta) throws DAOException, SQLException {
+    public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
 
         // Estraggo le informazioni dal bean
-        String username = credentials.getUsername();
+        String username = Credentials.getUsername();
 
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);

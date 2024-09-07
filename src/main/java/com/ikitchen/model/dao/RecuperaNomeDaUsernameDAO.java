@@ -28,8 +28,7 @@ public class RecuperaNomeDaUsernameDAO {
 
                 // Setting del nome recuperato
                 if (rs.next()) {
-                    Credentials profilo = new Credentials();
-                    profilo.setNome(rs.getString("nome"));
+                    Credentials.setNome(rs.getString("nome"));
                 }
             }
         } catch (SQLException e) {

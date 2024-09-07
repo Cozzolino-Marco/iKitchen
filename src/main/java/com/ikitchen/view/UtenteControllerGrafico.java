@@ -4,7 +4,6 @@ import com.ikitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.bean.BeanIngredienti;
-import com.ikitchen.model.bean.CredentialsBean;
 import com.ikitchen.model.dao.ConnectionFactory;
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.domain.Credentials;
@@ -66,7 +65,7 @@ public class UtenteControllerGrafico {
 
         // Invoca il metodo per caricare i prodotti della dispensa ad elenco
         if (elementContainerValidi != null) {
-            caricaIngredienti(Credentials.getUsername());
+            caricaIngredienti();
         }
 
         // Invoca il metodo per configurare lo stile personalizzato dei tab
@@ -74,16 +73,13 @@ public class UtenteControllerGrafico {
     }
 
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
-    private void caricaIngredienti(String username) throws DAOException, SQLException {
-
-        // Crea un bean con le informazioni selezionate
-        CredentialsBean infoPerListaIngredienti = new CredentialsBean(username);
+    private void caricaIngredienti() throws DAOException, SQLException {
 
         // Inizializza il controller applicativo per ottenere gli ingredienti
         OttieniIngredientiControllerApplicativo ingredienti = new OttieniIngredientiControllerApplicativo();
 
         // Gestisci la visualizzazione degli ingredienti validi
-        BeanIngredienti validi = ingredienti.mostraIngredientiValidi(infoPerListaIngredienti);
+        BeanIngredienti validi = ingredienti.mostraIngredientiValidi();
         if (validi.getListIngredienti().isEmpty()) {
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));
@@ -98,7 +94,7 @@ public class UtenteControllerGrafico {
         }
 
         // Gestisci la visualizzazione degli ingredienti non validi
-        BeanIngredienti nonValidi = ingredienti.mostraIngredientiNonValidi(infoPerListaIngredienti);
+        BeanIngredienti nonValidi = ingredienti.mostraIngredientiNonValidi();
         if (nonValidi.getListIngredienti().isEmpty()) {
             Label emptyMessage = new Label("La lista è vuota!");
             emptyMessage.setFont(new Font("System Bold", 20));

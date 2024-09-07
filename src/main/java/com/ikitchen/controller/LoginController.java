@@ -6,7 +6,6 @@ import com.ikitchen.model.dao.ConnectionFactory;
 import com.ikitchen.model.dao.LoginProcedureDAO;
 import com.ikitchen.model.dao.RecuperaNomeDaUsernameDAO;
 import com.ikitchen.model.domain.Credentials;
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -20,14 +19,14 @@ public class LoginController {
     }
 
     // Metodo per effettuare il login
-    public Credentials start(CredentialsBean credentialsBean) throws DAOException, IOException, SQLException {
+    public Credentials start(CredentialsBean credentialsBean) throws DAOException, SQLException {
 
         // Crea un'istanza di Credentials con i dati di login
-        Credentials credentials = new Credentials(credentialsBean.getUsername(),credentialsBean.getPassword());
+        Credentials credentials = new Credentials(credentialsBean.getUsername(), credentialsBean.getPassword());
 
         // Esegui la procedura di login nel database
         try {
-            new LoginProcedureDAO().execute(credentials);
+            new LoginProcedureDAO().execute();
         } catch (DAOException | SQLException e) {
             throw new IllegalArgumentException(e);
         }

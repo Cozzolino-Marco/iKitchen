@@ -5,6 +5,7 @@ import com.ikitchen.model.bean.BeanIngredienti;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.CredentialsBean;
 import com.ikitchen.model.dao.RecuperaIngredientiDispensaDAO;
+import com.ikitchen.model.domain.Credentials;
 import com.ikitchen.model.domain.Ingrediente;
 import com.ikitchen.model.domain.ListIngredienti;
 import java.sql.SQLException;
@@ -21,10 +22,10 @@ public class OttieniIngredientiControllerApplicativo {
     }
 
     // Metodo per mostrare gli ingredienti validi
-    public BeanIngredienti mostraIngredientiValidi(CredentialsBean infoPerListaIngredienti) throws DAOException, SQLException {
+    public BeanIngredienti mostraIngredientiValidi() throws DAOException, SQLException {
 
         // Estraggo le informazioni dal bean
-        String username = infoPerListaIngredienti.getUsername();
+        String username = Credentials.getUsername();
 
         // Eseguo la query usando il DAO e ottengo il risultato
         ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.execute(username);
@@ -52,10 +53,10 @@ public class OttieniIngredientiControllerApplicativo {
     }
 
     // Metodo per mostrare gli ingredienti non validi
-    public BeanIngredienti mostraIngredientiNonValidi(CredentialsBean infoPerListaIngredienti) throws DAOException, SQLException {
+    public BeanIngredienti mostraIngredientiNonValidi() throws DAOException, SQLException {
 
         // Estraggo le informazioni dal bean
-        String username = infoPerListaIngredienti.getUsername();
+        String username = Credentials.getUsername();
 
         // Eseguo la query usando il DAO e ottengo il risultato
         ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.execute(username);

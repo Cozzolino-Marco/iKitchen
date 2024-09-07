@@ -5,12 +5,12 @@ import com.ikitchen.model.domain.Role;
 public class CredentialsBean {
 
     // Variabili
-    private static String username;
-    private static String password;
-    private static String ripetiPassword;
-    private static Role role;
-    private static String nome;
-    private static String cognome;
+    private String username;
+    private String password;
+    private String ripetiPassword;
+    private Role role;
+    private String nome;
+    private String cognome;
 
     // Usato dal controller grafico della registrazione per popolare i dati utente
     public CredentialsBean() {}
@@ -21,28 +21,23 @@ public class CredentialsBean {
         this.password = password;
     }
 
-    // Usato dai controller grafici di ottieni ricetta e utente controller
-    public CredentialsBean(String username) {
-        this.username = username;
-    }
-
     // Getter
-    public static String getNome() {
+    public String getNome() {
         return nome;
     }
-    public static String getCognome() {
+    public String getCognome() {
         return cognome;
     }
-    public static Role getRole() {
+    public Role getRole() {
         return role;
     }
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
-    public static String getPassword() {
+    public String getPassword() {
         return password;
     }
-    public static String getRipetiPassword() {
+    public String getRipetiPassword() {
         return ripetiPassword;
     }
 

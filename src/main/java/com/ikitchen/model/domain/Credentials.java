@@ -50,11 +50,11 @@ public class Credentials {
     }
 
     // Setter
-    public void setNome(String nome) {
-        this.nome = nome;
+    public static void setNome(String nome) {
+        Credentials.nome = nome;
     }
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
+    public static void setCognome(String cognome) {
+        Credentials.cognome = cognome;
     }
     public static void setRole(Role role){
         Credentials.role = role;
@@ -65,7 +65,7 @@ public class Credentials {
     public static void setPassword(String password) {
         Credentials.password = password;
     }
-    public void setRipetiPassword(String ripetiPassword) {
-        this.ripetiPassword = ripetiPassword;
+    public static void setRipetiPassword(String ripetiPassword) {
+        Credentials.ripetiPassword = ripetiPassword;
     }
 }

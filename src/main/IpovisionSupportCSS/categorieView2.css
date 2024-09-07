@@ -28,9 +28,5 @@
     -fx-spacing: 10.0;
     -fx-background-color: black;
     -fx-alignment: center;
-}
-
-/* Margini per i bottoni delle categorie */
-#categoriesContainer {
     -fx-padding: 20.0 0 20.0 0;
 }

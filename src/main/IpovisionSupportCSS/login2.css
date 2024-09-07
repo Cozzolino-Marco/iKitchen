@@ -40,19 +40,3 @@ Button {
     -fx-background-radius: 10;
     -fx-border-radius: 10;
 }
-
-/* Padding e Spaziatura per VBox */
-VBox {
-    -fx-padding: 50px;
-    -fx-spacing: 40px;
-}
-
-/* Spaziatura orizzontale tra gli elementi */
-HBox {
-    -fx-spacing: 110px;
-}
-
-/* Margine sinistro */
-HBox .margin {
-    -fx-margin-left: 15px;
-}

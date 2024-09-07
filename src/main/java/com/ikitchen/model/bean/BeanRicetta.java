@@ -27,7 +27,7 @@ public class BeanRicetta {
     public BeanRicetta() {}
 
     // Passaggio di dati completo dall'applicativo al grafico per la visualizzazione della ricetta in dettaglio
-    public BeanRicetta (String codRicetta, String titolo, String descrizione, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
+    public BeanRicetta (String titolo, String descrizione, String categoria, int durataPreparazione, int calorie, ListIngredienti ingredienti, int likes) {
 
         // Controllo della consistenza del titolo
         if (titolo.length() < 3) {
@@ -110,6 +110,9 @@ public class BeanRicetta {
     }
 
     // Setter
+    public void setCodice(String codRicetta) {
+        this.codRicetta = codRicetta;
+    }
     public void setTitolo(String titolo) {
         if (titolo == null) {
             this.titolo = "TBA";
@@ -136,6 +139,12 @@ public class BeanRicetta {
         } else {
             this.calorie = calorie;
         }
+    }
+    public void setPassaggi(String passaggi) {
+        this.passaggi = passaggi;
+    }
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
     public void setLinkRicetta(String linkRicetta) {
         if (linkRicetta == null) {

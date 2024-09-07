@@ -9,20 +9,19 @@ import java.sql.SQLException;
 
 public class RegistrazioneDAO {
 
-    public void execute(Object... params) throws DAOException, SQLException {
+    public void execute() throws DAOException, SQLException {
 
         // Parametri
         CallableStatement cs = null;
-        Credentials cred = (Credentials) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call registrazione(?, ?, ?, ?, ?)}");
-            cs.setString(1, cred.getNome());
-            cs.setString(2, cred.getCognome());
-            cs.setInt(3, cred.getRole().getId());
-            cs.setString(4, cred.getUsername());
-            cs.setString(5, cred.getPassword());
+            cs.setString(1, Credentials.getNome());
+            cs.setString(2, Credentials.getCognome());
+            cs.setInt(3, Credentials.getRole().getId());
+            cs.setString(4, Credentials.getUsername());
+            cs.setString(5, Credentials.getPassword());
 
             // Esegui la stored procedure
             cs.execute();

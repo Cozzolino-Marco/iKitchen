@@ -15,15 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class RegistratiGrafico {
-
-    @FXML
-    private VBox mainContainer;
 
     @FXML
     private TextField textFieldNome;
@@ -97,7 +93,7 @@ public class RegistratiGrafico {
 
         // Mostra il popup in base all'esito della query
         try {
-            controllerRegistrati.effettuaRegistrazione();
+            controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
             LoginGrafico loginGrafico = new LoginGrafico();
             loginGrafico.loginView();
             Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");

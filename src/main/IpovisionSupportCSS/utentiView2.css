@@ -1,9 +1,4 @@
 /* Rimuove padding e spazi per VBox e TabPane */
-VBox {
-    -fx-padding: 0;
-    -fx-spacing: 0;
-}
-
 .tab-pane {
     -fx-padding: 0;
     -fx-spacing: 0;

@@ -94,7 +94,7 @@ public class RegistratiGrafico2 {
 
         // Mostra il popup in base all'esito della query
         try {
-            controllerRegistrati.effettuaRegistrazione();
+            controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
             LoginGrafico2 loginGrafico = new LoginGrafico2();
             loginGrafico.loginView();
             Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");

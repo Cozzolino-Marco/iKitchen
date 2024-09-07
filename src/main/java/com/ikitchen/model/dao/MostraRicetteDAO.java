@@ -29,11 +29,10 @@ public class MostraRicetteDAO {
             // Controllo esecuzione
             if(status) {
                 ResultSet rs = cs.getResultSet();
-                FactoryRicetta factoryRicetta = new FactoryRicetta();
 
                 // Itera attraverso il ResultSet e popola la lista di ricette
                 while (rs.next()) {
-                    Ricetta recipe = factoryRicetta.createRicetta(rs.getString("categoria"));
+                    Ricetta recipe = FactoryRicetta.createRicetta(rs.getString("categoria"));
                     recipe.setCodice(rs.getString("codRicetta"));
                     recipe.setTitolo(rs.getString("titolo"));
                     recipe.setImmagine(rs.getBlob("immagine"));

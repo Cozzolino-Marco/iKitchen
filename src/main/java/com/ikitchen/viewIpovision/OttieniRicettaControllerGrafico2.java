@@ -1,15 +1,14 @@
 package com.ikitchen.viewIpovision;
 
+import static com.ikitchen.ApplicationStart.getHostServicesInstance;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
 import com.ikitchen.model.domain.ApplicazioneStage;
-import com.ikitchen.model.domain.Credentials;
 import com.ikitchen.model.domain.Ingrediente;
 import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -29,7 +28,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,8 +38,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.ikitchen.ApplicationStart.getHostServicesInstance;
 
 public class OttieniRicettaControllerGrafico2 {
 
@@ -67,8 +63,6 @@ public class OttieniRicettaControllerGrafico2 {
     @FXML
     private VBox categoriesContainer;
 
-    // Variabili
-    private OttieniRicettaControllerApplicativo ricette = null;
     private OttieniRicettaControllerApplicativo ricetta = null;
     private String categoriaScelta;
     private String provenienzaScelta;
@@ -210,33 +204,6 @@ public class OttieniRicettaControllerGrafico2 {
         categoriesContainer.setAlignment(Pos.CENTER);
     }
 
-    // Metodo per cambiare i filtri in base alla provenienza scelta
-    public void verificaProvenienza() {
-        // Aggiungi un listener alla ComboBox della Provenienza
-        ObservableList<String> itemsF = filtraggioComboBox.getItems();
-        ObservableList<String> itemsS = storageComboBox.getItems();
-
-        if (provenienzaComboBox.getValue().equals("Dal web")) {
-            itemsF.remove("Filtrate in base alla dispensa");
-            itemsS.remove("Solo dal database");
-            itemsS.remove("Solo dal file system");
-            itemsS.remove("Da entrambi");
-            if (!itemsS.contains("Nessuno")) {
-                itemsS.add(0, "Nessuno");
-            }
-        } else {
-            itemsS.remove("Nessuno");
-            if (!itemsF.contains("Filtrate in base alla dispensa")) {
-                itemsF.add(1, "Filtrate in base alla dispensa");
-            }
-            if (!itemsS.contains("Solo dal database") && !itemsS.contains("Solo dal file system") && !itemsS.contains("Da entrambi")) {
-                itemsS.add(1, "Solo dal database");
-                itemsS.add(2, "Solo dal file system");
-                itemsS.add(3, "Da entrambi");
-            }
-        }
-    }
-
     // Metodo per mostrare la pagina dei filtri
     @FXML
     public void filtriView() throws IOException {
@@ -272,7 +239,7 @@ public class OttieniRicettaControllerGrafico2 {
         BeanRicette infoPerListaRicette = new BeanRicette(categoria, provenienza, filtraggio, storage);
 
         // Inizializza il controller applicativo
-        ricette = new OttieniRicettaControllerApplicativo();
+        OttieniRicettaControllerApplicativo ricette = new OttieniRicettaControllerApplicativo();
 
         // Ottieni la lista delle ricette dal controller applicativo
         BeanRicette listaRicette = ricette.mostraRicette(infoPerListaRicette);
@@ -320,10 +287,6 @@ public class OttieniRicettaControllerGrafico2 {
     // Metodo che mostra le ricette caricate a livello grafico
     @FXML
     protected void mostraRicette() throws IOException {
-
-        /*if (provenienzaComboBox.getValue() != null) {
-            verificaProvenienza();
-        }*/
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
         if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null || storageComboBox.getValue() == null) {
@@ -591,8 +554,7 @@ public class OttieniRicettaControllerGrafico2 {
             descrizione.setWrapText(true);
 
             // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
-            CredentialsBean usernameBean = new CredentialsBean(Credentials.getUsername());
-            BeanIngredienti beanIngredienti = ricetta.verificaQuantita(usernameBean, dettagliRicetta);
+            BeanIngredienti beanIngredienti = ricetta.verificaQuantita(dettagliRicetta);
 
             // Gestione lista ingredienti
             Label ingredientiLabel = new Label("INGREDIENTI");
@@ -751,13 +713,7 @@ public class OttieniRicettaControllerGrafico2 {
             popupStage.show();
 
         } catch (DAOException | SQLException e) {
-            e.printStackTrace();
-            VBox errorContent = new VBox(new Label("Errore nel caricamento dei dettagli della ricetta"));
-            errorContent.setAlignment(Pos.CENTER);
-            errorContent.setPadding(new Insets(20));
-            Scene popupScene = new Scene(errorContent, 300, 550);
-            popupStage.setScene(popupScene);
-            popupStage.show();
+            Popup.mostraPopup("Errore", "Errore nel caricamento dei dettagli della ricetta.", "error");
         }
     }
 

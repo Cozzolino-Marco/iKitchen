@@ -10,8 +10,7 @@ import java.sql.Types;
 
 public class LoginProcedureDAO {
 
-    public void execute(Object... params) throws DAOException, SQLException {
-        Credentials cred = (Credentials) params[0];
+    public void execute() throws DAOException, SQLException {
         int role;
         CallableStatement cs = null;
 
@@ -20,8 +19,8 @@ public class LoginProcedureDAO {
             cs = conn.prepareCall("{call login(?,?,?)}");
 
             // Imposta i parametri IN
-            cs.setString(1, cred.getUsername());
-            cs.setString(2, cred.getPassword());
+            cs.setString(1, Credentials.getUsername());
+            cs.setString(2, Credentials.getPassword());
 
             // Registra il parametro OUT
             cs.registerOutParameter(3, Types.NUMERIC);
@@ -38,7 +37,7 @@ public class LoginProcedureDAO {
             }*/
 
             // Imposta il ruolo nelle credenziali
-            cred.setRole(Role.fromInt(role));
+            Credentials.setRole(Role.fromInt(role));
 
         } catch (SQLException e) {
             throw new DAOException("Login error: " + e.getMessage());
