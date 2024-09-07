@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>iKitchen</artifactId>
+    <artifactId>ikitchen</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>iKitchen</name>
+    <name>ikitchen</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,6 +37,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- dipendenze per includere automaticamente il driver per la connessione al DB -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.31</version>
+        </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
@@ -64,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.example.ikitchen/com.iKitchen.ApplicationStart</mainClass>
+                            <mainClass>com.example.ikitchen/com.ikitchen.ApplicationStart</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

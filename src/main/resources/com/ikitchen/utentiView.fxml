@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.ikitchen.view.UtenteControllerGrafico">
+
+    <!-- Barra di navigazione superiore -->
+    <top>
+        <VBox prefWidth="500.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <HBox style="-fx-background-color: #00A5A5;" alignment="CENTER" spacing="10.0" prefHeight="40.0">
+                <Label fx:id="labelTitle" style="-fx-text-fill: white;">
+                    <font>
+                        <Font name="System Bold" size="20.0"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Sezione per i tab Validi/Non Validi -->
+    <center>
+        <VBox fx:id="mainContainer" spacing="10.0">
+            <padding>
+                <Insets bottom="10.0" left="15.0" right="15.0" top="10.0"/>
+            </padding>
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" prefWidth="500.0">
+                <Tab text="Disponibili">
+                    <VBox spacing="10.0">
+                        <ScrollPane fx:id="scrollPaneValidi" fitToWidth="true" fitToHeight="true">
+                            <VBox fx:id="elementContainerValidi" spacing="10"/>
+                        </ScrollPane>
+                    </VBox>
+                </Tab>
+                <Tab text="Da acquistare">
+                    <VBox spacing="10.0">
+                        <ScrollPane fx:id="scrollPaneNonValidi" fitToWidth="true" fitToHeight="true">
+                            <VBox fx:id="elementContainerNonValidi" spacing="10"/>
+                        </ScrollPane>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </center>
+
+    <!-- Barra di navigazione inferiore -->
+    <bottom>
+        <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="50.0">
+            <Button text="⏪" onAction="#logout"/>
+            <Button text="🌍" onAction="#categorieView"/>
+            <Button text="🏠" onAction="#homePageUtente"/>
+            <Button text="❤" onAction="#preferitiView"/>
+            <Button text="➕" onAction="#aggiungiProdotto"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
