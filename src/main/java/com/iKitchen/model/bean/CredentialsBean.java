@@ -5,12 +5,12 @@ import com.iKitchen.model.domain.Role;
 public class CredentialsBean {
 
     // Variabili
-    static String username;
-    static String password;
-    static String ripetiPassword;
-    static Role role;
-    static String nome;
-    static String cognome;
+    private static String username;
+    private static String password;
+    private static String ripetiPassword;
+    private static Role role;
+    private static String nome;
+    private static String cognome;
 
     // Usato dal controller grafico della registrazione per popolare i dati utente
     public CredentialsBean() {}

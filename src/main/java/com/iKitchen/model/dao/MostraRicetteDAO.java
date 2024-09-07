@@ -6,23 +6,21 @@ import com.iKitchen.model.domain.ListRicette;
 import com.iKitchen.model.domain.Ricetta;
 import java.sql.*;
 
-public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
+public class MostraRicetteDAO {
 
-    @Override
     public ListRicette execute(Object... params) throws DAOException, SQLException {
 
         // Parametri
         ListRicette listRicette = new ListRicette();
         CallableStatement cs = null;
-        String categoria = (String) params[0];
-        String provenienza = (String) params[1];
-        String filtraggio = (String) params[2];
+        Ricetta ricetta = (Ricetta) params[0];
+        String filtraggio = (String) params[1];
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call mostra_ricette(?, ?, ?)}");
-            cs.setString(1, categoria);
-            cs.setString(2, provenienza);
+            cs.setString(1, ricetta.getCategoria());
+            cs.setString(2, ricetta.getProvenienza());
             cs.setString(3, filtraggio);
 
             // Esegui la stored procedure
@@ -35,16 +33,16 @@ public class MostraRicetteDAO implements GenericProcedureDAO<ListRicette> {
 
                 // Itera attraverso il ResultSet e popola la lista di ricette
                 while (rs.next()) {
-                    Ricetta ricetta = factoryRicetta.createRicetta(rs.getString("categoria"));
-                    ricetta.setCodice(rs.getString("codRicetta"));
-                    ricetta.setTitolo(rs.getString("titolo"));
-                    ricetta.setImmagine(rs.getBlob("immagine"));
-                    ricetta.setCuoco(rs.getString("cuoco"));
-                    ricetta.setDurataPreparazione(rs.getInt("durataPreparazione"));
-                    ricetta.setCalorie(rs.getInt("calorie"));
+                    Ricetta recipe = factoryRicetta.createRicetta(rs.getString("categoria"));
+                    recipe.setCodice(rs.getString("codRicetta"));
+                    recipe.setTitolo(rs.getString("titolo"));
+                    recipe.setImmagine(rs.getBlob("immagine"));
+                    recipe.setCuoco(rs.getString("cuoco"));
+                    recipe.setDurataPreparazione(rs.getInt("durataPreparazione"));
+                    recipe.setCalorie(rs.getInt("calorie"));
 
                     // Aggiungi ricetta alla lista ricette
-                    listRicette.addRicetta(ricetta);
+                    listRicette.addRicetta(recipe);
                 }
             }
         } catch (SQLException e) {

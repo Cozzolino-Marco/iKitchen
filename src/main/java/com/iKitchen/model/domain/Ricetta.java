@@ -6,18 +6,18 @@ import java.sql.Blob;
 public abstract class Ricetta implements Serializable {
 
     // Variabili
-    String codRicetta;
-    String titolo;
-    String descrizione;
-    transient Blob immagine;
-    String provenienza;
-    String cuoco;
-    int durataPreparazione;
-    int calorie;
-    ListIngredienti ingredienti;
-    String passaggi;
-    String videoUrl;
-    int likes;
+    protected String codRicetta;
+    protected String titolo;
+    protected String descrizione;
+    protected transient Blob immagine;
+    protected String provenienza;
+    protected String cuoco;
+    protected int durataPreparazione;
+    protected int calorie;
+    protected ListIngredienti ingredienti;
+    protected String passaggi;
+    protected String videoUrl;
+    protected int likes;
 
     // Getter
     public String getCodice() {

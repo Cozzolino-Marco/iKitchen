@@ -103,50 +103,50 @@ public class OttieniRicettaControllerGraficoAPI {
         String baseUrl;
         String corruptedUrl;
 
-        switch (categoria) {
-            case "Colazione":
+        switch (categoria.toLowerCase()) {
+            case "colazione":
                 baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/colazione/";
                 } else {
                     return baseUrl + "/colazione/";
                 }
-            case "Pasto veloce":
+            case "pasto veloce":
                 baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/panini/";
                 } else {
                     return baseUrl + "/panini/";
                 }
-            case "Bevande":
+            case "bevande":
                 baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/Bevande/";
                 } else {
                     return baseUrl + "/Bevande/";
                 }
-            case "Primi piatti":
+            case "primi piatti":
                 baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/Primi/";
                 } else {
                     return baseUrl + "/Primi/";
                 }
-            case "Secondi piatti":
+            case "secondi piatti":
                 baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/Secondi-piatti/";
                 } else {
                     return baseUrl + "/Secondi-piatti/";
                 }
-            case "Contorni":
+            case "contorni":
                 baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/contorni/";
                 } else {
                     return baseUrl + "/contorni/";
                 }
-            case "Dolci":
+            case "dolci":
                 baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
                     return baseUrl + "page" + pageNumber + "/Dolci-e-Desserts/";

@@ -3,6 +3,7 @@ package com.iKitchen.view;
 import com.iKitchen.ApplicationStart;
 import com.iKitchen.model.domain.ApplicazioneStage;
 import com.iKitchen.model.domain.Credentials;
+import com.iKitchen.model.utility.Popup;
 import com.iKitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,7 +51,14 @@ public class LoginGrafico {
 
         try {
             LoginController loginController = new LoginController();
-            Credentials cred = loginController.start(credB);
+            Credentials cred = null;
+
+            // Chiamata al login controller per effettuare il login
+            try {
+                cred = loginController.start(credB);
+            } catch (DAOException | SQLException e) {
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+            }
 
             // Recupera il nome associato allo username
             loginController.recuperaNome(credB);
@@ -148,7 +156,6 @@ public class LoginGrafico {
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        //scene.getStylesheets().add(getClass().getResource("/utentiView2.css").toExternalForm());
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);

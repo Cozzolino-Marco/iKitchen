@@ -4,7 +4,6 @@ import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.bean.CredentialsBean;
 import com.iKitchen.model.dao.ConnectionFactory;
 import com.iKitchen.model.dao.LoginProcedureDAO;
-import com.iKitchen.model.dao.RecuperaIngredientiDispensaDAO;
 import com.iKitchen.model.dao.RecuperaNomeDaUsernameDAO;
 import com.iKitchen.model.domain.Credentials;
 import java.io.IOException;
@@ -20,6 +19,7 @@ public class LoginController {
         this.recuperaNomeDaUsernameDAO = new RecuperaNomeDaUsernameDAO();
     }
 
+    // Metodo per effettuare il login
     public Credentials start(CredentialsBean credentialsBean) throws DAOException, IOException, SQLException {
 
         // Crea un'istanza di Credentials con i dati di login

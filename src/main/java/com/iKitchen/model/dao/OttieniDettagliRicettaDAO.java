@@ -14,17 +14,16 @@ public class OttieniDettagliRicettaDAO {
     public Ricetta execute(Object... params) throws DAOException, SQLException {
 
         // Parametri
-        Ricetta ricetta = null;
+        Ricetta recipe = null;
         CallableStatement cs = null;
         IngredientiDAO ingredientiDAO = new IngredientiDAO();
-        String codRicetta = (String) params[0];
-        String categoria = (String) params[1];
+        Ricetta ricetta = (Ricetta) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call ottieni_dettagli_ricetta(?, ?)}");
-            cs.setString(1, codRicetta);
-            cs.setString(2, categoria);
+            cs.setString(1, ricetta.getCodice());
+            cs.setString(2, ricetta.getCategoria());
 
             // Esegui la stored procedure
             boolean status = cs.execute();
@@ -36,22 +35,22 @@ public class OttieniDettagliRicettaDAO {
 
                 // Popola la ricetta
                 if (rs.next()) {
-                    ricetta = factoryRicetta.createRicetta(rs.getString("categoria"));
-                    ricetta.setCodice(rs.getString("codRicetta"));
-                    ricetta.setTitolo(rs.getString("titolo"));
-                    ricetta.setDescrizione(rs.getString("descrizione"));
-                    ricetta.setImmagine(rs.getBlob("immagine"));
-                    ricetta.setCuoco(rs.getString("cuoco"));
-                    ricetta.setDurataPreparazione(rs.getInt("durataPreparazione"));
-                    ricetta.setCalorie(rs.getInt("calorie"));
-                    ricetta.setPassaggi(rs.getString("passaggi"));
-                    ricetta.setVideoUrl(rs.getString("videoUrl"));
-                    ricetta.setLikes(rs.getInt("likes"));
+                    recipe = factoryRicetta.createRicetta(rs.getString("categoria"));
+                    recipe.setCodice(rs.getString("codRicetta"));
+                    recipe.setTitolo(rs.getString("titolo"));
+                    recipe.setDescrizione(rs.getString("descrizione"));
+                    recipe.setImmagine(rs.getBlob("immagine"));
+                    recipe.setCuoco(rs.getString("cuoco"));
+                    recipe.setDurataPreparazione(rs.getInt("durataPreparazione"));
+                    recipe.setCalorie(rs.getInt("calorie"));
+                    recipe.setPassaggi(rs.getString("passaggi"));
+                    recipe.setVideoUrl(rs.getString("videoUrl"));
+                    recipe.setLikes(rs.getInt("likes"));
 
                     // Recupera e imposta gli ingredienti
                     String idRicetta = rs.getString("codRicetta");
                     ListIngredienti ingredienti = ingredientiDAO.getIngredientiPerRicetta(idRicetta);
-                    ricetta.setIngredienti(ingredienti);
+                    recipe.setIngredienti(ingredienti);
                 }
             }
         } catch (SQLException e) {
@@ -61,7 +60,6 @@ public class OttieniDettagliRicettaDAO {
                 cs.close();
             }
         }
-        return ricetta;
+        return recipe;
     }
 }
-

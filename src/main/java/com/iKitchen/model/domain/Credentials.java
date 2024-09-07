@@ -3,12 +3,12 @@ package com.iKitchen.model.domain;
 public class Credentials {
 
     // Variabili
-    static String username;
-    static String password;
-    static String ripetiPassword;
-    static Role role;
-    static String nome;
-    static String cognome;
+    private static String username;
+    private static String password;
+    private static String ripetiPassword;
+    private static Role role;
+    private static String nome;
+    private static String cognome;
 
     // Costruttore usato dal DAO per il recupero del nome
     public Credentials () {}

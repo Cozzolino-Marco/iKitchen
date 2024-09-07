@@ -3,6 +3,7 @@ package com.iKitchen;
 import com.iKitchen.exception.DAOException;
 import com.iKitchen.model.dao.MostraRicetteDAO;
 import com.iKitchen.model.domain.ApplicazioneStage;
+import com.iKitchen.model.domain.FactoryRicetta;
 import com.iKitchen.model.domain.ListRicette;
 import com.iKitchen.model.domain.Ricetta;
 import com.iKitchen.model.utility.ScreenSize;
@@ -32,14 +33,21 @@ public class ApplicationStart extends Application {
         // TODO: Rimuovere il riempimento del file system
         String nomeFile = "iKitchen/RicetteUtenti/Primi piatti_Da chef.dat";
         MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-        ListRicette listRicette = new ListRicette();
-        listRicette = mostraRicetteDAO.execute("Primi piatti", "Da chef", "Tutte le ricette");
+
+        // Crea l'oggetto Ricetta con la categoria e provenienza corrette
+        Ricetta ricetta = FactoryRicetta.createRicetta("Primi piatti");  // Usa la factory per creare l'oggetto Ricetta
+        ricetta.setProvenienza("Da chef");
+
+        // Esegui il metodo execute con l'oggetto Ricetta e il filtro
+        ListRicette listRicette = mostraRicetteDAO.execute(ricetta, "Tutte le ricette");
 
         List<Ricetta> ricetteToAdd = new ArrayList<>();
-        for (Ricetta ricetta : listRicette.getListaRicette()) {
-            ricetteToAdd.add(ricetta);
+        for (Ricetta recipe : listRicette.getListaRicette()) {
+            ricetteToAdd.add(recipe);
         }
         salvaEventiSuFile(ricetteToAdd, nomeFile);
+
+
 
         ApplicazioneStage.setStage(stage);
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));

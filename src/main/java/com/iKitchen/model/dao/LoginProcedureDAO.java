@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class LoginProcedureDAO{
+public class LoginProcedureDAO {
 
     public void execute(Object... params) throws DAOException, SQLException {
         Credentials cred = (Credentials) params[0];
@@ -29,8 +29,15 @@ public class LoginProcedureDAO{
             // Esegui la chiamata
             cs.executeQuery();
 
-            // Ottieni il valore del parametro OUT
+            // Ottieni il valore del parametro OUT (ruolo)
             role = cs.getInt(3);
+
+            /* Verifica se il ruolo è valido
+            if (role == -1) {  // Supponiamo che -1 sia l'indicatore di credenziali non valide
+                throw new DAOException("Credenziali non valide: username o password errati.");
+            }*/
+
+            // Imposta il ruolo nelle credenziali
             cred.setRole(Role.fromInt(role));
 
         } catch (SQLException e) {
@@ -42,4 +49,3 @@ public class LoginProcedureDAO{
         }
     }
 }
-

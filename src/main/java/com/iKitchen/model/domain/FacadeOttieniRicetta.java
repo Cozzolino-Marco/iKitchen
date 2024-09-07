@@ -19,21 +19,8 @@ public class FacadeOttieniRicetta {
         return listProdottiDispensa;
     }
 
-    /* Metodo per mostrare le ricette
-    public ListRicette mostraRicette(String categoria, String provenienza, String filtro) throws DAOException, SQLException {
-
-        // Istanzia il DAO per mostrare la lista di ricette filtrate ed eseguo la query usando il DAO
-        MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-        ListRicette listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
-
-        // Istanzia il File System per mostrare la lista di ricette filtrate
-        MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
-
-        return listRicette;
-    }*/
-
     // Metodo per mostrare le ricette
-    public ListRicette mostraRicette(String categoria, String provenienza, String filtro, String storage) throws DAOException, SQLException {
+    public ListRicette mostraRicette(Ricetta ricetta, String filtro, String storage) throws DAOException, SQLException {
 
         // Istazio lista di ricette
         ListRicette listRicette = new ListRicette();
@@ -42,33 +29,33 @@ public class FacadeOttieniRicetta {
         if (storage.equalsIgnoreCase("Solo dal database")) {
             // Mostrare le ricette solo dal DB
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-            listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
+            listRicette = mostraRicetteDAO.execute(ricetta, filtro);
         }
         else if (storage.equalsIgnoreCase("Solo dal file system")) {
             // Mostrare le ricette solo dal file system
             MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
-            listRicette = mostraRicetteFS.recuperaRicetteDaFile(categoria, provenienza, filtro);
+            listRicette = mostraRicetteFS.recuperaRicetteDaFile(ricetta);
         }
         else if (storage.equalsIgnoreCase("Da entrambi")) {
             // Mostrare le ricette dal DB e dal file system
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-            listRicette = mostraRicetteDAO.execute(categoria, provenienza, filtro);
+            listRicette = mostraRicetteDAO.execute(ricetta, filtro);
             MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
-            listRicette = mostraRicetteFS.recuperaRicetteDaFile(categoria, provenienza, filtro, listRicette);
+            listRicette = mostraRicetteFS.recuperaRicetteDaFile(ricetta, listRicette);
         }
         return listRicette;
     }
 
     // Metodo per mostrare una ricetta specifica
-    public Ricetta ottieniDettagliRicetta(String codRicetta, String categoria) throws DAOException, SQLException {
+    public Ricetta ottieniDettagliRicetta(Ricetta ricetta) throws DAOException, SQLException {
 
         // Istanzia il DAO per mostrare i dettagli della ricetta
         OttieniDettagliRicettaDAO ottieniDettagliRicettaDAO = new OttieniDettagliRicettaDAO();
 
         // Eseguo la query usando il DAO e ottengo il risultato
-        Ricetta ricetta = ottieniDettagliRicettaDAO.execute(codRicetta, categoria);
+        Ricetta recipe = ottieniDettagliRicettaDAO.execute(ricetta);
 
-        return ricetta;
+        return recipe;
     }
 
     // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta

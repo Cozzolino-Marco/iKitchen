@@ -296,7 +296,8 @@ public class OttieniRicettaControllerGrafico2 {
                 BorderPane element = createElement(beanRicetta);
 
                 // Imposta la larghezza minima per ciascun elemento
-                element.setMinWidth(180);
+                element.setMinWidth(220);
+                element.setMaxWidth(220);
                 element.setMaxWidth(Double.MAX_VALUE);
 
                 // Forzatura all'espansione orizzontale dell'elemento

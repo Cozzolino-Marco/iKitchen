@@ -7,7 +7,7 @@ import java.io.*;
 public class MostraRicetteFS {
 
     // Metodo per recuperare ricette dal file system, gestendo il caso di lista esistente o creazione di una nuova lista
-    public ListRicette recuperaRicetteDaFile(String categoria, String provenienza, String filtro, ListRicette... existingList) {
+    public ListRicette recuperaRicetteDaFile(Ricetta ricetta, ListRicette... existingList) {
 
         // Dichiarazioni iniziali
         ListRicette listRicette;
@@ -20,7 +20,7 @@ public class MostraRicetteFS {
         }
 
         // Costruisci il nome del file system
-        String nomeFile = costruisciNomeFile(categoria, provenienza);
+        String nomeFile = costruisciNomeFile(ricetta.getCategoria(), ricetta.getProvenienza());
 
         // Verifica se il file esiste, altrimenti crealo
         File file = new File(nomeFile);
@@ -39,10 +39,10 @@ public class MostraRicetteFS {
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             // Lettura degli oggetti dal file uno alla volta
-            Ricetta ricetta;
-            while ((ricetta = (Ricetta) ois.readObject()) != null) {
-                if (categoria == null || ricetta.getCategoria().equalsIgnoreCase(categoria)) {
-                    listRicette.addRicetta(ricetta);
+            Ricetta recipe;
+            while ((recipe = (Ricetta) ois.readObject()) != null) {
+                if (ricetta.getCategoria() == null || recipe.getCategoria().equalsIgnoreCase(ricetta.getCategoria())) {
+                    listRicette.addRicetta(recipe);
                 }
             }
 

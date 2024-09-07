@@ -36,22 +36,26 @@ public class OttieniRicettaControllerApplicativo {
             return controllerAttoreSecondario.recuperaRicette(infoPerListaRicette);
         }
 
+        // Creo un oggetto Ricetta usando la factory
+        Ricetta ricetta = FactoryRicetta.createRicetta(categoria);
+        ricetta.setProvenienza(provenienza);
+
         // Uso il facade per centralizzare i DAO delle procedure
-        listRicette = facadeOttieniRicetta.mostraRicette(categoria, provenienza, filtro, storage);
+        listRicette = facadeOttieniRicetta.mostraRicette(ricetta, filtro, storage);
 
         // Creo un nuovo bean per restituire le ricette alla vista
         BeanRicette ricetteBean = new BeanRicette(categoria, provenienza, filtro, storage);
 
         // Itero attraverso la lista di ricette e le aggiungo al BeanRicette
-        for (Ricetta ricetta : listRicette.getListaRicette()) {
+        for (Ricetta recipe : listRicette.getListaRicette()) {
             BeanRicetta beanRicetta = new BeanRicetta(
-                    ricetta.getCodice(),
-                    ricetta.getTitolo(),
-                    ricetta.getImmagine(),
-                    ricetta.getCategoria(),
-                    ricetta.getCuoco(),
-                    ricetta.getDurataPreparazione(),
-                    ricetta.getCalorie()
+                    recipe.getCodice(),
+                    recipe.getTitolo(),
+                    recipe.getImmagine(),
+                    recipe.getCategoria(),
+                    recipe.getCuoco(),
+                    recipe.getDurataPreparazione(),
+                    recipe.getCalorie()
             );
             ricetteBean.addRicetta(beanRicetta);
         }
@@ -60,27 +64,32 @@ public class OttieniRicettaControllerApplicativo {
 
     // Restituisce al controller grafico tutte le informazioni di una ricetta specifica
     public BeanRicetta ottieniDettagliRicetta(BeanRicetta infoPerRicetta) throws DAOException, SQLException {
+
         // Estraggo le informazioni dal bean
         String codRicetta = infoPerRicetta.getCodice();
         String categoria = infoPerRicetta.getCategoria();
 
+        // Creo un oggetto Ricetta usando la factory
+        Ricetta ricetta = FactoryRicetta.createRicetta(categoria);
+        ricetta.setCodice(codRicetta);
+
         // Uso il facade per centralizzare i DAO delle procedure
-        ricetta = facadeOttieniRicetta.ottieniDettagliRicetta(codRicetta, categoria);
+        Ricetta recipe = facadeOttieniRicetta.ottieniDettagliRicetta(ricetta);
 
         // Creo un nuovo bean completo per restituire la ricetta alla vista
         return new BeanRicetta(
-                ricetta.getCodice(),
-                ricetta.getTitolo(),
-                ricetta.getDescrizione(),
-                ricetta.getImmagine(),
-                ricetta.getCategoria(),
-                ricetta.getCuoco(),
-                ricetta.getDurataPreparazione(),
-                ricetta.getCalorie(),
-                ricetta.getIngredienti(),
-                ricetta.getPassaggi(),
-                ricetta.getVideoUrl(),
-                ricetta.getLikes()
+                recipe.getCodice(),
+                recipe.getTitolo(),
+                recipe.getDescrizione(),
+                recipe.getImmagine(),
+                recipe.getCategoria(),
+                recipe.getCuoco(),
+                recipe.getDurataPreparazione(),
+                recipe.getCalorie(),
+                recipe.getIngredienti(),
+                recipe.getPassaggi(),
+                recipe.getVideoUrl(),
+                recipe.getLikes()
         );
     }
 

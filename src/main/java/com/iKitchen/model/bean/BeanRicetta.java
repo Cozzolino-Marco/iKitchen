@@ -26,7 +26,7 @@ public class BeanRicetta {
     // Costruttore di default vuoto usato da scrapeRicette
     public BeanRicetta() {}
 
-    // Passaggio di dati completo per la visualizzazione della ricetta in dettaglio
+    // Passaggio di dati completo dall'applicativo al grafico per la visualizzazione della ricetta in dettaglio
     public BeanRicetta (String codRicetta, String titolo, String descrizione, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie, ListIngredienti ingredienti, String passaggi, String videoUrl, int likes) {
 
         // Controllo della consistenza del titolo
@@ -44,11 +44,6 @@ public class BeanRicetta {
         if (!categorieValide.contains(categoria)) {
             throw new IllegalArgumentException("La categoria non è valida! Le categorie valide sono: " + categorieValide);
         }
-
-        /* Controllo sulla correttezza del campo provenienza
-        if (!provenienza.equals("Da chef") && !provenienza.equals("Dal web")) {
-            throw new IllegalArgumentException("La provenienza deve essere 'da chef' oppure 'dal web'!");
-        }*/
 
         // Controllo sulla correttezza del campo durata preparazione
         if (durataPreparazione < 0) {
@@ -80,7 +75,7 @@ public class BeanRicetta {
         this.likes = likes;
     }
 
-    // Passaggio di dati parziale per la visualizzazione delle info base delle ricette
+    // Passaggio di dati parziale dall'applicativo al grafico per la visualizzazione delle info base delle ricette
     public BeanRicetta (String codRicetta, String titolo, Blob immagine, String categoria, String cuoco, int durataPreparazione, int calorie) {
 
         // Controllo della consistenza del titolo

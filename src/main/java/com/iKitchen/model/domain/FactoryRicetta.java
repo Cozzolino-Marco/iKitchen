@@ -2,7 +2,7 @@ package com.iKitchen.model.domain;
 
 public class FactoryRicetta {
 
-    public Ricetta createRicetta(String categoria) {
+    public static Ricetta createRicetta(String categoria) {
         switch (categoria.toLowerCase()) {
             case "colazione":
                 return new RicettaColazione();
