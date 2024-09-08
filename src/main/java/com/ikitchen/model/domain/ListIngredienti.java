@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListIngredienti implements Serializable {
-    List<Ingrediente> listaIngredienti = new ArrayList<>();
+    private List<Ingrediente> listaIngredienti = new ArrayList<>();
 
     public void addIngrediente(Ingrediente ingrediente) {
         this.listaIngredienti.add(ingrediente);
