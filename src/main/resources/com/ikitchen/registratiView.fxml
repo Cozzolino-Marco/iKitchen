@@ -13,7 +13,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.view.RegistratiGrafico"
+            fx:controller="com.ikitchen.view_standard.RegistratiGrafico"
             style="-fx-background-color: #d4cdcd;">
 
     <!-- Grafica form di registrazione -->

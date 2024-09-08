@@ -12,7 +12,6 @@ import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -27,7 +26,7 @@ public class ApplicationStart extends Application {
     @Override
     public void start(Stage stage) throws IOException, DAOException, SQLException {
 
-        // Gestione servizio link web della ricetta
+        // Assegna correttamente il servizio HostServices alla variabile statica
         hostServices = getHostServices();
 
         // TODO: Rimuovere il riempimento del file system

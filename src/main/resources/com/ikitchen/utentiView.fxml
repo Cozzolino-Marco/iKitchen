@@ -14,7 +14,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.view.UtenteControllerGrafico">
+            fx:controller="com.ikitchen.view_standard.UtenteControllerGrafico">
 
     <!-- Barra di navigazione superiore -->
     <top>

@@ -10,7 +10,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.viewIpovision.OttieniRicettaControllerGrafico2"
+            fx:controller="com.ikitchen.view_ipovision.OttieniRicettaControllerGrafico2"
             stylesheets="@/categorieView2.css">
 
     <!-- Barra di navigazione superiore -->

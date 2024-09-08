@@ -1,4 +1,4 @@
-package com.ikitchen.viewIpovision;
+package com.ikitchen.view_ipovision;
 
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.utility.Credentials;

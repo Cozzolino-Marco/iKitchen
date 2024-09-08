@@ -1,4 +1,4 @@
-package com.ikitchen.view;
+package com.ikitchen.view_standard;
 
 import com.ikitchen.model.bean.BeanRicetta;
 import com.ikitchen.model.bean.BeanRicette;
@@ -100,58 +100,53 @@ public class OttieniRicettaControllerGraficoAPI {
     // Metodo che genera l'URL al quale connettersi
     public String generateUrl(String categoria, int pageNumber) {
 
-        String baseUrl;
+        // Variabili di riferimento
+        String baseUrlCatalogo = "https://www.giallozafferano.it/ricette-cat/";
+        String baseUrlRicerca = "https://www.giallozafferano.it/ricerca-ricette/";
         String corruptedUrl;
 
         switch (categoria.toLowerCase()) {
             case "colazione":
-                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/colazione/";
+                    return baseUrlRicerca + "page" + pageNumber + "/colazione/";
                 } else {
-                    return baseUrl + "/colazione/";
+                    return baseUrlRicerca + "/colazione/";
                 }
             case "pasto veloce":
-                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/panini/";
+                    return baseUrlRicerca + "page" + pageNumber + "/panini/";
                 } else {
-                    return baseUrl + "/panini/";
+                    return baseUrlRicerca + "/panini/";
                 }
             case "bevande":
-                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/Bevande/";
+                    return baseUrlCatalogo + "page" + pageNumber + "/Bevande/";
                 } else {
-                    return baseUrl + "/Bevande/";
+                    return baseUrlCatalogo + "/Bevande/";
                 }
             case "primi piatti":
-                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/Primi/";
+                    return baseUrlCatalogo + "page" + pageNumber + "/Primi/";
                 } else {
-                    return baseUrl + "/Primi/";
+                    return baseUrlCatalogo + "/Primi/";
                 }
             case "secondi piatti":
-                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/Secondi-piatti/";
+                    return baseUrlCatalogo + "page" + pageNumber + "/Secondi-piatti/";
                 } else {
-                    return baseUrl + "/Secondi-piatti/";
+                    return baseUrlCatalogo + "/Secondi-piatti/";
                 }
             case "contorni":
-                baseUrl = "https://www.giallozafferano.it/ricerca-ricette/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/contorni/";
+                    return baseUrlRicerca + "page" + pageNumber + "/contorni/";
                 } else {
-                    return baseUrl + "/contorni/";
+                    return baseUrlRicerca + "/contorni/";
                 }
             case "dolci":
-                baseUrl = "https://www.giallozafferano.it/ricette-cat/";
                 if (pageNumber > 1) {
-                    return baseUrl + "page" + pageNumber + "/Dolci-e-Desserts/";
+                    return baseUrlCatalogo + "page" + pageNumber + "/Dolci-e-Desserts/";
                 } else {
-                    return baseUrl + "/Dolci-e-Desserts/";
+                    return baseUrlCatalogo + "/Dolci-e-Desserts/";
                 }
             default:
                 corruptedUrl = "Categoria non riconosciuta";

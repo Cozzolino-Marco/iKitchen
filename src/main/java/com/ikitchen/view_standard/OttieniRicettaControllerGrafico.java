@@ -1,4 +1,4 @@
-package com.ikitchen.view;
+package com.ikitchen.view_standard;
 
 import static com.ikitchen.ApplicationStart.getHostServicesInstance;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
@@ -67,7 +67,7 @@ public class OttieniRicettaControllerGrafico {
     private VBox categoriesContainer;
 
     // Dichiarazioni costanti
-    private static final String appName = "iKitchen";
+    private static final String APP_NAME = "iKitchen";
     private static final String WARNING_MESSAGE_TITLE = "Attenzione";
     private static final String WARNING_POPUP_TYPE = "warning";
     private static final String ERROR_MESSAGE_TITLE = "Errore";
@@ -129,7 +129,7 @@ public class OttieniRicettaControllerGrafico {
 
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle(appName);
+        stage.setTitle(APP_NAME);
         stage.setScene(scene);
         stage.show();
     }
@@ -238,7 +238,7 @@ public class OttieniRicettaControllerGrafico {
 
             scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-            stage.setTitle(appName);
+            stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
         }
@@ -324,7 +324,7 @@ public class OttieniRicettaControllerGrafico {
 
             // Ultimi settaggi della scena ed avvio
             scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-            stage.setTitle(appName);
+            stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
         }
@@ -456,7 +456,7 @@ public class OttieniRicettaControllerGrafico {
                         Desktop.getDesktop().browse(new URI(url));
                     } else {
                         // Gestisci il caso in cui il sistema non supporti l'apertura di URL
-                        System.out.println("Navigazione web non supportata su questo sistema.");
+                        Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);
                     }
                 } catch (IOException | URISyntaxException e) {
                     Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso del link della ricetta.", ERROR_POPUP_TYPE);
@@ -516,7 +516,7 @@ public class OttieniRicettaControllerGrafico {
             StackPane cuocoLikesPane = new StackPane();
 
             // Informazioni del cuoco
-            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco() + "\u200D");
+            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco().replace("\u200D", ""));
             cuoco.setStyle("-fx-font-size: 15px;");
             HBox cuocoBox = new HBox(cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
@@ -720,7 +720,7 @@ public class OttieniRicettaControllerGrafico {
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle(appName);
+        stage.setTitle(APP_NAME);
         stage.setScene(scene);
         stage.show();
     }

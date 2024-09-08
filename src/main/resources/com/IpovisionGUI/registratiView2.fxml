@@ -13,7 +13,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.viewIpovision.RegistratiGrafico2"
+            fx:controller="com.ikitchen.view_ipovision.RegistratiGrafico2"
             stylesheets="@/registratiView2.css">
 
     <!-- Grafica form di registrazione -->

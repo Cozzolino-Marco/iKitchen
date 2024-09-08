@@ -1,4 +1,4 @@
-package com.ikitchen.view;
+package com.ikitchen.view_standard;
 
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.utility.Credentials;
@@ -62,11 +62,9 @@ public class LoginGrafico {
                 Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
                 loginView();
             }
-        } catch (DAOException | SQLException e) {
+        } catch (DAOException | SQLException | IOException e) {
             Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
             loginView();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

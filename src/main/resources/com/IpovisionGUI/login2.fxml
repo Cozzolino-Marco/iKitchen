@@ -9,7 +9,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.viewIpovision.LoginGrafico2"
+            fx:controller="com.ikitchen.view_ipovision.LoginGrafico2"
             stylesheets="@/login2.css">
 
     <!-- VBox per il form del login -->

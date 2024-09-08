@@ -1,4 +1,4 @@
-package com.ikitchen.viewIpovision;
+package com.ikitchen.view_ipovision;
 
 import com.ikitchen.controller.OttieniIngredientiControllerApplicativo;
 import com.ikitchen.exception.DAOException;
@@ -150,20 +150,18 @@ public class UtenteControllerGrafico2 {
 
         // Imposta l'immagine
         try {
-            if (ingrediente.getImmagine() != null) {
-                InputStream inputStream = ingrediente.getImmagine().getBinaryStream();
-                if (inputStream != null) {
-                    Image image = new Image(inputStream, 100, 100, true, true);
-                    imageView.setImage(image);
-                } else {
-                    Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
-                    imageView.setImage(defaultImage);
-                }
+            InputStream inputStream = (ingrediente.getImmagine() != null) ? ingrediente.getImmagine().getBinaryStream() : null;
+
+            if (inputStream != null) {
+                // Imposta immagine specificata
+                Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
+                imageView.setImage(image);
             } else {
-                Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
-                imageView.setImage(defaultImage);
+                // Forza il catch per caricare immagine di default
+                throw new SQLException();
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            // Carica immagine di default
             Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
             imageView.setImage(defaultImage);
         }

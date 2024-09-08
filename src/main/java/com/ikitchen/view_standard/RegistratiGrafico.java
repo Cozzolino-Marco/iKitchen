@@ -1,4 +1,4 @@
-package com.ikitchen.view;
+package com.ikitchen.view_standard;
 
 import com.ikitchen.controller.RegistratiController;
 import com.ikitchen.exception.DAOException;

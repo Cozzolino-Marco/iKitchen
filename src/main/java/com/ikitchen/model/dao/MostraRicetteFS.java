@@ -83,8 +83,7 @@ public class MostraRicetteFS {
     private void creaFile(File file) throws IOException {
         boolean fileCreato = file.createNewFile();
         if (fileCreato) {
-            // Il logger si occuperà di inserire nomeFile al posto del segnaposto senza bisogno di concatenazione esplicita
-            logger.log(Level.INFO, "File creato con successo: {0}" + file.getPath());
+            logger.log(Level.INFO, "File creato con successo!");
         }
     }
 

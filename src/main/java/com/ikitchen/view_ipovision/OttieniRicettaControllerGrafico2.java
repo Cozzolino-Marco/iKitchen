@@ -1,4 +1,4 @@
-package com.ikitchen.viewIpovision;
+package com.ikitchen.view_ipovision;
 
 import static com.ikitchen.ApplicationStart.getHostServicesInstance;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
@@ -64,7 +64,7 @@ public class OttieniRicettaControllerGrafico2 {
     private VBox categoriesContainer;
 
     // Dichiarazioni costanti
-    private static final String appName = "iKitchen";
+    private static final String APP_NAME = "iKitchen";
     private static final String WARNING_MESSAGE_TITLE = "Attenzione";
     private static final String WARNING_POPUP_TYPE = "warning";
     private static final String ERROR_MESSAGE_TITLE = "Errore";
@@ -126,7 +126,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle(appName);
+        stage.setTitle(APP_NAME);
         stage.setScene(scene);
         stage.show();
     }
@@ -234,7 +234,7 @@ public class OttieniRicettaControllerGrafico2 {
 
             scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-            stage.setTitle(appName);
+            stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
         }
@@ -342,7 +342,7 @@ public class OttieniRicettaControllerGrafico2 {
 
             // Ultimi settaggi della scena ed avvio
             scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-            stage.setTitle(appName);
+            stage.setTitle(APP_NAME);
             stage.setScene(scene);
             stage.show();
         }
@@ -738,7 +738,7 @@ public class OttieniRicettaControllerGrafico2 {
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle(appName);
+        stage.setTitle(APP_NAME);
         stage.setScene(scene);
         stage.show();
     }

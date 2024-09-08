@@ -1,7 +1,7 @@
 package com.ikitchen.model.domain;
 
 public class RicettaColazione extends Ricetta {
-    /*private String tipoColazione;
+    private String tipoColazione;
     private int numeroPortate;
     private int consistenzaEnergetica;
 
@@ -10,7 +10,7 @@ public class RicettaColazione extends Ricetta {
         this.tipoColazione = tipoColazione;
         this.numeroPortate = numeroPortate;
         this.consistenzaEnergetica = consistenzaEnergetica;
-    }*/
+    }
 
     @Override
     public String getCategoria() {

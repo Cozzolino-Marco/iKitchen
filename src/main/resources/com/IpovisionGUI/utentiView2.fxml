@@ -13,7 +13,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.ikitchen.viewIpovision.UtenteControllerGrafico2"
+            fx:controller="com.ikitchen.view_ipovision.UtenteControllerGrafico2"
             stylesheets="@/utentiView2.css">
 
     <!-- Barra di navigazione superiore -->

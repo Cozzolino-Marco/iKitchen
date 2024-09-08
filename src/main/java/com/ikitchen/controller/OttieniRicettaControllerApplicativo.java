@@ -4,7 +4,7 @@ import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
 import com.ikitchen.model.domain.*;
 import com.ikitchen.model.utility.Credentials;
-import com.ikitchen.view.OttieniRicettaControllerGraficoAPI;
+import com.ikitchen.view_standard.OttieniRicettaControllerGraficoAPI;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;

@@ -8,9 +8,9 @@ module com.example.ikitchen {
 
     exports com.ikitchen;
     opens com.ikitchen to javafx.fxml;
-    opens com.ikitchen.view to javafx.fxml;
-    exports com.ikitchen.view;
-    opens com.ikitchen.viewIpovision to javafx.fxml;
+    opens com.ikitchen.view_standard to javafx.fxml;
+    exports com.ikitchen.view_standard;
+    opens com.ikitchen.view_ipovision to javafx.fxml;
     exports com.ikitchen.model.domain;
     opens com.ikitchen.model.domain to javafx.fxml;
     exports com.ikitchen.model.utility;
