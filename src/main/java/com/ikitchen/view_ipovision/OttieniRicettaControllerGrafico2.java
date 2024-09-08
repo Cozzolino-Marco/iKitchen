@@ -474,10 +474,10 @@ public class OttieniRicettaControllerGrafico2 {
                         Desktop.getDesktop().browse(new URI(url));
                     } else {
                         // Gestisci il caso in cui il sistema non supporti l'apertura di URL
-                        System.out.println("Navigazione web non supportata su questo sistema.");
+                        Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);
                     }
                 } catch (IOException | URISyntaxException e) {
-                    e.printStackTrace();
+                    Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso del link della ricetta.", ERROR_POPUP_TYPE);
                 }
             });
         }
@@ -534,10 +534,14 @@ public class OttieniRicettaControllerGrafico2 {
             StackPane cuocoLikesPane = new StackPane();
 
             // Informazioni del cuoco
-            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco() + "\u200D");
+            ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
+            cuocoIcon.setFitHeight(15);
+            cuocoIcon.setFitWidth(15);
+            Label cuoco = new Label(dettagliRicetta.getCuoco());
             cuoco.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
-            HBox cuocoBox = new HBox(cuoco);
+            HBox cuocoBox = new HBox(cuocoIcon, cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
+            cuocoBox.setSpacing(5);
 
             // Informazioni dei likes
             Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " LIKES");

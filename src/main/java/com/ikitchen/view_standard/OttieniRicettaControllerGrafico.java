@@ -516,10 +516,14 @@ public class OttieniRicettaControllerGrafico {
             StackPane cuocoLikesPane = new StackPane();
 
             // Informazioni del cuoco
-            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco().replace("\u200D", ""));
-            cuoco.setStyle("-fx-font-size: 15px;");
-            HBox cuocoBox = new HBox(cuoco);
+            ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
+            cuocoIcon.setFitHeight(15);
+            cuocoIcon.setFitWidth(15);
+            Label cuoco = new Label(dettagliRicetta.getCuoco());
+            cuoco.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
+            HBox cuocoBox = new HBox(cuocoIcon, cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
+            cuocoBox.setSpacing(5);
 
             // Informazioni dei likes
             Label likes = new Label("❤ " + dettagliRicetta.getLikes() + " Likes");

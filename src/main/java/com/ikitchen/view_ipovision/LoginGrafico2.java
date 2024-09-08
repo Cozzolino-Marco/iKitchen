@@ -45,11 +45,12 @@ public class LoginGrafico2 {
 
     // Acquisizione credienziali e passaggio al controller del login
     @FXML
-    protected void onLoginButtonClick() {
+    protected void onLoginButtonClick() throws IOException {
         CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+        LoginController loginController = new LoginController();
 
+        // Chiamata al login controller per effettuare il login
         try {
-            LoginController loginController = new LoginController();
             loginController.start(credB);
 
             // Recupera il nome associato allo username
@@ -60,12 +61,11 @@ public class LoginGrafico2 {
                 cambiaViewDopoLogin();
             } else {
                 Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+                loginView();
             }
-
-        } catch (DAOException | IOException e) {
-            throw new IllegalArgumentException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (DAOException | SQLException | IOException e) {
+            Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+            loginView();
         }
     }
 
