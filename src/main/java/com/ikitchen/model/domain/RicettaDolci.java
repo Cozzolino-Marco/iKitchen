@@ -25,7 +25,7 @@ public class RicettaDolci extends Ricetta {
     public void setIngredientiSpeciali(String ingredientiSpeciali) {
         this.ingredientiSpeciali = ingredientiSpeciali;
     }
-    public void setStileServizio(int tempoCottura) {
+    public void setStileServizio(String stileServizio) {
         this.stileServizio = stileServizio;
     }
 

@@ -72,6 +72,7 @@ public class OttieniRicettaControllerGrafico {
     private static final String WARNING_POPUP_TYPE = "warning";
     private static final String ERROR_MESSAGE_TITLE = "Errore";
     private static final String ERROR_POPUP_TYPE = "error";
+    private static final String DEFAULT_IMAGE = "/default_image.png";
 
     // Altre dichiarazioni variabili
     private OttieniRicettaControllerApplicativo ricetta = null;
@@ -343,10 +344,10 @@ public class OttieniRicettaControllerGrafico {
                 InputStream inputStream = ricettaBean.getImmagine().getBinaryStream();
                 image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
             } else {
-                image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
+                image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE)));
             }
         } catch (SQLException e) {
-            image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")));
+            image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE)));
         }
 
         // Settaggi grafici per l'immagine
@@ -509,7 +510,7 @@ public class OttieniRicettaControllerGrafico {
                 immagineRicetta.setFitWidth(250);
                 immagineRicetta.setFitHeight(150);
             } else {
-                immagineRicetta = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png"))));
+                immagineRicetta = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE))));
                 immagineRicetta.setFitWidth(140);
                 immagineRicetta.setFitHeight(140);
             }

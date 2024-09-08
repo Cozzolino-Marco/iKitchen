@@ -25,7 +25,7 @@ public class RicettaPrimiPiatti extends Ricetta {
     public void setSugo(String sugo) {
         this.sugo = sugo;
     }
-    public void setTipoAroma(String tipoCondimento) {
+    public void setTipoAroma(String tipoAroma) {
         this.tipoAroma = tipoAroma;
     }
 
