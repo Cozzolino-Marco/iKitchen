@@ -1,6 +1,5 @@
 package com.ikitchen;
 
-import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.application.Application;
@@ -9,17 +8,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class ApplicationStart extends Application {
 
     private static HostServices hostServices;
 
     @Override
-    public void start(Stage stage) throws IOException, DAOException, SQLException {
+    public void start(Stage stage) throws IOException {
 
         // Assegna correttamente il servizio HostServices alla variabile statica
-        hostServices = getHostServices();
+        ApplicationStart.hostServices = getHostServices();
 
         // Caricamento scena di default iniziale
         ApplicazioneStage.setStage(stage);
