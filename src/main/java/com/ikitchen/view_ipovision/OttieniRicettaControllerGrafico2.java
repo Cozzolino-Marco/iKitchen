@@ -521,9 +521,16 @@ public class OttieniRicettaControllerGrafico2 {
             dettagli.setAlignment(Pos.CENTER);
 
             // Gestione grafica dell'immagine della ricetta
-            ImageView immagineRicetta = new ImageView(new Image(dettagliRicetta.getImmagine().getBinaryStream()));
-            immagineRicetta.setFitWidth(250);
-            immagineRicetta.setFitHeight(150);
+            ImageView immagineRicetta;
+            if (dettagliRicetta.getImmagine() != null && dettagliRicetta.getImmagine().getBinaryStream() != null) {
+                immagineRicetta = new ImageView(new Image(dettagliRicetta.getImmagine().getBinaryStream()));
+                immagineRicetta.setFitWidth(250);
+                immagineRicetta.setFitHeight(150);
+            } else {
+                immagineRicetta = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png"))));
+                immagineRicetta.setFitWidth(180);
+                immagineRicetta.setFitHeight(180);
+            }
             immagineRicetta.setPreserveRatio(true);
             Rectangle clip = new Rectangle(immagineRicetta.getFitWidth(), immagineRicetta.getFitHeight());
             clip.setArcWidth(30);
@@ -537,7 +544,7 @@ public class OttieniRicettaControllerGrafico2 {
             ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
             cuocoIcon.setFitHeight(15);
             cuocoIcon.setFitWidth(15);
-            Label cuoco = new Label(dettagliRicetta.getCuoco());
+            Label cuoco = new Label(dettagliRicetta.getCuoco().toUpperCase());
             cuoco.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
             HBox cuocoBox = new HBox(cuocoIcon, cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
@@ -639,15 +646,21 @@ public class OttieniRicettaControllerGrafico2 {
             }
 
             // Passaggi della ricetta
-            Label passaggiLabel = new Label("Passaggi");
+            Label passaggiLabel = new Label("PASSAGGI");
             passaggiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.9px;");
             VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
             VBox passaggiBox = new VBox(10);
-            Label passaggi = new Label(dettagliRicetta.getPassaggi().toUpperCase());
-            passaggiBox.getChildren().add(passaggi);
+            String passaggiTesto = dettagliRicetta.getPassaggi();
+            if (passaggiTesto != null) {
+                Label passaggi = new Label(dettagliRicetta.getPassaggi().toUpperCase());
+                passaggiBox.getChildren().add(passaggi);
+            } else {
+                Label passaggiMessage = new Label("NON SONO STATI SCRITTI PASSAGGI PER QUESTA RICETTA.");
+                passaggiBox.getChildren().add(passaggiMessage);
+            }
 
             // Video URL
-            Label videoLabel = new Label("Video Tutorial");
+            Label videoLabel = new Label("VIDEO TUTORIAL");
             videoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.8px;");
             VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
             Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
@@ -655,7 +668,7 @@ public class OttieniRicettaControllerGrafico2 {
             videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
 
             // Pulsante per confermare l'uso della ricetta
-            Button confirmButton = new Button("Usa ricetta");
+            Button confirmButton = new Button("USA RICETTA");
 
             // Controlla se tutti gli ingredienti sono validi per abilitare o disabilitare il pulsante
             if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size()) {

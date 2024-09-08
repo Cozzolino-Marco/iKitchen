@@ -2,10 +2,10 @@ package com.ikitchen.model.domain;
 
 public class RicettaColazione extends Ricetta {
 
-    // Variabili
-    private String tipoColazione;
-    private int numeroPortate;
-    private int consistenzaEnergetica;
+    // Attributi
+    private String tipoColazione;           // Esempio: "Italiana", "Continentale", "Inglese", "Americana"
+    private int numeroPortate;              // Esempio: "1 per colazione semplice", "3 per colazione completa"
+    private int consistenzaEnergetica;      // Esempio: "250 per una colazione leggera", "600 per una colazione sostanziosa"
 
     // Getter
     public String getTipoColazione() {
