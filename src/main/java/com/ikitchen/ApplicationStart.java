@@ -17,7 +17,7 @@ public class ApplicationStart extends Application {
     public void start(Stage stage) throws IOException {
 
         // Assegna correttamente il servizio HostServices alla variabile statica
-        ApplicationStart.hostServices = getHostServices();
+        setHostServicesInstance(getHostServices());
 
         // Caricamento scena di default iniziale
         ApplicazioneStage.setStage(stage);
@@ -31,6 +31,11 @@ public class ApplicationStart extends Application {
     // Ritorno l'istanza utile al servizio link web della ricetta
     public static HostServices getHostServicesInstance() {
         return hostServices;
+    }
+
+    // Ritorno l'istanza utile al servizio link web della ricetta
+    public static void setHostServicesInstance(HostServices hostServices) {
+        ApplicationStart.hostServices = hostServices;
     }
 
     // MAIN
