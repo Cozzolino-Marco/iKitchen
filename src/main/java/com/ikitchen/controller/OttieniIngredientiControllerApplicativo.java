@@ -4,7 +4,7 @@ import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.bean.BeanIngredienti;
 import com.ikitchen.model.dao.RecuperaIngredientiDispensaDAO;
-import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Credentials;
 import com.ikitchen.model.domain.Ingrediente;
 import com.ikitchen.model.domain.ListIngredienti;
 import java.sql.SQLException;

@@ -5,7 +5,7 @@ import com.ikitchen.model.bean.CredentialsBean;
 import com.ikitchen.model.dao.ConnectionFactory;
 import com.ikitchen.model.dao.LoginProcedureDAO;
 import com.ikitchen.model.dao.RecuperaNomeDaUsernameDAO;
-import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Credentials;
 import java.sql.SQLException;
 
 public class LoginController {

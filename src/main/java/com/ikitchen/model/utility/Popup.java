@@ -17,6 +17,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Popup {
 
+    // Costruttore privato per impedire l'istanza della classe
+    private Popup() {}
+
+    // Mostra il popup classico informativo
     public static void mostraPopup(String titolo, String messaggio, String tipo) {
 
         // Crea un nuovo Stage per il popup
@@ -77,7 +81,10 @@ public class Popup {
         popupStage.showAndWait();
     }
 
+    // Mostra il popup che interagisce con l'utente
     public static boolean mostraPopupConferma(String titolo, String messaggio) {
+
+        // Usato per la sua sicurezza nei thread, poiché il valore può essere aggiornato dall'azione del pulsante
         AtomicBoolean confermato = new AtomicBoolean(false);
 
         // Crea un nuovo Stage per il popup
@@ -136,9 +143,10 @@ public class Popup {
         Scene popupScene = new Scene(popupContent, 300, 300);
         popupStage.setScene(popupScene);
 
-        // Mostra il popup e attende la risposta
+        // Mostra il popup e attende la risposta dell'utente
         popupStage.showAndWait();
 
+        // Ritorna il valore della conferma
         return confermato.get();
     }
 }

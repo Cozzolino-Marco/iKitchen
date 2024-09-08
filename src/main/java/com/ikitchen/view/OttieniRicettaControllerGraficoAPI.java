@@ -186,8 +186,7 @@ public class OttieniRicettaControllerGraficoAPI {
         }
 
         // Converte l'immagine da array di byte a Blob e la restituisce
-        Blob immagine = new SerialBlob(immagineTemp);
-        return immagine;
+        return new SerialBlob(immagineTemp);
     }
 
     // Metodo personale per convertire da stringa a intero gestendo i casi di stringa vuota

@@ -3,6 +3,7 @@ package com.ikitchen.controller;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
 import com.ikitchen.model.domain.*;
+import com.ikitchen.model.utility.Credentials;
 import com.ikitchen.view.OttieniRicettaControllerGraficoAPI;
 import java.io.IOException;
 import java.sql.SQLException;

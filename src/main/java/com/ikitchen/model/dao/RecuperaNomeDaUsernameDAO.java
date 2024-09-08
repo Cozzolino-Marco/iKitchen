@@ -1,7 +1,7 @@
 package com.ikitchen.model.dao;
 
 import com.ikitchen.exception.DAOException;
-import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Credentials;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;

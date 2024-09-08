@@ -4,42 +4,46 @@ import java.awt.Toolkit;
 
 public class ScreenSize {
 
-    private static int GUI = 0;
+    // Costruttore privato per impedire l'istanza della classe
+    private ScreenSize() {}
+
+    // Per tenere traccia dello stato attuale dell'interfaccia grafica
+    private static int current_gui = 0;
 
     // Standard screen size
-    public static int WIDTH_GUI1 = 330;
-    public static int HEIGHT_GUI1 = 600;
+    private static int width_gui = 330;
+    private static int height_gui = 600;
 
     // Dimensione stimata della barra delle applicazioni del desktop
     private static final int DOCK_HEIGHT = 70;
 
     // Usato dal login grafico per ottenere la GUI attuale
     public static int getGUI() {
-        return GUI;
+        return current_gui;
     }
 
     // Usato dal login grafico per cambiare la GUI
     public static void changeGUI() {
-        if (GUI == 0) {
+        if (current_gui == 0) {
             // Ottieni le dimensioni dello schermo del computer
             Toolkit toolkit = Toolkit.getDefaultToolkit();
             java.awt.Dimension screenSize = toolkit.getScreenSize();
-            WIDTH_GUI1 = screenSize.width;
-            HEIGHT_GUI1 = screenSize.height - DOCK_HEIGHT;
-            GUI = 1;
+            width_gui = screenSize.width;
+            height_gui = screenSize.height - DOCK_HEIGHT;
+            current_gui = 1;
         } else {
             // Ripristina le dimensioni predefinite
-            GUI = 0;
-            WIDTH_GUI1 = 330;
-            HEIGHT_GUI1 = 600;
+            current_gui = 0;
+            width_gui = 330;
+            height_gui = 600;
         }
     }
 
+    // Getter di altezza e larghezza
     public static double getSceneWidth(){
-        return WIDTH_GUI1;
+        return width_gui;
     }
-
     public static double getSceneHeight(){
-        return HEIGHT_GUI1;
+        return height_gui;
     }
 }

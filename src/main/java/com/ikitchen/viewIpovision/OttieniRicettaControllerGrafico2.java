@@ -63,6 +63,14 @@ public class OttieniRicettaControllerGrafico2 {
     @FXML
     private VBox categoriesContainer;
 
+    // Dichiarazioni costanti
+    private static final String appName = "iKitchen";
+    private static final String WARNING_MESSAGE_TITLE = "Attenzione";
+    private static final String WARNING_POPUP_TYPE = "warning";
+    private static final String ERROR_MESSAGE_TITLE = "Errore";
+    private static final String ERROR_POPUP_TYPE = "error";
+
+    // Altre dichiarazioni variabili
     private OttieniRicettaControllerApplicativo ricetta = null;
     private String categoriaScelta;
     private String provenienzaScelta;
@@ -75,7 +83,7 @@ public class OttieniRicettaControllerGrafico2 {
             try {
                 caricaRicette(categoriaScelta, provenienzaScelta, filtraggioScelta, storageScelto);
             } catch (DAOException | SQLException | IOException e) {
-                throw new RuntimeException(e);
+                Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante durante il caricamento delle ricette.", ERROR_POPUP_TYPE);
             }
         }
         if (categoriesContainer != null) {
@@ -116,9 +124,9 @@ public class OttieniRicettaControllerGrafico2 {
         OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
         controller.initialize("", "", "", "");
 
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle("iKitchen");
+        stage.setTitle(appName);
         stage.setScene(scene);
         stage.show();
     }
@@ -210,7 +218,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Mostra un popup di errore se la categoria non è stata selezionata
         if (categoriaScelta == null) {
-            Popup.mostraPopup("Attenzione", "Prima di andare avanti, seleziona per favore la categoria della ricetta!", "warning");
+            Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Prima di andare avanti, seleziona per favore la categoria della ricetta!", WARNING_POPUP_TYPE);
         } else {
             // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -224,9 +232,9 @@ public class OttieniRicettaControllerGrafico2 {
             controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
             controller.initialize("", "", "", "");
 
-            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-            stage.setTitle("iKitchen");
+            stage.setTitle(appName);
             stage.setScene(scene);
             stage.show();
         }
@@ -290,7 +298,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
         if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null || storageComboBox.getValue() == null) {
-            Popup.mostraPopup("Attenzione", "Si prega di selezionare tutte le opzioni prima di procedere!", "warning");
+            Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Si prega di selezionare tutte le opzioni prima di procedere!", WARNING_POPUP_TYPE);
 
         } else if ("Dal web".equals(provenienzaComboBox.getValue()) &&
                 ("Filtrate in base alla dispensa".equals(filtraggioComboBox.getValue()) ||
@@ -299,20 +307,20 @@ public class OttieniRicettaControllerGrafico2 {
                         "Da entrambi".equals(storageComboBox.getValue()))) {
 
             // Mostra un popup con un messaggio specifico
-            Popup.mostraPopup("Attenzione",
+            Popup.mostraPopup(WARNING_MESSAGE_TITLE,
                     "Con la provenienza 'Dal web', non è possibile selezionare 'Filtrate in base alla dispensa' come filtraggio " +
                             "e non sono ammesse le selezioni di: 'Solo dal database', 'Solo dal file system', 'Da entrambi' come storage.",
-                    "warning");
+                    WARNING_POPUP_TYPE);
 
         } else if ("Da chef".equals(provenienzaComboBox.getValue()) && "Nessuno".equals(storageComboBox.getValue())) {
 
             // Mostra un popup con un messaggio specifico
-            Popup.mostraPopup("Attenzione", "Con la provenienza 'Da chef', non è possibile selezionare 'Nessuno' come storage.", "warning");
+            Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Con la provenienza 'Da chef', non è possibile selezionare 'Nessuno' come storage.", WARNING_POPUP_TYPE);
 
         } else {
 
             // Salvataggio della categoria scelta
-            String categoriaScelta = this.categoriaScelta;
+            String categoriaSelezionata = this.categoriaScelta;
 
             // Caricamento della scena
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -323,18 +331,18 @@ public class OttieniRicettaControllerGrafico2 {
 
             // Settaggio dei dati
             OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
-            controller.setCategoriaLabelTitle(categoriaScelta);
-            controller.setCategoria(categoriaScelta);
+            controller.setCategoriaLabelTitle(categoriaSelezionata);
+            controller.setCategoria(categoriaSelezionata);
             controller.setProvenienza(provenienzaComboBox.getValue().toString());
             controller.setFiltraggio(filtraggioComboBox.getValue().toString());
             controller.setStorage(storageComboBox.getValue().toString());
 
             // Chiamata al metodo per inizializzare
-            controller.initialize(categoriaScelta, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString(), storageComboBox.getValue().toString());
+            controller.initialize(categoriaSelezionata, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString(), storageComboBox.getValue().toString());
 
             // Ultimi settaggi della scena ed avvio
-            scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
-            stage.setTitle("iKitchen");
+            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+            stage.setTitle(appName);
             stage.setScene(scene);
             stage.show();
         }
@@ -372,7 +380,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Creazione del titolo della ricetta
         Label titleLabel = new Label(ricettaBean.getTitolo().toUpperCase());
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 15px;");
 
         // Creazione dell'icona del cuoco e del nome del cuoco
         ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
@@ -404,7 +412,7 @@ public class OttieniRicettaControllerGrafico2 {
         durataIcon.setFitHeight(14);
         durataIcon.setFitWidth(14);
         Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " MIN");
-        durataLabel.setStyle("-fx-font-size: 12px;");
+        durataLabel.setStyle("-fx-font-size: 12.1px;");
 
         // Parte bottom per info calorie e durata
         HBox infoBox = new HBox(calorieIcon, calorieLabel, spacer, durataIcon, durataLabel);
@@ -434,7 +442,6 @@ public class OttieniRicettaControllerGrafico2 {
                 likeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/like_icon_red.png"))));
                 isLiked[0] = true;
             }
-            System.out.println("Like cliccato per: " + ricettaBean.getTitolo());
         });
 
         // Impostazione della posizione dell'icona del like nell'angolo in alto a destra
@@ -527,7 +534,7 @@ public class OttieniRicettaControllerGrafico2 {
             StackPane cuocoLikesPane = new StackPane();
 
             // Informazioni del cuoco
-            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco().toUpperCase());
+            Label cuoco = new Label("👨‍🍳 " + dettagliRicetta.getCuoco() + "\u200D");
             cuoco.setStyle("-fx-text-fill: white; -fx-font-size: 15px;");
             HBox cuocoBox = new HBox(cuoco);
             cuocoBox.setAlignment(Pos.CENTER_LEFT);
@@ -593,7 +600,7 @@ public class OttieniRicettaControllerGrafico2 {
 
                 // Crea la label per l'ingrediente
                 Label ingredienteLabel = new Label(ingrediente.getNome().toUpperCase() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
-                ingredienteLabel.setStyle("-fx-text-fill: white; -fx-font-size: 12px;");
+                ingredienteLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11.9px;");
 
                 // Aggiungi un'icona di successo o di errore accanto all'ingrediente
                 ImageView iconView;
@@ -605,22 +612,7 @@ public class OttieniRicettaControllerGrafico2 {
                     // Rendi l'icona cliccabile
                     int finalQuantitaDisponibile = quantitaDisponibile;
                     String finalTipoIngrediente = tipoIngrediente;
-                    iconView.setOnMouseClicked(event -> {
-
-                        // Crea un Alert per spiegare perché l'ingrediente non è valido
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Ingrediente non valido");
-                        alert.setHeaderText(null);
-                        if (ingrediente.getQuantita() <= finalQuantitaDisponibile) {
-                            alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
-                                    "Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " " + finalTipoIngrediente + ", disponibile " + finalQuantitaDisponibile + " " + finalTipoIngrediente + ".\n");
-                            alert.showAndWait();
-                        } else {
-                            alert.setContentText("L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché è scaduto.");
-                            alert.showAndWait();
-                        }
-
-                    });
+                    iconView.setOnMouseClicked(event -> mostraAlertIngredienteNonValido(ingrediente, finalQuantitaDisponibile, finalTipoIngrediente));
 
                     // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile
                     iconView.setCursor(Cursor.HAND);
@@ -644,7 +636,7 @@ public class OttieniRicettaControllerGrafico2 {
 
             // Passaggi della ricetta
             Label passaggiLabel = new Label("Passaggi");
-            passaggiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+            passaggiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.9px;");
             VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
             VBox passaggiBox = new VBox(10);
             Label passaggi = new Label(dettagliRicetta.getPassaggi().toUpperCase());
@@ -652,7 +644,7 @@ public class OttieniRicettaControllerGrafico2 {
 
             // Video URL
             Label videoLabel = new Label("Video Tutorial");
-            videoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+            videoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.8px;");
             VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
             Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
             videoLink.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
@@ -678,7 +670,7 @@ public class OttieniRicettaControllerGrafico2 {
                     ricetta.usaRicetta(dettagliRicetta);
                     Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
                 } catch (DAOException | SQLException ex) {
-                    Popup.mostraPopup("Errore", "Si è verificato un errore durante l'uso della ricetta.", "error");
+                    Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso della ricetta.", ERROR_POPUP_TYPE);
                 }
             };
             confirmButton.setOnAction(confirmHandler);
@@ -695,26 +687,44 @@ public class OttieniRicettaControllerGrafico2 {
             popupContent.getChildren().addAll(popupInitialContent, popupOtherContent);
 
             // Inserisci il contenuto nel ScrollPane
-            ScrollPane scrollPane = new ScrollPane(popupContent);
-            scrollPane.setFitToWidth(true);
+            ScrollPane localScrollPane = new ScrollPane(popupContent);
+            localScrollPane.setFitToWidth(true);
 
             // Imposta la visualizzazione all'inizio
-            scrollPane.setVvalue(0);
+            localScrollPane.setVvalue(0);
 
             // Imposta il layout come scena del popup
-            Scene popupScene = new Scene(scrollPane, 600, 600);
+            Scene popupScene = new Scene(localScrollPane, 600, 600);
             popupStage.setScene(popupScene);
 
             // Esecuzione codice passato per forzare lo scroll all'inizio dopo il rendering della GUI
             popupStage.show();
-            Platform.runLater(() -> scrollPane.setVvalue(0));
+            Platform.runLater(() -> localScrollPane.setVvalue(0));
 
             // Mostra il popup
             popupStage.show();
 
         } catch (DAOException | SQLException e) {
-            Popup.mostraPopup("Errore", "Errore nel caricamento dei dettagli della ricetta.", "error");
+            Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Errore nel caricamento dei dettagli della ricetta.", ERROR_POPUP_TYPE);
         }
+    }
+
+    // Gestione alert della motivazione della non validità dell'ingrediente
+    private void mostraAlertIngredienteNonValido(Ingrediente ingrediente, int quantitaDisponibile, String tipoIngrediente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ingrediente non valido");
+        alert.setHeaderText(null);
+
+        String messaggio;
+        if (ingrediente.getQuantita() <= quantitaDisponibile) {
+            messaggio = "L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
+                    "Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " " + tipoIngrediente + ", disponibile " + quantitaDisponibile + " " + tipoIngrediente + ".\n";
+        } else {
+            messaggio = "L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché è scaduto.";
+        }
+
+        alert.setContentText(messaggio);
+        alert.showAndWait();
     }
 
     // Metodo per mostrare la homepage utente
@@ -726,9 +736,9 @@ public class OttieniRicettaControllerGrafico2 {
         String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle("iKitchen");
+        stage.setTitle(appName);
         stage.setScene(scene);
         stage.show();
     }

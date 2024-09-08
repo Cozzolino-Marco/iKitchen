@@ -6,7 +6,7 @@ import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.bean.BeanIngredienti;
 import com.ikitchen.model.dao.ConnectionFactory;
 import com.ikitchen.model.domain.ApplicazioneStage;
-import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Credentials;
 import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
@@ -242,7 +242,7 @@ public class UtenteControllerGrafico {
         UtenteControllerGrafico controller = fxmlLoader.getController();
         controller.initialize();
 
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -262,7 +262,7 @@ public class UtenteControllerGrafico {
         OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
         controller.initialize("", "", "", "");
 
-        scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         stage.setTitle("iKitchen");
         stage.setScene(scene);
@@ -303,7 +303,7 @@ public class UtenteControllerGrafico {
             Stage stage = ApplicazioneStage.getStage();
 
             // Imposta la nuova scena con il layout caricato
-            Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+            Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
             // Cambia la scena dello stage
             stage.setScene(scene);

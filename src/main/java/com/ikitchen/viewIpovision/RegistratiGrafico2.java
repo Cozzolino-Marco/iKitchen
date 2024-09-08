@@ -55,7 +55,7 @@ public class RegistratiGrafico2 {
         Stage stage = ApplicazioneStage.getStage();
 
         // Imposta la nuova scena con il layout caricato
-        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         // Cambia la scena dello stage
         stage.setScene(scene);
@@ -95,15 +95,26 @@ public class RegistratiGrafico2 {
         // Mostra il popup in base all'esito della query
         try {
             controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
-            LoginGrafico2 loginGrafico = new LoginGrafico2();
-            loginGrafico.loginView();
+
+            // Carica il file FXML per la vista del login
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Ottieni lo stage attuale dalla classe ApplicazioneStage
+            Stage stage = ApplicazioneStage.getStage();
+
+            // Imposta la nuova scena con il layout caricato
+            Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+            // Cambia la scena dello stage
+            stage.setScene(scene);
+            stage.show();
+
             Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");
         } catch (IllegalArgumentException e) {
             Popup.mostraPopup("Attenzione", "Password non coincidenti!", "warning");
-        } catch (DAOException | SQLException ex) {
+        } catch (DAOException | SQLException | IOException e) {
             Popup.mostraPopup("Errore", "Si è verificato un errore durante la registrazione.", "error");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

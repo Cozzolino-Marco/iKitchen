@@ -1,9 +1,10 @@
 package com.ikitchen.model.domain;
 
+import java.io.Serializable;
 import java.sql.Blob;
 import java.util.Date;
 
-public class Ingrediente {
+public class Ingrediente implements Serializable {
 
     // Variabili
     private String codIngrediente;
@@ -11,7 +12,7 @@ public class Ingrediente {
     private Date scadenza;
     private int quantita;
     private int limite;
-    transient Blob immagine;
+    private transient Blob immagine;
     private String tipo;
 
     // Getter

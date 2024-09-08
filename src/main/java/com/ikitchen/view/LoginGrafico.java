@@ -1,7 +1,7 @@
 package com.ikitchen.view;
 
 import com.ikitchen.model.domain.ApplicazioneStage;
-import com.ikitchen.model.domain.Credentials;
+import com.ikitchen.model.utility.Credentials;
 import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
@@ -35,7 +35,7 @@ public class LoginGrafico {
         Stage stage = ApplicazioneStage.getStage();
 
         // Imposta la nuova scena con il layout caricato
-        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         // Cambia la scena dello stage
         stage.setScene(scene);
@@ -88,7 +88,7 @@ public class LoginGrafico {
         Parent rootNode = fxmlLoader.load();
 
         // Imposta la scena
-        Scene scene = new Scene(rootNode, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        Scene scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.centerOnScreen();
@@ -106,7 +106,7 @@ public class LoginGrafico {
         Stage stage = ApplicazioneStage.getStage();
 
         // Imposta la nuova scena con il layout caricato
-        Scene scene = new Scene(root, ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         // Cambia la scena dello stage
         stage.setScene(scene);
@@ -119,32 +119,23 @@ public class LoginGrafico {
         // Invoca il metodo per il cambio grafica
         ScreenSize.changeGUI();
 
+        // Settaggi scena
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
-
         String fxmlFile;
-        if (ScreenSize.getGUI() == 0){
-            /*if(Credentials.getRole().getId() == 1) {
-                fxmlFile = "/com/iKitchen/utentiView.fxml";
-            }else{
-                fxmlFile = "/com/iKitchen/chefView.fxml";
-            }*/
-            fxmlFile = "/com/ikitchen/login.fxml";
 
+        // Caricamento del login in base alla GUI
+        if (ScreenSize.getGUI() == 0){
+            fxmlFile = "/com/ikitchen/login.fxml";
         } else {
-            /*if(Credentials.getRole().getId() == 1) {
-                fxmlFile = "/com/iKitchen/utentiView2.fxml";
-            }else{
-                fxmlFile = "/com/iKitchen/chefView2.fxml";
-            }*/
             fxmlFile = "/com/IpovisionGUI/login2.fxml";
         }
 
+        // Caricamento della scena
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.centerOnScreen();

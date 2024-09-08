@@ -40,18 +40,14 @@ public class ApplicationStart extends Application {
 
         // Esegui il metodo execute con l'oggetto Ricetta e il filtro
         ListRicette listRicette = mostraRicetteDAO.execute(ricetta, "Tutte le ricette");
-
-        List<Ricetta> ricetteToAdd = new ArrayList<>();
-        for (Ricetta recipe : listRicette.getListaRicette()) {
-            ricetteToAdd.add(recipe);
-        }
+        List<Ricetta> ricetteToAdd = new ArrayList<>(listRicette.getListaRicette());
         salvaEventiSuFile(ricetteToAdd, nomeFile);
 
 
 
         ApplicazioneStage.setStage(stage);
         FXMLLoader fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), ScreenSize.WIDTH_GUI1, ScreenSize.HEIGHT_GUI1);
+        Scene scene = new Scene(fxmlLoader.load(), ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.show();

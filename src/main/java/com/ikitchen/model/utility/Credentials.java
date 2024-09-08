@@ -1,4 +1,6 @@
-package com.ikitchen.model.domain;
+package com.ikitchen.model.utility;
+
+import com.ikitchen.model.domain.Role;
 
 public class Credentials {
 
@@ -10,7 +12,7 @@ public class Credentials {
     private static String nome;
     private static String cognome;
 
-    // Costruttore privato
+    // Costruttore privato per impedire l'istanza della classe
     private Credentials () {}
 
     // Getter
