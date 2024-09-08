@@ -121,7 +121,7 @@ public class OttieniRicettaControllerGrafico {
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/ikitchen/categorieView.fxml";
+        String fxmlFile = "/com/StandardGUI/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
@@ -230,7 +230,7 @@ public class OttieniRicettaControllerGrafico {
             Stage stage = ApplicazioneStage.getStage();
             Scene scene;
 
-            String fxmlFile = "/com/ikitchen/filtriView.fxml";
+            String fxmlFile = "/com/StandardGUI/filtriView.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
             OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
@@ -309,7 +309,7 @@ public class OttieniRicettaControllerGrafico {
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = ApplicazioneStage.getStage();
             Scene scene;
-            String fxmlFile = "/com/ikitchen/elencoRicetteView.fxml";
+            String fxmlFile = "/com/StandardGUI/elencoRicetteView.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
             // Settaggio dei dati
@@ -485,7 +485,7 @@ public class OttieniRicettaControllerGrafico {
         ricetta = new OttieniRicettaControllerApplicativo();
 
         try {
-            // Ottieni i dettagli completi della ricetta (metodo per mostrare gli ingredienti)
+            // Ottieni i dettagli completi della ricetta
             BeanRicetta dettagliRicetta = ricetta.ottieniDettagliRicetta(ricettaBean);
 
             // Crea VBox per il titolo e dettagli
@@ -733,7 +733,7 @@ public class OttieniRicettaControllerGrafico {
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/ikitchen/utentiView.fxml";
+        String fxmlFile = "/com/StandardGUI/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());

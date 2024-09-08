@@ -2,19 +2,27 @@ package com.ikitchen.model.domain;
 
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.dao.*;
-
 import java.sql.SQLException;
 
 public class FacadeOttieniRicetta {
 
+    // Variabile per mantenere la lista degli ingredienti globalmente in memoria
+    private ListIngredienti globalListIngredienti = null;
+
     // Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
     public ListIngredienti ottieniIngredientiDispensaUtente(String username) throws DAOException, SQLException {
 
-        // Istanzia il DAO per recuperare gli ingredienti della dispensa
-        RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
+        // Se la lista è già in memoria, restituiscila senza chiamare il database
+        if (globalListIngredienti != null) {
+            return globalListIngredienti;
+        }
 
-        // Eseguo la query usando il DAO e restituisco il risultato
-        return recuperaIngredientiDispensaDAO.execute(username);
+        // Se la lista non è presente in memoria, chiamare il DAO per recuperare gli ingredienti
+        RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
+        globalListIngredienti = recuperaIngredientiDispensaDAO.execute(username);
+
+        // Restituisco la lista appena recuperata
+        return globalListIngredienti;
     }
 
     // Metodo per mostrare le ricette

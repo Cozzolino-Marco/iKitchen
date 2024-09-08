@@ -26,7 +26,7 @@ public class BeanRicette {
         this.listRicette = new ArrayList<>();
     }
 
-    // Metodi getter per le variabili categoria, provenienza e filtraggio
+    // Metodi getter per le variabili categoria, provenienza, filtraggio e storage
     public String getCategoria() {
         return categoria;
     }
@@ -38,6 +38,20 @@ public class BeanRicette {
     }
     public String getStorage() {
         return storage;
+    }
+
+    // Metodi setter per le variabili categoria, provenienza, filtraggio e storage
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    public void setProvenienza(String provenienza) {
+        this.provenienza = provenienza;
+    }
+    public void setFiltraggio(String filtraggio) {
+        this.filtraggio = filtraggio;
+    }
+    public void setStorage(String storage) {
+        this.storage = storage;
     }
 
     // Metodo per la restituzione della lista di ricette

@@ -21,7 +21,7 @@ public class ApplicationStart extends Application {
 
         // Caricamento scena di default iniziale
         ApplicazioneStage.setStage(stage);
-        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationStart.class.getResource("/com/StandardGUI/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
         stage.setTitle("iKitchen");
         stage.setScene(scene);

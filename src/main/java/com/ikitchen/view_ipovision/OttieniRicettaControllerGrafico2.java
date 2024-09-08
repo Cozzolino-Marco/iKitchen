@@ -503,7 +503,7 @@ public class OttieniRicettaControllerGrafico2 {
         ricetta = new OttieniRicettaControllerApplicativo();
 
         try {
-            // Ottieni i dettagli completi della ricetta (metodo per mostrare gli ingredienti)
+            // Ottieni i dettagli completi della ricetta
             BeanRicetta dettagliRicetta = ricetta.ottieniDettagliRicetta(ricettaBean);
 
             // Crea VBox per il titolo e dettagli

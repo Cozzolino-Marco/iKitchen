@@ -229,7 +229,7 @@ public class UtenteControllerGrafico {
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/ikitchen/utentiView.fxml";
+        String fxmlFile = "/com/StandardGUI/utentiView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
@@ -250,7 +250,7 @@ public class UtenteControllerGrafico {
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/ikitchen/categorieView.fxml";
+        String fxmlFile = "/com/StandardGUI/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
@@ -291,7 +291,7 @@ public class UtenteControllerGrafico {
             ConnectionFactory.closeConnection();
 
             // Carica il file FXML per la vista del login
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ikitchen/login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
             Parent root = fxmlLoader.load();
 
             // Ottieni lo stage attuale dalla classe ApplicazioneStage

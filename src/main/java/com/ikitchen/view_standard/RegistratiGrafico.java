@@ -47,7 +47,7 @@ public class RegistratiGrafico {
     // Chiamata al controller del login
     public void loginView() throws IOException {
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ikitchen/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
         Parent root = fxmlLoader.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
@@ -96,7 +96,7 @@ public class RegistratiGrafico {
             controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
 
             // Carica il file FXML per la vista del login
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ikitchen/login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
             Parent root = fxmlLoader.load();
 
             // Ottieni lo stage attuale dalla classe ApplicazioneStage

@@ -131,7 +131,7 @@ public class LoginGrafico2 {
 
         // Caricamento del login in base alla GUI
         if (ScreenSize.getGUI() == 0){
-            fxmlFile = "/com/ikitchen/login.fxml";
+            fxmlFile = "/com/StandardGUI/login.fxml";
         } else {
             fxmlFile = "/com/IpovisionGUI/login2.fxml";
         }

@@ -28,7 +28,7 @@ public class LoginGrafico {
     @FXML
     public void loginView() throws IOException {
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ikitchen/login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
         Parent root = fxmlLoader.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
@@ -76,9 +76,9 @@ public class LoginGrafico {
         FXMLLoader fxmlLoader = new FXMLLoader();
 
         if (Credentials.getRole().getId() == 1) {
-            fxmlFile = "/com/ikitchen/utentiView.fxml"; // View per utenti domestici
+            fxmlFile = "/com/StandardGUI/utentiView.fxml"; // View per utenti domestici
         } else {
-            fxmlFile = "/com/ikitchen/chefView.fxml"; // View per chef
+            fxmlFile = "/com/StandardGUI/chefView.fxml"; // View per chef
         }
 
         // Carica l'FXML
@@ -97,7 +97,7 @@ public class LoginGrafico {
     public void registratiView() throws IOException {
 
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/ikitchen/registratiView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/registratiView.fxml"));
         Parent root = fxmlLoader.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
@@ -125,7 +125,7 @@ public class LoginGrafico {
 
         // Caricamento del login in base alla GUI
         if (ScreenSize.getGUI() == 0){
-            fxmlFile = "/com/ikitchen/login.fxml";
+            fxmlFile = "/com/StandardGUI/login.fxml";
         } else {
             fxmlFile = "/com/IpovisionGUI/login2.fxml";
         }

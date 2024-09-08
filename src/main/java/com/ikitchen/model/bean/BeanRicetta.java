@@ -13,7 +13,6 @@ public class BeanRicetta {
     String titolo;
     String descrizione;
     Blob immagine;
-    String categoria;
     String cuoco;
     int durataPreparazione;
     int calorie;
@@ -22,6 +21,10 @@ public class BeanRicetta {
     String videoUrl;
     int likes;
     String linkRicetta;
+    String categoria;
+    String provenienza;
+    String filtraggio;
+    String storage;
 
     // Costruttore di default vuoto usato da scrapeRicette
     public BeanRicetta() {}
@@ -131,6 +134,9 @@ public class BeanRicetta {
     }
     public void setLinkRicetta(String linkRicetta) {
         this.linkRicetta = Objects.requireNonNullElse(linkRicetta, "TBA");
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     // Getter
