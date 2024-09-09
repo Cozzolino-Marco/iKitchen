@@ -85,7 +85,7 @@ public class OttieniRicettaControllerApplicativo {
         return beanRicetta;
     }
 
-    // Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
+    /* Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
     public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
 
         // Recupero lo username
@@ -122,6 +122,35 @@ public class OttieniRicettaControllerApplicativo {
         }
 
         // Ritorna il BeanIngredienti contenente gli ingredienti validi
+        return ingredientiValidi;
+    }
+     */
+
+    public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
+        String username = Credentials.getUsername();
+        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
+        Date currentDate = new Date();
+        BeanIngredienti ingredientiValidi = new BeanIngredienti();
+
+        for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
+            boolean valido = false;
+
+            for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
+                if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
+                    if (ingredienteDispensa.getQuantita() >= ingredienteRichiesto.getQuantita() && ingredienteDispensa.getScadenza().after(currentDate)) {
+                        valido = true;
+                    }
+                    BeanIngrediente beanIngrediente = new BeanIngrediente();
+                    beanIngrediente.setNome(ingredienteDispensa.getNome());
+                    beanIngrediente.setQuantita(ingredienteDispensa.getQuantita());
+                    beanIngrediente.setScadenza(ingredienteDispensa.getScadenza());
+                    beanIngrediente.setValidita(valido);
+                    ingredientiValidi.getListIngredienti().add(beanIngrediente);
+                    break;
+                }
+            }
+        }
+
         return ingredientiValidi;
     }
 
