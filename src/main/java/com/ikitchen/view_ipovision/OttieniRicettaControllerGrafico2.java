@@ -688,7 +688,7 @@ public class OttieniRicettaControllerGrafico2 {
             Button confirmButton = new Button("USA RICETTA");
 
             // Controlla se tutti gli ingredienti sono validi e se la lista non è vuota per abilitare o disabilitare il pulsante
-            if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && dettagliRicetta.getIngredienti().getListaIngredienti().size() != 0) {
+            if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && !dettagliRicetta.getIngredienti().getListaIngredienti().isEmpty()) {
                 confirmButton.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
                 confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
                 confirmButton.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato

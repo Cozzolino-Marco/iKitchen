@@ -76,6 +76,7 @@ public class OttieniRicettaControllerGrafico {
 
     // Altre dichiarazioni variabili
     private OttieniRicettaControllerApplicativo ricette = null;
+    private int validIngredientCount = 0;
     private String categoriaScelta;
     private String provenienzaScelta;
     private String filtraggioScelta;
@@ -135,8 +136,7 @@ public class OttieniRicettaControllerGrafico {
         stage.show();
     }
 
-    // Metodo per aggiornare dinamicamente i bottoni delle categorie
-    @FXML
+    @FXML // Metodo per aggiornare dinamicamente i bottoni delle categorie
     public void loadCategories() {
         categoriesContainer.getChildren().clear();
 
@@ -217,8 +217,7 @@ public class OttieniRicettaControllerGrafico {
         categoriesContainer.setAlignment(Pos.CENTER);
     }
 
-    // Metodo per mostrare la pagina dei filtri
-    @FXML
+    @FXML // Metodo per mostrare la pagina dei filtri
     public void filtriView() throws IOException {
 
         // Mostra un popup di errore se la categoria non è stata selezionata
@@ -275,8 +274,7 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
-    // Metodo che mostra le ricette caricate a livello grafico
-    @FXML
+    @FXML // Metodo che mostra le ricette caricate a livello grafico
     protected void mostraRicette() throws IOException {
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
@@ -485,14 +483,17 @@ public class OttieniRicettaControllerGrafico {
             // Ottieni i dettagli completi della ricetta chiamando il controller applicativo
             BeanRicetta dettagliRicetta = ricette.ottieniDettagliRicetta(ricettaBean);
 
-            // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco e likes
+            // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione
             VBox popupInitialContent = createPopupInitialContent(dettagliRicetta);
 
-            // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco e likes
-            VBox popupOtherContent = createPopupOtherContent(dettagliRicetta);
+            // Creazione grafica della sezione dedicata agli ingredienti
+            VBox popupIngredientiContent = createPopupIngredientiContent(dettagliRicetta);
 
-            // Aggiungi i contenuti al layout principale
-            popupContent.getChildren().addAll(popupInitialContent, popupOtherContent);
+            // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma
+            VBox popupOtherContent = createPopupFinalContent(dettagliRicetta);
+
+            // Aggiungi tutti i contenuti creati al layout principale
+            popupContent.getChildren().addAll(popupInitialContent, popupIngredientiContent, popupOtherContent);
 
             // Inserisci il contenuto nel ScrollPane
             ScrollPane localScrollPane = new ScrollPane(popupContent);
@@ -573,25 +574,25 @@ public class OttieniRicettaControllerGrafico {
         // Aggiunta degli elementi al StackPane
         cuocoLikesPane.getChildren().addAll(cuocoBox, likes);
 
+        // Descrizione della ricetta
+        Label descrizione = new Label(dettagliRicetta.getDescrizione());
+        descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
+        descrizione.setWrapText(true);
+
         // Aggiungi gli elementi iniziali al VBox
-        popupInitialContent.getChildren().addAll(titolo, dettagli, immagineRicetta, cuocoLikesPane);
+        popupInitialContent.getChildren().addAll(titolo, dettagli, immagineRicetta, cuocoLikesPane, descrizione);
 
         // Restituisci il contenuto delle informazioni iniziali
         return popupInitialContent;
     }
 
-    // Crea e restituisce il contenuto aggiuntivo del popup per il metodo "mostraDettagliRicetta"
-    private VBox createPopupOtherContent(BeanRicetta dettagliRicetta) throws SQLException, DAOException {
+    // Crea e gestisce solo la sezione dedicata agli ingredienti per il metodo "mostraDettagliRicetta"
+    private VBox createPopupIngredientiContent(BeanRicetta dettagliRicetta) throws SQLException, DAOException {
 
         // Crea VBox per le altre informazioni
-        VBox popupOtherContent = new VBox();
-        popupOtherContent.setAlignment(Pos.CENTER_LEFT);
-        popupOtherContent.setSpacing(10);
-
-        // Descrizione della ricetta
-        Label descrizione = new Label(dettagliRicetta.getDescrizione());
-        descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
-        descrizione.setWrapText(true);
+        VBox popupIngredientiContent = new VBox();
+        popupIngredientiContent.setAlignment(Pos.CENTER_LEFT);
+        popupIngredientiContent.setSpacing(10);
 
         // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
         BeanIngredienti beanIngredienti = ricette.verificaQuantita(dettagliRicetta);
@@ -606,7 +607,7 @@ public class OttieniRicettaControllerGrafico {
         ingredientiGrid.setVgap(5);
         int column = 0;
         int row = 0;
-        int validIngredientCount = 0;
+        validIngredientCount = 0;
         Date currentDate = new Date();
         int quantitaDisponibile = 0;
 
@@ -677,6 +678,21 @@ public class OttieniRicettaControllerGrafico {
             }
         }
 
+        // Aggiungi le altre informazioni al VBox
+        popupIngredientiContent.getChildren().addAll(ingredientiLabel, ingredientiGrid);
+
+        // Restituisci le informazioni aggiuntive
+        return popupIngredientiContent;
+    }
+
+    // Crea e restituisce il contenuto aggiuntivo del popup per il metodo "mostraDettagliRicetta"
+    private VBox createPopupFinalContent(BeanRicetta dettagliRicetta) throws DAOException {
+
+        // Crea VBox per le altre informazioni
+        VBox popupFinalContent = new VBox();
+        popupFinalContent.setAlignment(Pos.CENTER_LEFT);
+        popupFinalContent.setSpacing(10);
+
         // Passaggi della ricetta
         Label passaggiLabel = new Label("Passaggi");
         passaggiLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13.9px;");
@@ -712,7 +728,7 @@ public class OttieniRicettaControllerGrafico {
         Button confirmButton = new Button("Usa ricetta");
 
         // Controlla se tutti gli ingredienti sono validi e se la lista non è vuota per abilitare o disabilitare il pulsante
-        if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && dettagliRicetta.getIngredienti().getListaIngredienti().size() != 0) {
+        if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && !dettagliRicetta.getIngredienti().getListaIngredienti().isEmpty()) {
             confirmButton.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
             confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
             confirmButton.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato
@@ -739,10 +755,10 @@ public class OttieniRicettaControllerGrafico {
         buttonBox.getChildren().add(confirmButton);
 
         // Aggiungi le altre informazioni al VBox
-        popupOtherContent.getChildren().addAll(descrizione, ingredientiLabel, ingredientiGrid, passaggiLabel, passaggiBox, videoLabel, linkVideoBox, buttonBox);
+        popupFinalContent.getChildren().addAll(passaggiLabel, passaggiBox, videoLabel, linkVideoBox, buttonBox);
 
         // Restituisci le informazioni aggiuntive
-        return popupOtherContent;
+        return popupFinalContent;
     }
 
     // Gestione alert della motivazione della non validità dell'ingrediente
