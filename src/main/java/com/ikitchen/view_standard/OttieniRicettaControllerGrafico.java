@@ -608,74 +608,11 @@ public class OttieniRicettaControllerGrafico {
         int column = 0;
         int row = 0;
         validIngredientCount = 0;
-        Date currentDate = new Date();
         int quantitaDisponibile = 0;
 
         // Controlla se l'ingrediente è nella lista degli ingredienti validi
-        String tipoIngrediente = null;
         for (Ingrediente ingrediente : dettagliRicetta.getIngredienti().getListaIngredienti()) {
-            boolean ingredienteValido = false;
-            for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
-                if (beanIngrediente.getNome().equals(ingrediente.getNome()) && beanIngrediente.getQuantita() >= ingrediente.getQuantita() && beanIngrediente.getScadenza().after(currentDate)) {
-                    ingredienteValido = true;
-                    validIngredientCount++;
-                    break;
-                } else {
-                    quantitaDisponibile = beanIngrediente.getQuantita();
-                }
-            }
-
-            // Recupera il tipo di ingrediente
-            if (ingrediente.getTipo().equals("cibo")) {
-                tipoIngrediente = "g";
-            } else if (ingrediente.getTipo().equals("drink")) {
-                tipoIngrediente = "l";
-            }
-
-            // Crea la label per l'ingrediente
-            Label ingredienteLabel = new Label(ingrediente.getNome() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
-            ingredienteLabel.setStyle("-fx-font-size: 11.9px;");
-
-            // Aggiungi un'icona di successo o di errore accanto all'ingrediente
-            ImageView iconView;
-            if (ingredienteValido) {
-                iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
-            } else {
-                iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
-
-                // Rendi l'icona cliccabile
-                int finalQuantitaDisponibile = quantitaDisponibile;
-                String finalTipoIngrediente = tipoIngrediente;
-                iconView.setOnMouseClicked(event -> mostraAlertIngredienteNonValido(ingrediente, finalQuantitaDisponibile, finalTipoIngrediente));
-
-                // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile
-                iconView.setCursor(Cursor.HAND);
-            }
-
-            // Imposta la dimensione dell'icona success/error
-            iconView.setFitWidth(14);
-            iconView.setFitHeight(14);
-
-            // Aggiungi l'icona e la label all'ingrediente nella griglia
-            HBox ingredienteBox = new HBox(5, iconView, ingredienteLabel);
-            ingredientiGrid.add(ingredienteBox, column, row);
-
-            // Gestione cambio colonne della griglia
-            int dimListaIngredienti = dettagliRicetta.getIngredienti().getListaIngredienti().size();
-            row++;
-            if (dimListaIngredienti % 2 == 0) {
-                // Se la lista degli ingredienti ha una dimensione pari
-                if (row >= dimListaIngredienti / 2) {
-                    row = 0;
-                    column = 1;
-                }
-            } else {
-                // Se la lista degli ingredienti ha una dimensione dispari
-                if (row > dimListaIngredienti / 2) {
-                    row = 0;
-                    column = 1;
-                }
-            }
+            processIngredienteValido(dettagliRicetta, beanIngredienti, ingrediente, quantitaDisponibile, ingredientiGrid, row, column);
         }
 
         // Aggiungi le altre informazioni al VBox
@@ -683,6 +620,77 @@ public class OttieniRicettaControllerGrafico {
 
         // Restituisci le informazioni aggiuntive
         return popupIngredientiContent;
+    }
+
+    // Refactor di prova
+    private void processIngredienteValido(BeanRicetta dettagliRicetta, BeanIngredienti beanIngredienti, Ingrediente ingrediente, int quantitaDisponibile, GridPane ingredientiGrid, int row, int column) {
+
+        // Dichiarazioni iniziali
+        String tipoIngrediente = null;
+        boolean ingredienteValido = false;
+        Date currentDate = new Date();
+
+        for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
+            if (beanIngrediente.getNome().equals(ingrediente.getNome()) && beanIngrediente.getQuantita() >= ingrediente.getQuantita() && beanIngrediente.getScadenza().after(currentDate)) {
+                ingredienteValido = true;
+                validIngredientCount++;
+                break;
+            } else {
+                quantitaDisponibile = beanIngrediente.getQuantita();
+            }
+        }
+
+        // Recupera il tipo di ingrediente
+        if (ingrediente.getTipo().equals("cibo")) {
+            tipoIngrediente = "g";
+        } else if (ingrediente.getTipo().equals("drink")) {
+            tipoIngrediente = "l";
+        }
+
+        // Crea la label per l'ingrediente
+        Label ingredienteLabel = new Label(ingrediente.getNome() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
+        ingredienteLabel.setStyle("-fx-font-size: 11.9px;");
+
+        // Aggiungi un'icona di successo o di errore accanto all'ingrediente
+        ImageView iconView;
+        if (ingredienteValido) {
+            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
+        } else {
+            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
+
+            // Rendi l'icona cliccabile
+            int finalQuantitaDisponibile = quantitaDisponibile;
+            String finalTipoIngrediente = tipoIngrediente;
+            iconView.setOnMouseClicked(event -> mostraAlertIngredienteNonValido(ingrediente, finalQuantitaDisponibile, finalTipoIngrediente));
+
+            // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile
+            iconView.setCursor(Cursor.HAND);
+        }
+
+        // Imposta la dimensione dell'icona success/error
+        iconView.setFitWidth(14);
+        iconView.setFitHeight(14);
+
+        // Aggiungi l'icona e la label all'ingrediente nella griglia
+        HBox ingredienteBox = new HBox(5, iconView, ingredienteLabel);
+        ingredientiGrid.add(ingredienteBox, column, row);
+
+        // Gestione cambio colonne della griglia
+        int dimListaIngredienti = dettagliRicetta.getIngredienti().getListaIngredienti().size();
+        row++;
+        if (dimListaIngredienti % 2 == 0) {
+            // Se la lista degli ingredienti ha una dimensione pari
+            if (row >= dimListaIngredienti / 2) {
+                row = 0;
+                column = 1;
+            }
+        } else {
+            // Se la lista degli ingredienti ha una dimensione dispari
+            if (row > dimListaIngredienti / 2) {
+                row = 0;
+                column = 1;
+            }
+        }
     }
 
     // Crea e restituisce il contenuto aggiuntivo del popup per il metodo "mostraDettagliRicetta"
