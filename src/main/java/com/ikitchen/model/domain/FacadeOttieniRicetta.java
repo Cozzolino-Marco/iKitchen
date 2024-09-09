@@ -69,6 +69,13 @@ public class FacadeOttieniRicetta {
         // Eseguo la query usando il DAO per aggiornare il DB
         usaRicettaDAO.execute(codRicetta);
 
+        // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
+        aggiornaDispensa(ricetta);
+    }
+
+    // Metodo per aggiornare la lista globale degli ingredienti della dispensa dell'utente
+    private void aggiornaDispensa(Ricetta ricetta) {
+
         // Ottieni la data corrente
         Date currentDate = new Date();
 
