@@ -268,7 +268,7 @@ public class OttieniRicettaControllerGrafico {
         } else {
             // Ciclo che itera la creazione di un elemento ricetta per la lista ricette
             for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
-                BorderPane element = createElement(beanRicetta);
+                BorderPane element = createRicettaElement(beanRicetta);
                 elementContainer.getChildren().add(element);
             }
         }
@@ -330,7 +330,7 @@ public class OttieniRicettaControllerGrafico {
     }
 
     // Gestione grafica di un elemento ricetta
-    private BorderPane createElement(BeanRicetta ricettaBean) {
+    private BorderPane createRicettaElement(BeanRicetta ricettaBean) {
         BorderPane element = new BorderPane();
 
         // Gestione dell'immagine della ricetta
@@ -700,7 +700,7 @@ public class OttieniRicettaControllerGrafico {
         VBox passaggiBox = new VBox(10);
         String passaggiTesto = dettagliRicetta.getPassaggi();
         if (passaggiTesto == null || passaggiTesto.isEmpty()) {
-            Label passaggiMessage = new Label("Non sono stati scritti i passaggi.");
+            Label passaggiMessage = new Label("Non sono stati scritti i passaggi");
             passaggiBox.getChildren().add(passaggiMessage);
         } else {
             Label passaggi = new Label(dettagliRicetta.getPassaggi());
@@ -714,7 +714,7 @@ public class OttieniRicettaControllerGrafico {
         VBox linkVideoBox = new VBox(10);
         String linkVideo = dettagliRicetta.getVideoUrl();
         if (linkVideo == null || linkVideo.isEmpty()) {
-            Label linkVideoMessage = new Label("Non è presente il link per il video.");
+            Label linkVideoMessage = new Label("Non è presente il link per il video");
             linkVideoBox.getChildren().add(linkVideoMessage);
         } else {
             Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());

@@ -100,59 +100,67 @@ public class OttieniRicettaControllerGraficoAPI {
     // Metodo che genera l'URL al quale connettersi
     public String generateUrl(String categoria, int pageNumber) {
 
-        // Variabili di riferimento
+        // Link di riferimento
         String baseUrlCatalogo = "https://www.giallozafferano.it/ricette-cat/";
         String baseUrlRicerca = "https://www.giallozafferano.it/ricerca-ricette/";
-        String corruptedUrl;
+
+        // Chiamata alla vera generazione dell'url
+        String url = generateBaseUrl(categoria, pageNumber, baseUrlCatalogo, baseUrlRicerca);
+        if (url == null) {
+            return "Categoria non riconosciuta";  // URL corrotto
+        }
+        return url;
+    }
+
+    // Helper method che gestisce la logica della base URL
+    private String generateBaseUrl(String categoria, int pageNumber, String baseUrlCatalogo, String baseUrlRicerca) {
+        String categoryUrl;
+        String baseUrl;
 
         switch (categoria.toLowerCase()) {
             case "colazione":
-                if (pageNumber > 1) {
-                    return baseUrlRicerca + "page" + pageNumber + "/colazione/";
-                } else {
-                    return baseUrlRicerca + "/colazione/";
-                }
-            case "pasto veloce":
-                if (pageNumber > 1) {
-                    return baseUrlRicerca + "page" + pageNumber + "/panini/";
-                } else {
-                    return baseUrlRicerca + "/panini/";
-                }
-            case "bevande":
-                if (pageNumber > 1) {
-                    return baseUrlCatalogo + "page" + pageNumber + "/Bevande/";
-                } else {
-                    return baseUrlCatalogo + "/Bevande/";
-                }
-            case "primi piatti":
-                if (pageNumber > 1) {
-                    return baseUrlCatalogo + "page" + pageNumber + "/Primi/";
-                } else {
-                    return baseUrlCatalogo + "/Primi/";
-                }
-            case "secondi piatti":
-                if (pageNumber > 1) {
-                    return baseUrlCatalogo + "page" + pageNumber + "/Secondi-piatti/";
-                } else {
-                    return baseUrlCatalogo + "/Secondi-piatti/";
-                }
-            case "contorni":
-                if (pageNumber > 1) {
-                    return baseUrlRicerca + "page" + pageNumber + "/contorni/";
-                } else {
-                    return baseUrlRicerca + "/contorni/";
-                }
-            case "dolci":
-                if (pageNumber > 1) {
-                    return baseUrlCatalogo + "page" + pageNumber + "/Dolci-e-Desserts/";
-                } else {
-                    return baseUrlCatalogo + "/Dolci-e-Desserts/";
-                }
-            default:
-                corruptedUrl = "Categoria non riconosciuta";
+                categoryUrl = "colazione/";
+                baseUrl = baseUrlRicerca;
                 break;
+            case "pasto veloce":
+                categoryUrl = "panini/";
+                baseUrl = baseUrlRicerca;
+                break;
+            case "bevande":
+                categoryUrl = "Bevande/";
+                baseUrl = baseUrlCatalogo;
+                break;
+            case "primi piatti":
+                categoryUrl = "Primi/";
+                baseUrl = baseUrlCatalogo;
+                break;
+            case "secondi piatti":
+                categoryUrl = "Secondi-piatti/";
+                baseUrl = baseUrlCatalogo;
+                break;
+            case "contorni":
+                categoryUrl = "contorni/";
+                baseUrl = baseUrlRicerca;
+                break;
+            case "dolci":
+                categoryUrl = "Dolci-e-Desserts/";
+                baseUrl = baseUrlCatalogo;
+                break;
+            default:
+                return null; // Categoria non riconosciuta
         }
-        return corruptedUrl;
+
+        // Chiamo il metodo per gestire la paginazione
+        return addPagination(baseUrl, categoryUrl, pageNumber);
+    }
+
+    // Helper method che aggiunge la paginazione
+    private String addPagination(String baseUrl, String categoryUrl, int pageNumber) {
+        if (pageNumber > 1) {
+            return baseUrl + "page" + pageNumber + "/" + categoryUrl;
+        } else {
+            return baseUrl + categoryUrl;
+        }
     }
 
     // Metodo che converte gli URL relativi delle immagini in assoluti se necessario
