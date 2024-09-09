@@ -52,7 +52,7 @@ class OttieniRicettaControllerApplicativoTest {
         BeanRicetta infoPerRicetta = new BeanRicetta();
 
         // Impostazione manuale dei valori del bean
-        infoPerRicetta.setCodice("16");
+        infoPerRicetta.setCodice("6");
         infoPerRicetta.setCategoria("Primi piatti");
 
         // Variabile per salvare il risultato del metodo ottieniDettagliRicetta

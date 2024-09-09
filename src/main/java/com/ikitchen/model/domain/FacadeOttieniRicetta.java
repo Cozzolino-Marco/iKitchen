@@ -3,26 +3,24 @@ package com.ikitchen.model.domain;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.dao.*;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class FacadeOttieniRicetta {
 
     // Variabile per mantenere la lista degli ingredienti globalmente in memoria
-    private ListIngredienti globalListIngredienti = null;
+    private ListIngredienti globalListIngredientiDispensaUtente = null;
 
     // Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
     public ListIngredienti ottieniIngredientiDispensaUtente(String username) throws DAOException, SQLException {
 
-        // Se la lista è già in memoria, restituiscila senza chiamare il database
-        if (globalListIngredienti != null) {
-            return globalListIngredienti;
+        // Se la lista non è presente in memoria, chiamare il DAO per recuperare gli ingredienti
+        if (globalListIngredientiDispensaUtente == null) {
+            RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
+            globalListIngredientiDispensaUtente = recuperaIngredientiDispensaDAO.execute(username);
         }
 
-        // Se la lista non è presente in memoria, chiamare il DAO per recuperare gli ingredienti
-        RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
-        globalListIngredienti = recuperaIngredientiDispensaDAO.execute(username);
-
         // Restituisco la lista appena recuperata
-        return globalListIngredienti;
+        return globalListIngredientiDispensaUtente;
     }
 
     // Metodo per mostrare le ricette
@@ -63,12 +61,36 @@ public class FacadeOttieniRicetta {
     }
 
     // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta
-    public void usaRicetta(String codRicetta) throws DAOException, SQLException {
+    public void usaRicetta(Ricetta ricetta, String codRicetta) throws DAOException, SQLException {
 
-        // Istanzia il DAO per aggiornamento quantità
+        // Istanzia il DAO per aggiornamento quantità nel database
         UsaRicettaDAO usaRicettaDAO = new UsaRicettaDAO();
 
-        // Eseguo la query usando il DAO
+        // Eseguo la query usando il DAO per aggiornare il DB
         usaRicettaDAO.execute(codRicetta);
+
+        // Ottieni la data corrente
+        Date currentDate = new Date();
+
+        // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
+        if (globalListIngredientiDispensaUtente != null) {
+            for (Ingrediente ingredienteRicetta : ricetta.getIngredienti().getListaIngredienti()) {
+
+                // Itero attraverso gli ingredienti della dispensa
+                for (Ingrediente ingredienteDispensa : globalListIngredientiDispensaUtente.getListaIngredienti()) {
+
+                    // Se l'ingrediente è presente allora scala la quantità
+                    if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRicetta.getCodIngrediente())) {
+                        ingredienteDispensa.setQuantita(ingredienteDispensa.getQuantita() - ingredienteRicetta.getQuantita());
+
+                        // Se la quantità diventa negativa oppure il prodotto è scaduto allora si rimuove dalla lista
+                        if (ingredienteDispensa.getQuantita() <= 0 || ingredienteDispensa.getScadenza().before(currentDate)) {
+                            globalListIngredientiDispensaUtente.getListaIngredienti().remove(ingredienteDispensa);
+                        }
+                        break; // Interrompi il loop interno perché l'ingrediente è stato trovato e aggiornato
+                    }
+                }
+            }
+        }
     }
 }

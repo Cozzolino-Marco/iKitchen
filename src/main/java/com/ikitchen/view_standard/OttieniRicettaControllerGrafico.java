@@ -75,7 +75,7 @@ public class OttieniRicettaControllerGrafico {
     private static final String DEFAULT_IMAGE = "/default_image.png";
 
     // Altre dichiarazioni variabili
-    private OttieniRicettaControllerApplicativo ricetta = null;
+    private OttieniRicettaControllerApplicativo ricette = null;
     private String categoriaScelta;
     private String provenienzaScelta;
     private String filtraggioScelta;
@@ -252,7 +252,7 @@ public class OttieniRicettaControllerGrafico {
         BeanRicette infoPerListaRicette = new BeanRicette(categoria, provenienza, filtraggio, storage);
 
         // Inizializza il controller applicativo
-        OttieniRicettaControllerApplicativo ricette = new OttieniRicettaControllerApplicativo();
+        ricette = new OttieniRicettaControllerApplicativo();
 
         // Ottieni la lista delle ricette dal controller applicativo
         BeanRicette listaRicette = ricette.mostraRicette(infoPerListaRicette);
@@ -481,12 +481,9 @@ public class OttieniRicettaControllerGrafico {
         popupContent.setStyle("-fx-background-color: #FFFFFF;");
         popupContent.setAlignment(Pos.CENTER);
 
-        // Inizializza il controller applicativo per ottenere i dettagli della ricetta
-        ricetta = new OttieniRicettaControllerApplicativo();
-
         try {
             // Ottieni i dettagli completi della ricetta
-            BeanRicetta dettagliRicetta = ricetta.ottieniDettagliRicetta(ricettaBean);
+            BeanRicetta dettagliRicetta = ricette.ottieniDettagliRicetta(ricettaBean);
 
             // Crea VBox per il titolo e dettagli
             VBox popupInitialContent = new VBox();
@@ -555,7 +552,7 @@ public class OttieniRicettaControllerGrafico {
             descrizione.setWrapText(true);
 
             // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
-            BeanIngredienti beanIngredienti = ricetta.verificaQuantita(dettagliRicetta);
+            BeanIngredienti beanIngredienti = ricette.verificaQuantita(dettagliRicetta);
 
             // Gestione lista ingredienti
             Label ingredientiLabel = new Label("Ingredienti");
@@ -621,10 +618,20 @@ public class OttieniRicettaControllerGrafico {
                 ingredientiGrid.add(ingredienteBox, column, row);
 
                 // Gestione cambio colonne della griglia
+                int dimListaIngredienti = dettagliRicetta.getIngredienti().getListaIngredienti().size();
                 row++;
-                if (row > dettagliRicetta.getIngredienti().getListaIngredienti().size() / 2) {
-                    row = 0;
-                    column = 1;
+                if (dimListaIngredienti % 2 == 0) {
+                    // Se la lista degli ingredienti ha una dimensione pari
+                    if (row >= dimListaIngredienti / 2) {
+                        row = 0;
+                        column = 1;
+                    }
+                } else {
+                    // Se la lista degli ingredienti ha una dimensione dispari
+                    if (row > dimListaIngredienti / 2) {
+                        row = 0;
+                        column = 1;
+                    }
                 }
             }
 
@@ -634,27 +641,36 @@ public class OttieniRicettaControllerGrafico {
             VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
             VBox passaggiBox = new VBox(10);
             String passaggiTesto = dettagliRicetta.getPassaggi();
-            if (passaggiTesto != null) {
-                Label passaggi = new Label(dettagliRicetta.getPassaggi().toUpperCase());
-                passaggiBox.getChildren().add(passaggi);
-            } else {
-                Label passaggiMessage = new Label("Non sono stati scritti passaggi per questa ricetta.");
+            if (passaggiTesto == null || passaggiTesto.isEmpty()) {
+                Label passaggiMessage = new Label("Non sono stati scritti i passaggi.");
                 passaggiBox.getChildren().add(passaggiMessage);
+            } else {
+                Label passaggi = new Label(dettagliRicetta.getPassaggi());
+                passaggiBox.getChildren().add(passaggi);
             }
 
             // Video URL
             Label videoLabel = new Label("Video Tutorial");
             videoLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 13.8px;");
             VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
-            Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
-            videoLink.setStyle("-fx-font-size: 14px;");
-            videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
+            VBox linkVideoBox = new VBox(10);
+            String linkVideo = dettagliRicetta.getVideoUrl();
+            if (linkVideo == null || linkVideo.isEmpty()) {
+                Label linkVideoMessage = new Label("Non è presente il link per il video.");
+                linkVideoBox.getChildren().add(linkVideoMessage);
+            } else {
+                Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
+                videoLink.setStyle("-fx-font-size: 14px;");
+                videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
+                linkVideoBox.getChildren().add(videoLink);
+            }
+            VBox.setMargin(linkVideoBox, new Insets(0, 0, 20, 0));
 
             // Pulsante per confermare l'uso della ricetta
             Button confirmButton = new Button("Usa ricetta");
 
-            // Controlla se tutti gli ingredienti sono validi per abilitare o disabilitare il pulsante
-            if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size()) {
+            // Controlla se tutti gli ingredienti sono validi e se la lista non è vuota per abilitare o disabilitare il pulsante
+            if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && dettagliRicetta.getIngredienti().getListaIngredienti().size() != 0) {
                 confirmButton.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
                 confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
                 confirmButton.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato
@@ -667,7 +683,7 @@ public class OttieniRicettaControllerGrafico {
             // Invocazione del metodo per scalare le quantità degli ingredienti al click del bottone "usa ricetta"
             EventHandler<ActionEvent> confirmHandler = (confirmEvent) -> {
                 try {
-                    ricetta.usaRicetta(dettagliRicetta);
+                    ricette.usaRicetta(dettagliRicetta);
                     Popup.mostraPopup("Successo", "La ricetta è stata usata con successo!", "success");
                 } catch (DAOException | SQLException ex) {
                     Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso della ricetta.", ERROR_POPUP_TYPE);
@@ -681,7 +697,7 @@ public class OttieniRicettaControllerGrafico {
             buttonBox.getChildren().add(confirmButton);
 
             // Aggiungi le altre informazioni al VBox
-            popupOtherContent.getChildren().addAll(descrizione, ingredientiLabel, ingredientiGrid, passaggiLabel, passaggiBox, videoLabel, videoLink, buttonBox);
+            popupOtherContent.getChildren().addAll(descrizione, ingredientiLabel, ingredientiGrid, passaggiLabel, passaggiBox, videoLabel, linkVideoBox, buttonBox);
 
             // Aggiungi i due VBox al layout principale
             popupContent.getChildren().addAll(popupInitialContent, popupOtherContent);

@@ -88,7 +88,7 @@ public class OttieniRicettaControllerApplicativo {
     // Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
     public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
 
-        // Estraggo le informazioni dal bean
+        // Recupero lo username
         String username = Credentials.getUsername();
 
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente
@@ -127,6 +127,18 @@ public class OttieniRicettaControllerApplicativo {
 
     // Metodo che aggiorna le quantità richiamando il DAO con il facade
     public void usaRicetta(BeanRicetta beanRicetta) throws DAOException, SQLException {
-        facadeOttieniRicetta.usaRicetta(beanRicetta.getCodice());
+
+        // Estraggo le informazioni dal bean
+        String codRicetta = beanRicetta.getCodice();
+        String categoria = beanRicetta.getCategoria();
+        ListIngredienti ingredienti = beanRicetta.getIngredienti();
+
+        // Creo un oggetto Ricetta usando la factory e lo popolo con i dati di beanRicetta
+        Ricetta ricetta = FactoryRicetta.createRicetta(categoria);
+        ricetta.setCodice(codRicetta);
+        ricetta.setIngredienti(ingredienti);
+
+        // Chiamata al facade per aggiornare le quantità nel DB e nella lista globale
+        facadeOttieniRicetta.usaRicetta(ricetta, beanRicetta.getCodice());
     }
 }

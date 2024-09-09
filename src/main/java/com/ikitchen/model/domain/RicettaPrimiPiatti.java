@@ -3,7 +3,7 @@ package com.ikitchen.model.domain;
 public class RicettaPrimiPiatti extends Ricetta {
 
     // Attributi
-    private String tipoPasta;               // Esempio: "spaghetti", "penne", "risotto"
+    private String tipoPasta;               // Esempio: "spaghetti", "pennette", "bucatini"
     private String sugo;                    // Esempio: "pomodoro", "carbonara", "ragù"
     private String tipoAroma;               // Esempio: "parmigiano", "peperoncino", "erbe aromatiche"
 
