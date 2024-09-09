@@ -69,34 +69,32 @@ public class FacadeOttieniRicetta {
         // Eseguo la query usando il DAO per aggiornare il DB
         usaRicettaDAO.execute(codRicetta);
 
-        // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
-        aggiornaDispensa(ricetta);
-    }
-
-    // Metodo per aggiornare la lista globale degli ingredienti della dispensa dell'utente
-    private void aggiornaDispensa(Ricetta ricetta) {
-
         // Ottieni la data corrente
         Date currentDate = new Date();
 
         // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
         if (globalListIngredientiDispensaUtente != null) {
             for (Ingrediente ingredienteRicetta : ricetta.getIngredienti().getListaIngredienti()) {
+                aggiornaDispensa(ingredienteRicetta, currentDate);
+            }
+        }
+    }
 
-                // Itero attraverso gli ingredienti della dispensa
-                for (Ingrediente ingredienteDispensa : globalListIngredientiDispensaUtente.getListaIngredienti()) {
+    // Metodo per aggiornare la lista globale degli ingredienti della dispensa dell'utente
+    private void aggiornaDispensa(Ingrediente ingredienteRicetta, Date currentDate) {
 
-                    // Se l'ingrediente è presente allora scala la quantità
-                    if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRicetta.getCodIngrediente())) {
-                        ingredienteDispensa.setQuantita(ingredienteDispensa.getQuantita() - ingredienteRicetta.getQuantita());
+        // Itero attraverso gli ingredienti della dispensa
+        for (Ingrediente ingredienteDispensa : globalListIngredientiDispensaUtente.getListaIngredienti()) {
 
-                        // Se la quantità diventa negativa oppure il prodotto è scaduto allora si rimuove dalla lista
-                        if (ingredienteDispensa.getQuantita() <= 0 || ingredienteDispensa.getScadenza().before(currentDate)) {
-                            globalListIngredientiDispensaUtente.getListaIngredienti().remove(ingredienteDispensa);
-                        }
-                        break; // Interrompi il loop interno perché l'ingrediente è stato trovato e aggiornato
-                    }
+            // Se l'ingrediente è presente allora scala la quantità
+            if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRicetta.getCodIngrediente())) {
+                ingredienteDispensa.setQuantita(ingredienteDispensa.getQuantita() - ingredienteRicetta.getQuantita());
+
+                // Se la quantità diventa negativa oppure il prodotto è scaduto allora si rimuove dalla lista
+                if (ingredienteDispensa.getQuantita() <= 0 || ingredienteDispensa.getScadenza().before(currentDate)) {
+                    globalListIngredientiDispensaUtente.getListaIngredienti().remove(ingredienteDispensa);
                 }
+                break; // Interrompi il loop interno perché l'ingrediente è stato trovato e aggiornato
             }
         }
     }
