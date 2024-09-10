@@ -2,6 +2,9 @@ package com.ikitchen.model.bean;
 
 import com.ikitchen.model.domain.Role;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CredentialsBean {
 
     // Variabili
@@ -12,12 +15,29 @@ public class CredentialsBean {
     private String nome;
     private String cognome;
 
+    // Regex per validare un'email
+    private String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    Pattern pattern = Pattern.compile(EMAIL_REGEX);
+
     // Usato dal controller grafico della registrazione per popolare i dati utente
     public CredentialsBean() {}
 
     // Usato dal controller grafico di login per passare i dati al suo applicativo
     public CredentialsBean(String username, String password) {
+
+        // Matcher per confrontare l'email con il pattern
+        Matcher matcher = pattern.matcher(username);
+
+        // Eccezione per validità email
+        if (!matcher.matches()) {
+            // Lancia un'eccezione se l'email non è valida
+            throw new IllegalArgumentException("L'email fornita non è valida: " + username);
+        }
+
+        // Se l'email è valida, viene assegnato allo username
         this.username = username;
+
+        // Assegnazione della password
         this.password = password;
     }
 
@@ -46,6 +66,17 @@ public class CredentialsBean {
         this.role = role;
     }
     public void setUsername(String username) {
+
+        // Matcher per confrontare l'email con il pattern
+        Matcher matcher = pattern.matcher(username);
+
+        // Eccezione per validità email
+        if (!matcher.matches()) {
+            // Lancia un'eccezione se l'email non è valida
+            throw new IllegalArgumentException("L'email fornita non è valida: " + username);
+        }
+
+        // Se l'email è valida, viene assegnato allo username
         this.username = username;
     }
     public void setPassword(String password) {

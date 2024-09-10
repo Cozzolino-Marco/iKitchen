@@ -25,8 +25,46 @@ public class LoginGrafico {
     @FXML
     private PasswordField textFieldPassword;
 
+    @FXML // Acquisizione credienziali e passaggio al controller del login
+    protected void onLoginButtonClick() throws IOException {
+        
+        // Gestione eccezione per validità email
+        CredentialsBean credB = null;
+        try {
+            credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+        } catch (IllegalArgumentException e) {
+            Popup.mostraPopup("Errore", "L'email fornita non è valida!", "error");
+            loginView();
+        }
+
+        // Verifica se credB è stato istanziato correttamente
+        if (credB != null) {
+            LoginController loginController = new LoginController();
+
+            // Chiamata al login controller per effettuare il login
+            try {
+                loginController.start(credB);
+
+                // Recupera il nome associato allo username
+                loginController.recuperaNome(credB);
+
+                // Controlla il ruolo dell'utente e carica la view appropriata
+                if (Credentials.getRole() != null) {
+                    cambiaViewDopoLogin();
+                } else {
+                    Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+                    loginView();
+                }
+            } catch (DAOException | SQLException | IOException e) {
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+                loginView();
+            }
+        }
+    }
+
     @FXML // Metodo per il login
     public void loginView() throws IOException {
+        
         // Carica il file FXML per la vista del login
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
         Parent root = fxmlLoader.load();
@@ -112,30 +150,5 @@ public class LoginGrafico {
         // Cambia la scena dello stage
         stage.setScene(scene);
         stage.show();
-    }
-
-    @FXML // Acquisizione credienziali e passaggio al controller del login
-    protected void onLoginButtonClick() throws IOException {
-        CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
-        LoginController loginController = new LoginController();
-
-        // Chiamata al login controller per effettuare il login
-        try {
-            loginController.start(credB);
-
-            // Recupera il nome associato allo username
-            loginController.recuperaNome(credB);
-
-            // Controlla il ruolo dell'utente e carica la view appropriata
-            if (Credentials.getRole() != null) {
-                cambiaViewDopoLogin();
-            } else {
-                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-                loginView();
-            }
-        } catch (DAOException | SQLException | IOException e) {
-            Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-            loginView();
-        }
     }
 }

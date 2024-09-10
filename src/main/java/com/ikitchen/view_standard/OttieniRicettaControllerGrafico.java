@@ -674,8 +674,8 @@ public class OttieniRicettaControllerGrafico {
         } else {
             iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
         }
-        iconView.setFitWidth(14);
-        iconView.setFitHeight(14);
+        iconView.setFitWidth(17);
+        iconView.setFitHeight(17);
 
         // Recupera il tipo di ingrediente (cibo o drink)
         String tipoIngrediente = null;

@@ -4,6 +4,8 @@ import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.domain.FactoryRicetta;
 import com.ikitchen.model.domain.ListRicette;
 import com.ikitchen.model.domain.Ricetta;
+import com.ikitchen.model.utility.Credentials;
+
 import java.sql.*;
 
 public class MostraRicetteDAO {
@@ -16,10 +18,11 @@ public class MostraRicetteDAO {
 
         try {
             Connection conn = ConnectionFactory.getConnection();
-            cs = conn.prepareCall("{call mostra_ricette(?, ?, ?)}");
+            cs = conn.prepareCall("{call mostra_ricette(?, ?, ?, ?)}");
             cs.setString(1, ricetta.getCategoria());
             cs.setString(2, ricetta.getProvenienza());
             cs.setString(3, filtro);
+            cs.setString(4, Credentials.getUsername());
 
             // Esegui la stored procedure
             boolean status = cs.execute();
