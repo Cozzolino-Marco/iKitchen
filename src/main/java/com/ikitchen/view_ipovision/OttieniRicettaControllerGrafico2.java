@@ -458,6 +458,16 @@ public class OttieniRicettaControllerGrafico2 {
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         // Gestore di eventi per il click sull'elemento in base alla provenienza
+        gestisciClickElementoRicetta(element, ricettaBean, provenienzaScelta);
+
+        // Restituzione elemento grafico creato
+        return element;
+    }
+
+    // Gestore di eventi per il click sull'elemento ricetta in base alla provenienza
+    private void gestisciClickElementoRicetta(BorderPane element, BeanRicetta ricettaBean, String provenienzaScelta) {
+
+        // Controllo della provenienza
         if (provenienzaScelta.equals("Da chef")) {
             element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
         } else {
@@ -479,7 +489,6 @@ public class OttieniRicettaControllerGrafico2 {
                 }
             });
         }
-        return element;
     }
 
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta

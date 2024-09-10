@@ -473,7 +473,7 @@ public class OttieniRicettaControllerGrafico {
         }
     }
 
-        // Metodo per mostrare la pagina dei dettagli della ricetta scelta
+    // Metodo per mostrare la pagina dei dettagli della ricetta scelta
     private void mostraDettagliRicetta(BeanRicetta ricettaBean) {
 
         // Crea un nuovo Stage per il popup
