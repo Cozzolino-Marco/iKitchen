@@ -10,7 +10,7 @@ import java.sql.Types;
 
 public class LoginProcedureDAO {
 
-    public void execute() throws DAOException, SQLException {
+    public void loginExecute() throws DAOException, SQLException {
         int role;
         CallableStatement cs = null;
 

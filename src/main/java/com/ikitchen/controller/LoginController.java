@@ -24,7 +24,7 @@ public class LoginController {
         Credentials.setPassword(credB.getPassword());
 
         // Esegui la procedura di login nel database
-        new LoginProcedureDAO().execute();
+        new LoginProcedureDAO().loginExecute();
 
         // Cambia il ruolo della connessione in base al ruolo dell'utente
         if (Credentials.getRole() != null) {
@@ -40,9 +40,9 @@ public class LoginController {
     public void recuperaNome(CredentialsBean credentialsBean) throws DAOException, SQLException {
 
         // Estraggo l'informazione dal bean
-        String nome = credentialsBean.getUsername();
+        String username = credentialsBean.getUsername();
 
         // Chiamo il DAO ed ottengo il nome associato allo username
-        recuperaNomeDaUsernameDAO.execute(nome);
+        recuperaNomeDaUsernameDAO.recuperaNomeExecute(username);
     }
 }

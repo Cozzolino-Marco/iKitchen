@@ -10,12 +10,11 @@ import java.sql.SQLException;
 
 public class RecuperaIngredientiDispensaDAO {
 
-    public ListIngredienti execute(Object... params) throws DAOException, SQLException {
+    public ListIngredienti recuperaIngredientiExecute(String username) throws DAOException, SQLException {
 
         // Parametri
         ListIngredienti listIngredienti = new ListIngredienti();
         CallableStatement cs = null;
-        String username = (String) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();

@@ -11,13 +11,12 @@ import java.sql.SQLException;
 
 public class OttieniDettagliRicettaDAO {
 
-    public Ricetta execute(Object... params) throws DAOException, SQLException {
+    public Ricetta dettagliRicettaExecute(Ricetta ricetta) throws DAOException, SQLException {
 
         // Parametri
         Ricetta recipe = null;
         CallableStatement cs = null;
-        IngredientiDAO ingredientiDAO = new IngredientiDAO();
-        Ricetta ricetta = (Ricetta) params[0];
+        IngredientiRicettaDAO ingredientiDAO = new IngredientiRicettaDAO();
 
         try {
             Connection conn = ConnectionFactory.getConnection();
@@ -48,7 +47,7 @@ public class OttieniDettagliRicettaDAO {
 
                     // Recupera e imposta gli ingredienti
                     String idRicetta = rs.getString("codRicetta");
-                    ListIngredienti ingredienti = ingredientiDAO.getIngredientiPerRicetta(idRicetta);
+                    ListIngredienti ingredienti = ingredientiDAO.getIngredientiPerRicettaExecute(idRicetta);
                     recipe.setIngredienti(ingredienti);
                 }
             }

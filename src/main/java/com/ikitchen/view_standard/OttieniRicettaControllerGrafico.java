@@ -662,6 +662,7 @@ public class OttieniRicettaControllerGrafico {
         for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
             if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
                 ingredienteTrovato = beanIngrediente;
+                validIngredientCount++;
                 break;
             }
         }
@@ -744,6 +745,9 @@ public class OttieniRicettaControllerGrafico {
             confirmButton.setStyle("-fx-background-color: #9e0606; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
             confirmButton.setCursor(Cursor.DEFAULT); // Cursore standard se disabilitato
         }
+
+        // Azzera il contatore degli ingredienti validi
+        validIngredientCount = 0;
 
         // Invocazione del metodo per scalare le quantità degli ingredienti al click del bottone "usa ricetta"
         EventHandler<ActionEvent> confirmHandler = (confirmEvent) -> {

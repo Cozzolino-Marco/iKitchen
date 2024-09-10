@@ -27,7 +27,7 @@ public class OttieniIngredientiControllerApplicativo {
         String username = Credentials.getUsername();
 
         // Eseguo la query usando il DAO e ottengo il risultato
-        ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.execute(username);
+        ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.recuperaIngredientiExecute(username);
 
         // Creo un nuovo bean per restituire gli ingredienti alla vista
         BeanIngredienti ingredientiValidi = new BeanIngredienti(username);
@@ -58,7 +58,7 @@ public class OttieniIngredientiControllerApplicativo {
         String username = Credentials.getUsername();
 
         // Eseguo la query usando il DAO e ottengo il risultato
-        ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.execute(username);
+        ListIngredienti listIngredienti = recuperaIngredientiDispensaDAO.recuperaIngredientiExecute(username);
 
         // Creo un nuovo bean per restituire gli ingredienti alla vista
         BeanIngredienti ingredientiNonValidi = new BeanIngredienti(username);

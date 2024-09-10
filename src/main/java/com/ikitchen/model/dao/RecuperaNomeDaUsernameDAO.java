@@ -9,11 +9,10 @@ import java.sql.SQLException;
 
 public class RecuperaNomeDaUsernameDAO {
 
-    public void execute(Object... params) throws DAOException, SQLException {
+    public void recuperaNomeExecute(String username) throws DAOException, SQLException {
 
         // Parametri
         CallableStatement cs = null;
-        String username = (String) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();

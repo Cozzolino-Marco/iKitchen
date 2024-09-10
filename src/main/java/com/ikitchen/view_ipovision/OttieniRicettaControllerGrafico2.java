@@ -554,7 +554,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Dettagli sopra l'immagine (categoria, durata, calorie)
         Label dettagli = new Label(dettagliRicetta.getCategoria().toUpperCase() + " • " + dettagliRicetta.getDurataPreparazione() + " MIN • " + dettagliRicetta.getCalorie() + " KCAL");
-        dettagli.setStyle("-fx-text-fill: grey; -fx-font-size: 15px; -fx-text-fill: #666666;");
+        dettagli.setStyle("-fx-font-size: 15px; -fx-text-fill: #666666;");
         dettagli.setAlignment(Pos.CENTER);
 
         // Gestione grafica dell'immagine della ricetta
@@ -578,7 +578,7 @@ public class OttieniRicettaControllerGrafico2 {
         StackPane cuocoLikesPane = new StackPane();
 
         // Informazioni del cuoco
-        ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
+        ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon_negative.png"))));
         cuocoIcon.setFitHeight(15);
         cuocoIcon.setFitWidth(15);
         Label cuoco = new Label(dettagliRicetta.getCuoco().toUpperCase());
@@ -597,7 +597,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Descrizione della ricetta
         Label descrizione = new Label(dettagliRicetta.getDescrizione().toUpperCase());
-        descrizione.setStyle("-fx-text-fill: white; -fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
+        descrizione.setStyle("-fx-font-size: 13px; -fx-text-fill: #666666; -fx-text-alignment: justify;");
         descrizione.setWrapText(true);
 
         // Aggiungi gli elementi iniziali al VBox
@@ -675,6 +675,7 @@ public class OttieniRicettaControllerGrafico2 {
         for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
             if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
                 ingredienteTrovato = beanIngrediente;
+                validIngredientCount++;
                 break;
             }
         }
@@ -699,7 +700,7 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Crea la label per l'ingrediente
         Label ingredienteLabel = new Label(ingrediente.getNome().toUpperCase() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
-        ingredienteLabel.setStyle("-fx-font-size: 11.9px;");
+        ingredienteLabel.setStyle("-fx-text-fill: #666666; -fx-font-size: 11.9px;");
 
         // Crea e ritorna l'HBox che contiene l'icona e l'etichetta
         return new HBox(5, iconView, ingredienteLabel);
@@ -759,6 +760,9 @@ public class OttieniRicettaControllerGrafico2 {
             confirmButton.setStyle("-fx-background-color: #9e0606; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
             confirmButton.setCursor(Cursor.DEFAULT); // Cursore standard se disabilitato
         }
+
+        // Azzera il contatore degli ingredienti validi
+        validIngredientCount = 0;
 
         // Invocazione del metodo per scalare le quantità degli ingredienti al click del bottone "usa ricetta"
         EventHandler<ActionEvent> confirmHandler = (confirmEvent) -> {

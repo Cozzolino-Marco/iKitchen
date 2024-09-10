@@ -28,6 +28,6 @@ public class RegistratiController {
         }
 
         // Eseguo la query usando il DAO e ottengo il risultato
-        registrazioneDAO.execute();
+        registrazioneDAO.registrazioneExecute();
     }
 }

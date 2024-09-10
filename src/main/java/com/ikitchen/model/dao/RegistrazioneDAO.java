@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class RegistrazioneDAO {
 
-    public void execute() throws DAOException, SQLException {
+    public void registrazioneExecute() throws DAOException, SQLException {
 
         // Parametri
         CallableStatement cs = null;

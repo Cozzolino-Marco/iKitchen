@@ -8,20 +8,18 @@ import java.sql.*;
 
 public class MostraRicetteDAO {
 
-    public ListRicette execute(Object... params) throws DAOException, SQLException {
+    public ListRicette mostraRicetteExecute(Ricetta ricetta, String filtro) throws DAOException, SQLException {
 
         // Parametri
         ListRicette listRicette = new ListRicette();
         CallableStatement cs = null;
-        Ricetta ricetta = (Ricetta) params[0];
-        String filtraggio = (String) params[1];
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             cs = conn.prepareCall("{call mostra_ricette(?, ?, ?)}");
             cs.setString(1, ricetta.getCategoria());
             cs.setString(2, ricetta.getProvenienza());
-            cs.setString(3, filtraggio);
+            cs.setString(3, filtro);
 
             // Esegui la stored procedure
             boolean status = cs.execute();

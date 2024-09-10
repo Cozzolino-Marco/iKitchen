@@ -5,11 +5,10 @@ import java.sql.*;
 
 public class UsaRicettaDAO {
 
-    public void execute(Object... params) throws DAOException, SQLException {
+    public void usaRicettaExecute(String codRicetta) throws DAOException, SQLException {
 
         // Parametri
         CallableStatement cs = null;
-        String codRicetta = (String) params[0];
 
         try {
             Connection conn = ConnectionFactory.getConnection();

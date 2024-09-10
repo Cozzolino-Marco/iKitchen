@@ -8,9 +8,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class IngredientiDAO {
+public class IngredientiRicettaDAO {
 
-    public ListIngredienti getIngredientiPerRicetta(String idRicetta) throws DAOException, SQLException {
+    public ListIngredienti getIngredientiPerRicettaExecute(String idRicetta) throws DAOException, SQLException {
         ListIngredienti listIngredienti = new ListIngredienti();
         CallableStatement cs = null;
 

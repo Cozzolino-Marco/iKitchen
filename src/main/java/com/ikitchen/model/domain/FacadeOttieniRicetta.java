@@ -16,7 +16,7 @@ public class FacadeOttieniRicetta {
         // Se la lista non è presente in memoria, chiamare il DAO per recuperare gli ingredienti
         if (globalListIngredientiDispensaUtente == null) {
             RecuperaIngredientiDispensaDAO recuperaIngredientiDispensaDAO = new RecuperaIngredientiDispensaDAO();
-            globalListIngredientiDispensaUtente = recuperaIngredientiDispensaDAO.execute(username);
+            globalListIngredientiDispensaUtente = recuperaIngredientiDispensaDAO.recuperaIngredientiExecute(username);
         }
 
         // Restituisco la lista appena recuperata
@@ -33,7 +33,7 @@ public class FacadeOttieniRicetta {
         if (storage.equalsIgnoreCase("Solo dal database")) {
             // Mostrare le ricette solo dal DB
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-            listRicette = mostraRicetteDAO.execute(ricetta, filtro);
+            listRicette = mostraRicetteDAO.mostraRicetteExecute(ricetta, filtro);
         }
         else if (storage.equalsIgnoreCase("Solo dal file system")) {
             // Mostrare le ricette solo dal file system
@@ -43,7 +43,7 @@ public class FacadeOttieniRicetta {
         else if (storage.equalsIgnoreCase("Da entrambi")) {
             // Mostrare le ricette dal DB e dal file system
             MostraRicetteDAO mostraRicetteDAO = new MostraRicetteDAO();
-            listRicette = mostraRicetteDAO.execute(ricetta, filtro);
+            listRicette = mostraRicetteDAO.mostraRicetteExecute(ricetta, filtro);
             MostraRicetteFS mostraRicetteFS = new MostraRicetteFS();
             listRicette = mostraRicetteFS.recuperaRicetteDaFile(ricetta, listRicette);
         }
@@ -57,7 +57,7 @@ public class FacadeOttieniRicetta {
         OttieniDettagliRicettaDAO ottieniDettagliRicettaDAO = new OttieniDettagliRicettaDAO();
 
         // Eseguo la query usando il DAO e restituisco il risultato
-        return ottieniDettagliRicettaDAO.execute(ricetta);
+        return ottieniDettagliRicettaDAO.dettagliRicettaExecute(ricetta);
     }
 
     // Metodo per scalare le quantità degli ingredienti usati per la ricetta scelta
@@ -67,7 +67,7 @@ public class FacadeOttieniRicetta {
         UsaRicettaDAO usaRicettaDAO = new UsaRicettaDAO();
 
         // Eseguo la query usando il DAO per aggiornare il DB
-        usaRicettaDAO.execute(codRicetta);
+        usaRicettaDAO.usaRicettaExecute(codRicetta);
 
         // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
         if (globalListIngredientiDispensaUtente != null) {
