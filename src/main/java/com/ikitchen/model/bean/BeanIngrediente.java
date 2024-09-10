@@ -13,7 +13,6 @@ public class BeanIngrediente {
     private int limite;
     private Blob immagine;
     private String tipo;
-    private boolean validita;
 
     public BeanIngrediente() {}
 
@@ -63,9 +62,6 @@ public class BeanIngrediente {
     public void setLimite(int limite) {
         this.limite = limite;
     }
-    public void setValidita(boolean validita) {
-        this.validita = validita;
-    }
 
     // Getter
     public String getCodIngrediente() {
@@ -89,7 +85,13 @@ public class BeanIngrediente {
     public String getTipo() {
         return tipo;
     }
-    public boolean getValidita() {
+
+
+    private boolean validita;
+    public void setValidita(boolean validita) {
+        this.validita = validita;
+    }
+    public boolean isValido() {
         return validita;
     }
 }

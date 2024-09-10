@@ -34,7 +34,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -502,13 +501,13 @@ public class OttieniRicettaControllerGrafico2 {
             BeanRicetta dettagliRicetta = ricette.ottieniDettagliRicetta(ricettaBean);
 
             // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione
-            VBox popupInitialContent = createPopupInitialContent(dettagliRicetta);
+            VBox popupInitialContent = createInitialContent(dettagliRicetta);
 
             // Creazione grafica della sezione dedicata agli ingredienti
-            VBox popupIngredientiContent = createPopupIngredientiContent(dettagliRicetta);
+            VBox popupIngredientiContent = createIngredientiContent(dettagliRicetta);
 
             // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma
-            VBox popupOtherContent = createPopupFinalContent(dettagliRicetta);
+            VBox popupOtherContent = createFinalContent(dettagliRicetta);
 
             // Aggiungi tutti i contenuti creati al layout principale
             popupContent.getChildren().addAll(popupInitialContent, popupIngredientiContent, popupOtherContent);
@@ -536,8 +535,8 @@ public class OttieniRicettaControllerGrafico2 {
         }
     }
 
-    // Crea e restituisce il contenuto iniziale del popup per il metodo "mostraDettagliRicetta"
-    private VBox createPopupInitialContent(BeanRicetta dettagliRicetta) throws SQLException {
+    // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione per il popup "mostraRicetta"
+    private VBox createInitialContent(BeanRicetta dettagliRicetta) throws SQLException {
 
         // Crea VBox per il titolo e dettagli
         VBox popupInitialContent = new VBox();
@@ -604,8 +603,8 @@ public class OttieniRicettaControllerGrafico2 {
         return popupInitialContent;
     }
 
-    // Crea e gestisce solo la sezione dedicata agli ingredienti per il metodo "mostraDettagliRicetta"
-    private VBox createPopupIngredientiContent(BeanRicetta dettagliRicetta) throws SQLException, DAOException {
+    // Creazione grafica griglia dedicata agli ingredienti per il popup "mostraRicetta"
+    private VBox createIngredientiContent(BeanRicetta dettagliRicetta) throws SQLException, DAOException {
 
         // Crea VBox per le altre informazioni
         VBox popupIngredientiContent = new VBox();
@@ -615,67 +614,26 @@ public class OttieniRicettaControllerGrafico2 {
         // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
         BeanIngredienti beanIngredienti = ricette.verificaQuantita(dettagliRicetta);
 
-        // Gestione lista ingredienti
+        // Label ingredienti
         Label ingredientiLabel = new Label("INGREDIENTI");
         ingredientiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
         ingredientiLabel.setAlignment(Pos.CENTER_LEFT);
         VBox.setMargin(ingredientiLabel, new Insets(10, 0, 0, 0));
+
+        // Variabili di gestione della griglia degli ingredienti
         GridPane ingredientiGrid = new GridPane();
         ingredientiGrid.setHgap(10);
         ingredientiGrid.setVgap(5);
         int column = 0;
         int row = 0;
-        validIngredientCount = 0;
-        Date currentDate = new Date();
-        int quantitaDisponibile = 0;
 
-        // Controlla se l'ingrediente è nella lista degli ingredienti validi
-        String tipoIngrediente = null;
+        // Iterazione su ogni ingrediente presente nella lista di ingredienti della ricetta
         for (Ingrediente ingrediente : dettagliRicetta.getIngredienti().getListaIngredienti()) {
-            boolean ingredienteValido = false;
-            for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
-                if (beanIngrediente.getNome().equals(ingrediente.getNome()) && beanIngrediente.getQuantita() >= ingrediente.getQuantita() && beanIngrediente.getScadenza().after(currentDate)) {
-                    ingredienteValido = true;
-                    validIngredientCount++;
-                    break;
-                } else {
-                    quantitaDisponibile = beanIngrediente.getQuantita();
-                }
-            }
 
-            // Recupera il tipo di ingrediente
-            if (ingrediente.getTipo().equals("cibo")) {
-                tipoIngrediente = "g";
-            } else if (ingrediente.getTipo().equals("drink")) {
-                tipoIngrediente = "l";
-            }
+            // Crea la riga dell'ingrediente (box con l'icona e il nome)
+            HBox ingredienteBox = creaRigaIngrediente(ingrediente, beanIngredienti);
 
-            // Crea la label per l'ingrediente
-            Label ingredienteLabel = new Label(ingrediente.getNome().toUpperCase() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
-            ingredienteLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11.9px;");
-
-            // Aggiungi un'icona di successo o di errore accanto all'ingrediente
-            ImageView iconView;
-            if (ingredienteValido) {
-                iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
-            } else {
-                iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
-
-                // Rendi l'icona cliccabile
-                int finalQuantitaDisponibile = quantitaDisponibile;
-                String finalTipoIngrediente = tipoIngrediente;
-                iconView.setOnMouseClicked(event -> mostraAlertIngredienteNonValido(ingrediente, finalQuantitaDisponibile, finalTipoIngrediente));
-
-                // Cambia il cursore quando si passa sopra l'icona per indicare che è cliccabile
-                iconView.setCursor(Cursor.HAND);
-            }
-
-            // Imposta la dimensione dell'icona success/error
-            iconView.setFitWidth(14);
-            iconView.setFitHeight(14);
-
-            // Aggiungi l'icona e la label all'ingrediente nella griglia
-            HBox ingredienteBox = new HBox(5, iconView, ingredienteLabel);
+            // Aggiungi il box appena restituito nella griglia degli ingredienti
             ingredientiGrid.add(ingredienteBox, column, row);
 
             // Gestione cambio colonne della griglia
@@ -703,8 +661,48 @@ public class OttieniRicettaControllerGrafico2 {
         return popupIngredientiContent;
     }
 
-    // Crea e restituisce il contenuto aggiuntivo del popup per il metodo "mostraDettagliRicetta"
-    private VBox createPopupFinalContent(BeanRicetta dettagliRicetta) throws DAOException {
+    // Creazione grafica di un ingrediente per il metodo "createIngredientiContent"
+    private HBox creaRigaIngrediente(Ingrediente ingrediente, BeanIngredienti beanIngredienti) {
+
+        // Variabile per il BeanIngrediente corrispondente
+        BeanIngrediente ingredienteTrovato = null;
+
+        // Trova l'ingrediente corrispondente dalla lista di ingredienti validati
+        for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
+            if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
+                ingredienteTrovato = beanIngrediente;
+                break;
+            }
+        }
+
+        // Aggiungi un'icona di successo o di errore accanto all'ingrediente
+        ImageView iconView;
+        if (ingredienteTrovato != null && ingredienteTrovato.isValido()) {
+            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
+        } else {
+            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
+        }
+        iconView.setFitWidth(14);
+        iconView.setFitHeight(14);
+
+        // Recupera il tipo di ingrediente (cibo o drink)
+        String tipoIngrediente = null;
+        if (ingrediente.getTipo().equals("cibo")) {
+            tipoIngrediente = "g";
+        } else if (ingrediente.getTipo().equals("drink")) {
+            tipoIngrediente = "l";
+        }
+
+        // Crea la label per l'ingrediente
+        Label ingredienteLabel = new Label(ingrediente.getNome().toUpperCase() + " (" + ingrediente.getQuantita() + " " + tipoIngrediente + ")");
+        ingredienteLabel.setStyle("-fx-font-size: 11.9px;");
+
+        // Crea e ritorna l'HBox che contiene l'icona e l'etichetta
+        return new HBox(5, iconView, ingredienteLabel);
+    }
+
+    // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma per il popup "mostraRicetta"
+    private VBox createFinalContent(BeanRicetta dettagliRicetta) throws DAOException {
 
         // Crea VBox per le altre informazioni
         VBox popupFinalContent = new VBox();
@@ -779,24 +777,6 @@ public class OttieniRicettaControllerGrafico2 {
 
         // Restituisci le informazioni aggiuntive
         return popupFinalContent;
-    }
-
-    // Gestione alert della motivazione della non validità dell'ingrediente
-    private void mostraAlertIngredienteNonValido(Ingrediente ingrediente, int quantitaDisponibile, String tipoIngrediente) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Ingrediente non valido");
-        alert.setHeaderText(null);
-
-        String messaggio;
-        if (ingrediente.getQuantita() <= quantitaDisponibile) {
-            messaggio = "L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché:\n" +
-                    "Quantità insufficiente: Richiesto " + ingrediente.getQuantita() + " " + tipoIngrediente + ", disponibile " + quantitaDisponibile + " " + tipoIngrediente + ".\n";
-        } else {
-            messaggio = "L'ingrediente \"" + ingrediente.getNome() + "\" non è valido perché è scaduto.";
-        }
-
-        alert.setContentText(messaggio);
-        alert.showAndWait();
     }
 
     // Metodo per mostrare la homepage utente

@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class FacadeOttieniRicetta {
 
-    // Variabile per mantenere la lista degli ingredienti globalmente in memoria
+    // Variabile per mantenere la lista degli ingredienti della dispensa globalmente (strategia not DAO-oriented)
     private ListIngredienti globalListIngredientiDispensaUtente = null;
 
     // Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
@@ -23,7 +23,7 @@ public class FacadeOttieniRicetta {
         return globalListIngredientiDispensaUtente;
     }
 
-    // Metodo per mostrare le ricette
+    // Metodo per mostrare la lista di ricette in base ai filtri
     public ListRicette mostraRicette(Ricetta ricetta, String filtro, String storage) throws DAOException, SQLException {
 
         // Istazio lista di ricette
@@ -69,19 +69,19 @@ public class FacadeOttieniRicetta {
         // Eseguo la query usando il DAO per aggiornare il DB
         usaRicettaDAO.execute(codRicetta);
 
-        // Ottieni la data corrente
-        Date currentDate = new Date();
-
         // Aggiorno anche la lista globale degli ingredienti della dispensa dell'utente
         if (globalListIngredientiDispensaUtente != null) {
             for (Ingrediente ingredienteRicetta : ricetta.getIngredienti().getListaIngredienti()) {
-                aggiornaDispensa(ingredienteRicetta, currentDate);
+                aggiornaDispensa(ingredienteRicetta);
             }
         }
     }
 
     // Metodo per aggiornare la lista globale degli ingredienti della dispensa dell'utente
-    private void aggiornaDispensa(Ingrediente ingredienteRicetta, Date currentDate) {
+    private void aggiornaDispensa(Ingrediente ingredienteRicetta) {
+
+        // Ottengo la data corrente
+        Date currentDate = new Date();
 
         // Itero attraverso gli ingredienti della dispensa
         for (Ingrediente ingredienteDispensa : globalListIngredientiDispensaUtente.getListaIngredienti()) {

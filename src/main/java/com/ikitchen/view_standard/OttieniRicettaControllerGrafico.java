@@ -440,6 +440,16 @@ public class OttieniRicettaControllerGrafico {
         element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         // Gestore di eventi per il click sull'elemento in base alla provenienza
+        gestisciClickElementoRicetta(element, ricettaBean, provenienzaScelta);
+
+        // Restituzione elemento grafico creato
+        return element;
+    }
+
+    // Gestore di eventi per il click sull'elemento ricetta in base alla provenienza
+    private void gestisciClickElementoRicetta(BorderPane element, BeanRicetta ricettaBean, String provenienzaScelta) {
+
+        // Controllo della provenienza
         if (provenienzaScelta.equals("Da chef")) {
             element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
         } else {
@@ -461,10 +471,9 @@ public class OttieniRicettaControllerGrafico {
                 }
             });
         }
-        return element;
     }
 
-    // Metodo per mostrare la pagina dei dettagli della ricetta scelta
+        // Metodo per mostrare la pagina dei dettagli della ricetta scelta
     private void mostraDettagliRicetta(BeanRicetta ricettaBean) {
 
         // Crea un nuovo Stage per il popup
@@ -593,7 +602,7 @@ public class OttieniRicettaControllerGrafico {
         popupIngredientiContent.setAlignment(Pos.CENTER_LEFT);
         popupIngredientiContent.setSpacing(10);
 
-        // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
+        // Recupero dal controller applicativo la lista di ingredienti fleggati validi e non validi
         BeanIngredienti beanIngredienti = ricette.verificaQuantita(dettagliRicetta);
 
         // Label ingredienti
@@ -606,7 +615,6 @@ public class OttieniRicettaControllerGrafico {
         GridPane ingredientiGrid = new GridPane();
         ingredientiGrid.setHgap(10);
         ingredientiGrid.setVgap(5);
-        String tipoIngrediente = null;
         int column = 0;
         int row = 0;
 
@@ -648,19 +656,19 @@ public class OttieniRicettaControllerGrafico {
     private HBox creaRigaIngrediente(Ingrediente ingrediente, BeanIngredienti beanIngredienti) {
 
         // Variabile per il BeanIngrediente corrispondente
-        BeanIngrediente beanIngrediente = null;
+        BeanIngrediente ingredienteTrovato = null;
 
-        // Trova l'ingrediente corrispondente nella dispensa
-        for (BeanIngrediente bi : beanIngredienti.getListIngredienti()) {
-            if (bi.getNome().equals(ingrediente.getNome())) {
-                beanIngrediente = bi;
+        // Trova l'ingrediente corrispondente dalla lista di ingredienti validati
+        for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
+            if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
+                ingredienteTrovato = beanIngrediente;
                 break;
             }
         }
 
         // Aggiungi un'icona di successo o di errore accanto all'ingrediente
         ImageView iconView;
-        if (beanIngrediente != null && beanIngrediente.getValidita()) {
+        if (ingredienteTrovato != null && ingredienteTrovato.isValido()) {
             iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
         } else {
             iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));

@@ -85,7 +85,7 @@ public class OttieniRicettaControllerApplicativo {
         return beanRicetta;
     }
 
-    /* Restituisce al controller grafico la lista degli ingredienti della dispensa che rispettano i parametri di validazione per la ricetta
+    // Restituisce al controller grafico la lista degli ingredienti della dispensa con ognuno il flag della validità settato
     public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
 
         // Recupero lo username
@@ -94,64 +94,43 @@ public class OttieniRicettaControllerApplicativo {
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente
         ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
 
-        // Ottieni la data corrente
+        // Ottengo la data corrente
         Date currentDate = new Date();
 
         // Crea un BeanIngredienti per contenere gli ingredienti validi
-        BeanIngredienti ingredientiValidi = new BeanIngredienti();
+        BeanIngredienti listIngredienti = new BeanIngredienti();
 
         // Itera attraverso gli ingredienti della ricetta
         for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
+            boolean valido = false;
 
             // Cerca l'ingrediente richiesto nella dispensa dell'utente
             for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
                 if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
 
-                    // Verifica se la quantità è insufficiente oppure se è scaduto
-                    if (ingredienteDispensa.getQuantita() >= ingredienteRichiesto.getQuantita() && ingredienteDispensa.getScadenza().after(currentDate)) {
-                        BeanIngrediente beanIngredienteValido = new BeanIngrediente();
-                        beanIngredienteValido.setNome(ingredienteDispensa.getNome());
-                        beanIngredienteValido.setQuantita(ingredienteDispensa.getQuantita());
-                        beanIngredienteValido.setScadenza(ingredienteDispensa.getScadenza());
-                        ingredientiValidi.getListIngredienti().add(beanIngredienteValido);
-                    }
-
-                    break;  // Esci dal loop interno poiché l'ingrediente è stato trovato e aggiunto
-                }
-            }
-        }
-
-        // Ritorna il BeanIngredienti contenente gli ingredienti validi
-        return ingredientiValidi;
-    }
-     */
-
-    public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
-        String username = Credentials.getUsername();
-        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
-        Date currentDate = new Date();
-        BeanIngredienti ingredientiValidi = new BeanIngredienti();
-
-        for (Ingrediente ingredienteRichiesto : beanRicetta.getIngredienti().getListaIngredienti()) {
-            boolean valido = false;
-
-            for (Ingrediente ingredienteDispensa : ingredientiDispensa.getListaIngredienti()) {
-                if (ingredienteDispensa.getCodIngrediente().equals(ingredienteRichiesto.getCodIngrediente())) {
+                    // Verifica se la quantità è sufficiente ed se non è scaduto
                     if (ingredienteDispensa.getQuantita() >= ingredienteRichiesto.getQuantita() && ingredienteDispensa.getScadenza().after(currentDate)) {
                         valido = true;
                     }
+
+                    // Riempie un nuovo beanIngrediente delle info dell'ingrediente corrente e setta la validità
                     BeanIngrediente beanIngrediente = new BeanIngrediente();
                     beanIngrediente.setNome(ingredienteDispensa.getNome());
                     beanIngrediente.setQuantita(ingredienteDispensa.getQuantita());
                     beanIngrediente.setScadenza(ingredienteDispensa.getScadenza());
                     beanIngrediente.setValidita(valido);
-                    ingredientiValidi.getListIngredienti().add(beanIngrediente);
+
+                    // Aggiunge l'ingrediente corrente alla lista dei beanIngredienti
+                    listIngredienti.getListIngredienti().add(beanIngrediente);
+
+                    // Esci dal loop interno poiché l'ingrediente è stato trovato e aggiunto
                     break;
                 }
             }
         }
 
-        return ingredientiValidi;
+        // Ritorna il BeanIngredienti contenente tutti gli ingredienti (validi e non validi)
+        return listIngredienti;
     }
 
     // Metodo che aggiorna le quantità richiamando il DAO con il facade
