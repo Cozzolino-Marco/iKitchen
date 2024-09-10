@@ -168,7 +168,7 @@ public class OttieniRicettaControllerGraficoAPI {
 
         // Variabili utili
         byte[] immagineTemp;
-        String newUrlImmagine = null;
+        String newUrlImmagine;
 
         // Estraggo l'attributo "src" dal tag <img> di HTML e lo memorizzo come stringa
         String urlImmagine = immagineElement.attr("src");

@@ -61,8 +61,7 @@ public class RegistratiGrafico {
         stage.show();
     }
 
-    // Metodo per effettuare la registrazione chiamato dalla view
-    @FXML
+    @FXML // Metodo per effettuare la registrazione chiamato dalla view
     public void confermaRegistrazione() {
 
         // Prendo i dati dai campi di testo della view registrazione

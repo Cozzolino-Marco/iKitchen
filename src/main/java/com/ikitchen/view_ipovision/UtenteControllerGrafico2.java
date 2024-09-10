@@ -35,7 +35,10 @@ import java.util.Objects;
 public class UtenteControllerGrafico2 {
 
     @FXML
-    private Label labelTitle;
+    public ScrollPane scrollPaneValidi;
+
+    @FXML
+    public ScrollPane scrollPaneNonValidi;
 
     @FXML
     private TabPane tabPane;
@@ -47,10 +50,7 @@ public class UtenteControllerGrafico2 {
     private GridPane gridContainerNonValidi;
 
     @FXML
-    public ScrollPane scrollPaneValidi;
-
-    @FXML
-    public ScrollPane scrollPaneNonValidi;
+    private Label labelTitle;
 
     // Setta il titolo della categoria della barra di navigazione superiore
     public void setLabelTitle(String title) {
@@ -70,6 +70,48 @@ public class UtenteControllerGrafico2 {
 
         // Invoca il metodo per configurare lo stile personalizzato dei tab
         configuraCustomTab();
+    }
+
+    // Visualizzazione della pagina dell'utente
+    public void homePageUtente() throws IOException, DAOException, SQLException {
+        FXMLLoader fxmlLoader;
+        Stage stage = ApplicazioneStage.getStage();
+        Scene scene;
+
+        String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
+        fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        // Forzo la chiamata al controller stesso per rinizializzare la pagina
+        UtenteControllerGrafico2 controller = fxmlLoader.getController();
+        controller.initialize();
+
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+        stage.setTitle("iKitchen");
+        stage.setScene(scene);
+        stage.setResizable(true);
+        stage.show();
+    }
+
+    // Visualizzazione della pagina delle possibili categorie di ricette
+    public void categorieView() throws IOException {
+        FXMLLoader fxmlLoader;
+        Stage stage = ApplicazioneStage.getStage();
+        Scene scene;
+
+        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
+        fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
+        controller.initialize("", "", "", "");
+
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+        stage.setTitle("iKitchen");
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Dallo username, interagisce con controller e DAO per ottenere la lista di ingredienti dal DB
@@ -207,88 +249,14 @@ public class UtenteControllerGrafico2 {
         return element;
     }
 
-    // Visualizzazione della pagina dell'utente
-    public void homePageUtente() throws IOException, DAOException, SQLException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-        // Forzo la chiamata al controller stesso per rinizializzare la pagina
-        UtenteControllerGrafico2 controller = fxmlLoader.getController();
-        controller.initialize();
-
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.setResizable(true);
-        stage.show();
-    }
-
-    // Visualizzazione della pagina delle possibili categorie di ricette
-    public void categorieView() throws IOException {
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-        OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
-        controller.initialize("", "", "", "");
-
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    // Visualizzazione lista delle ricette preferite
-    public void preferitiView() {
-        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
-    }
-
     // Metodo per aggiungere un ingrediente alla propria dispensa
     public void aggiungiProdotto() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
-    // Metodo per effettuare il logout
-    public void logout() throws IOException, SQLException {
-
-        // Ottieni la scelta dell'utente al popup
-        boolean confermato = Popup.mostraPopupConferma("Conferma Logout", "Sei sicuro di voler effettuare il logout?");
-
-        if (confermato) {
-
-            // Azzera le credenziali dell'utente
-            Credentials.setUsername(null);
-            Credentials.setPassword(null);
-            Credentials.setRole(null);
-
-            // Chiude la connessione
-            ConnectionFactory.closeConnection();
-
-            // Carica il file FXML per la vista del login
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
-            Parent root = fxmlLoader.load();
-
-            // Ottieni lo stage attuale dalla classe ApplicazioneStage
-            Stage stage = ApplicazioneStage.getStage();
-
-            // Imposta la nuova scena con il layout caricato
-            Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-            // Cambia la scena dello stage
-            stage.setScene(scene);
-            stage.show();
-        }
+    // Visualizzazione lista delle ricette preferite
+    public void preferitiView() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
     // Metodo per la gestione grafica dei tab
@@ -330,6 +298,38 @@ public class UtenteControllerGrafico2 {
         Tab selectedTab = tabPane.getSelectionModel().getSelectedItem();
         if (selectedTab != null) {
             selectedTab.setStyle(selectedStyle);
+        }
+    }
+
+    // Metodo per effettuare il logout
+    public void logout() throws IOException, SQLException {
+
+        // Ottieni la scelta dell'utente al popup
+        boolean confermato = Popup.mostraPopupConferma("Conferma Logout", "Sei sicuro di voler effettuare il logout?");
+
+        if (confermato) {
+
+            // Azzera le credenziali dell'utente
+            Credentials.setUsername(null);
+            Credentials.setPassword(null);
+            Credentials.setRole(null);
+
+            // Chiude la connessione
+            ConnectionFactory.closeConnection();
+
+            // Carica il file FXML per la vista del login
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Ottieni lo stage attuale dalla classe ApplicazioneStage
+            Stage stage = ApplicazioneStage.getStage();
+
+            // Imposta la nuova scena con il layout caricato
+            Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+            // Cambia la scena dello stage
+            stage.setScene(scene);
+            stage.show();
         }
     }
 }

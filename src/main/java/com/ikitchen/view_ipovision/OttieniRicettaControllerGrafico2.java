@@ -45,15 +45,6 @@ public class OttieniRicettaControllerGrafico2 {
     private Label categoriaLabelTitle;
 
     @FXML
-    private ComboBox provenienzaComboBox;
-
-    @FXML
-    private ComboBox filtraggioComboBox;
-
-    @FXML
-    private ComboBox storageComboBox;
-
-    @FXML
     private GridPane gridContainerRicette;
 
     @FXML
@@ -62,21 +53,30 @@ public class OttieniRicettaControllerGrafico2 {
     @FXML
     private VBox categoriesContainer;
 
+    @FXML
+    private ComboBox provenienzaComboBox;
+
+    @FXML
+    private ComboBox filtraggioComboBox;
+
+    @FXML
+    private ComboBox storageComboBox;
+
     // Dichiarazioni costanti
     private static final String APP_NAME = "iKitchen";
-    private static final String WARNING_MESSAGE_TITLE = "Attenzione";
-    private static final String WARNING_POPUP_TYPE = "warning";
+    private static final String DEFAULT_IMAGE = "/default_image.png";
     private static final String ERROR_MESSAGE_TITLE = "Errore";
     private static final String ERROR_POPUP_TYPE = "error";
-    private static final String DEFAULT_IMAGE = "/default_image.png";
+    private static final String WARNING_MESSAGE_TITLE = "Attenzione";
+    private static final String WARNING_POPUP_TYPE = "warning";
 
     // Altre dichiarazioni variabili
-    private OttieniRicettaControllerApplicativo ricette = null;
-    private int validIngredientCount = 0;
     private String categoriaScelta;
     private String provenienzaScelta;
     private String filtraggioScelta;
     private String storageScelto;
+    private int validIngredientCount = 0;
+    private OttieniRicettaControllerApplicativo ricette = null;
 
     // Configurazione iniziale degli elementi grafici
     public void initialize(String categoriaScelta, String provenienzaScelta, String filtraggioScelta, String storageScelto) {
@@ -98,38 +98,17 @@ public class OttieniRicettaControllerGrafico2 {
     }
 
     // Setter delle tre informazioni di filtraggio delle ricette
-    public void setCategoria(String categoria) {
-        this.categoriaScelta = categoria;
-    }
-    public void setProvenienza(String provenienza) {
-        this.provenienzaScelta = provenienza;
+    public void setStorage(String storage) {
+        this.storageScelto = storage;
     }
     public void setFiltraggio(String filtraggio) {
         this.filtraggioScelta = filtraggio;
     }
-    public void setStorage(String storage) {
-        this.storageScelto = storage;
+    public void setProvenienza(String provenienza) {
+        this.provenienzaScelta = provenienza;
     }
-
-    // Metodo per mostrare la pagina della scelta delle categorie
-    public void categorieView() throws IOException {
-
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-
-        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-        OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
-        controller.initialize("", "", "", "");
-
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-        stage.setTitle(APP_NAME);
-        stage.setScene(scene);
-        stage.show();
+    public void setCategoria(String categoria) {
+        this.categoriaScelta = categoria;
     }
 
     @FXML // Metodo per aggiornare dinamicamente i bottoni delle categorie
@@ -212,31 +191,20 @@ public class OttieniRicettaControllerGrafico2 {
         categoriesContainer.setAlignment(Pos.CENTER);
     }
 
-    @FXML // Metodo per mostrare la pagina dei filtri
-    public void filtriView() throws IOException {
+    // Metodo per mostrare la homepage utente
+    public void homePageUtente() throws IOException {
+        FXMLLoader fxmlLoader;
+        Stage stage = ApplicazioneStage.getStage();
+        Scene scene;
 
-        // Mostra un popup di errore se la categoria non è stata selezionata
-        if (categoriaScelta == null) {
-            Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Prima di andare avanti, seleziona per favore la categoria della ricetta!", WARNING_POPUP_TYPE);
-        } else {
-            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
+        String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
+        fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-            String fxmlFile = "/com/IpovisionGUI/filtriView2.fxml";
-            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-
-            OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
-            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
-            controller.initialize("", "", "", "");
-
-            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-            stage.setTitle(APP_NAME);
-            stage.setScene(scene);
-            stage.show();
-        }
+        stage.setTitle(APP_NAME);
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
@@ -288,6 +256,33 @@ public class OttieniRicettaControllerGrafico2 {
                     row++;
                 }
             }
+        }
+    }
+
+    @FXML // Metodo per mostrare la pagina dei filtri
+    public void filtriView() throws IOException {
+
+        // Mostra un popup di errore se la categoria non è stata selezionata
+        if (categoriaScelta == null) {
+            Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Prima di andare avanti, seleziona per favore la categoria della ricetta!", WARNING_POPUP_TYPE);
+        } else {
+            // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            Stage stage = ApplicazioneStage.getStage();
+            Scene scene;
+
+            String fxmlFile = "/com/IpovisionGUI/filtriView2.fxml";
+            Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+            OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
+            controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
+            controller.initialize("", "", "", "");
+
+            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+            stage.setTitle(APP_NAME);
+            stage.setScene(scene);
+            stage.show();
         }
     }
 
@@ -464,33 +459,6 @@ public class OttieniRicettaControllerGrafico2 {
         return element;
     }
 
-    // Gestore di eventi per il click sull'elemento ricetta in base alla provenienza
-    private void gestisciClickElementoRicetta(BorderPane element, BeanRicetta ricettaBean, String provenienzaScelta) {
-
-        // Controllo della provenienza
-        if (provenienzaScelta.equals("Da chef")) {
-            element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
-        } else {
-            element.setOnMouseClicked(event -> {
-                try {
-                    // Ottieni il link della ricetta
-                    String url = ricettaBean.getLinkRicetta();
-
-                    // Verifica che il sistema supporti la navigazione su web
-                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                        // Apri il link nel browser predefinito
-                        Desktop.getDesktop().browse(new URI(url));
-                    } else {
-                        // Gestisci il caso in cui il sistema non supporti l'apertura di URL
-                        Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);
-                    }
-                } catch (IOException | URISyntaxException e) {
-                    Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso del link della ricetta.", ERROR_POPUP_TYPE);
-                }
-            });
-        }
-    }
-
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta
     private void mostraDettagliRicetta(BeanRicetta ricettaBean) {
 
@@ -541,6 +509,33 @@ public class OttieniRicettaControllerGrafico2 {
 
         } catch (DAOException | SQLException e) {
             Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Errore nel caricamento dei dettagli della ricetta.", ERROR_POPUP_TYPE);
+        }
+    }
+
+    // Gestore di eventi per il click sull'elemento ricetta in base alla provenienza
+    private void gestisciClickElementoRicetta(BorderPane element, BeanRicetta ricettaBean, String provenienzaScelta) {
+
+        // Controllo della provenienza
+        if (provenienzaScelta.equals("Da chef")) {
+            element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
+        } else {
+            element.setOnMouseClicked(event -> {
+                try {
+                    // Ottieni il link della ricetta
+                    String url = ricettaBean.getLinkRicetta();
+
+                    // Verifica che il sistema supporti la navigazione su web
+                    if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                        // Apri il link nel browser predefinito
+                        Desktop.getDesktop().browse(new URI(url));
+                    } else {
+                        // Gestisci il caso in cui il sistema non supporti l'apertura di URL
+                        Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);
+                    }
+                } catch (IOException | URISyntaxException e) {
+                    Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso del link della ricetta.", ERROR_POPUP_TYPE);
+                }
+            });
         }
     }
 
@@ -788,24 +783,29 @@ public class OttieniRicettaControllerGrafico2 {
         return popupFinalContent;
     }
 
-    // Metodo per mostrare la homepage utente
-    public void homePageUtente() throws IOException {
+    // Metodo per mostrare la pagina dei preferiti
+    public void preferitiView() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+    }
+
+    // Metodo per mostrare la pagina della scelta delle categorie
+    public void categorieView() throws IOException {
+
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
+        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+
+        OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
+        controller.initialize("", "", "", "");
+
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         stage.setTitle(APP_NAME);
         stage.setScene(scene);
         stage.show();
-    }
-
-    // Metodo per mostrare la pagina dei preferiti
-    public void preferitiView() {
-        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 }

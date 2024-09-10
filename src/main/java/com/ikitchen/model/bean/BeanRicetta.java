@@ -22,9 +22,6 @@ public class BeanRicetta {
     int likes;
     String linkRicetta;
     String categoria;
-    String provenienza;
-    String filtraggio;
-    String storage;
 
     // Costruttore di default vuoto usato da scrapeRicette
     public BeanRicetta() {}

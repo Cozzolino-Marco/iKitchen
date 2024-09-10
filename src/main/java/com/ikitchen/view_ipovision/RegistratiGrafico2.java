@@ -22,10 +22,10 @@ import java.sql.SQLException;
 public class RegistratiGrafico2 {
 
     @FXML
-    private TextField textFieldNome;
+    private PasswordField textFieldPassword;
 
     @FXML
-    private TextField textFieldCognome;
+    private PasswordField textFieldRipetiPassword;
 
     @FXML
     private ComboBox<Role> comboBoxRuolo;
@@ -34,36 +34,17 @@ public class RegistratiGrafico2 {
     private TextField textFieldUsername;
 
     @FXML
-    private PasswordField textFieldPassword;
+    private TextField textFieldNome;
 
     @FXML
-    private PasswordField textFieldRipetiPassword;
+    private TextField textFieldCognome;
 
     public void initialize() {
         // Configura la ComboBox con i valori dell'enum Role
         comboBoxRuolo.setItems(FXCollections.observableArrayList(Role.values()));
     }
 
-    // Chiamata al controller del login
-    public void loginView() throws IOException {
-
-        // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
-        Parent root = fxmlLoader.load();
-
-        // Ottieni lo stage attuale dalla classe ApplicazioneStage
-        Stage stage = ApplicazioneStage.getStage();
-
-        // Imposta la nuova scena con il layout caricato
-        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-        // Cambia la scena dello stage
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    // Metodo per effettuare la registrazione chiamato dalla view
-    @FXML
+    @FXML // Metodo per effettuare la registrazione chiamato dalla view
     public void confermaRegistrazione() {
 
         // Prendo i dati dai campi di testo della view registrazione
@@ -116,5 +97,23 @@ public class RegistratiGrafico2 {
         } catch (DAOException | SQLException | IOException e) {
             Popup.mostraPopup("Errore", "Si è verificato un errore durante la registrazione.", "error");
         }
+    }
+
+    // Chiamata al controller del login
+    public void loginView() throws IOException {
+
+        // Carica il file FXML per la vista del login
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        Stage stage = ApplicazioneStage.getStage();
+
+        // Imposta la nuova scena con il layout caricato
+        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+        // Cambia la scena dello stage
+        stage.setScene(scene);
+        stage.show();
     }
 }

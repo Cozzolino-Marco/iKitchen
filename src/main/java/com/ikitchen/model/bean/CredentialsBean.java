@@ -25,12 +25,6 @@ public class CredentialsBean {
     public String getNome() {
         return nome;
     }
-    public String getCognome() {
-        return cognome;
-    }
-    public Role getRole() {
-        return role;
-    }
     public String getUsername() {
         return username;
     }

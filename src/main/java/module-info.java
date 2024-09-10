@@ -15,4 +15,7 @@ module com.example.ikitchen {
     opens com.ikitchen.model.domain to javafx.fxml;
     exports com.ikitchen.model.utility;
     opens com.ikitchen.model.utility to javafx.fxml;
+
+    exports com.ikitchen.exception;
+    exports com.ikitchen.model.bean;
 }

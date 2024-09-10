@@ -25,7 +25,7 @@ public class LoginGrafico {
     @FXML
     private PasswordField textFieldPassword;
 
-    @FXML
+    @FXML // Metodo per il login
     public void loginView() throws IOException {
         // Carica il file FXML per la vista del login
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
@@ -42,30 +42,33 @@ public class LoginGrafico {
         stage.show();
     }
 
-    // Acquisizione credienziali e passaggio al controller del login
-    @FXML
-    protected void onLoginButtonClick() throws IOException {
-        CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
-        LoginController loginController = new LoginController();
+    // Metodo per il cambio della grafica
+    public void cambiaGrafica()throws IOException {
 
-        // Chiamata al login controller per effettuare il login
-        try {
-            loginController.start(credB);
+        // Invoca il metodo per il cambio grafica
+        ScreenSize.changeGUI();
 
-            // Recupera il nome associato allo username
-            loginController.recuperaNome(credB);
+        // Settaggi scena
+        FXMLLoader fxmlLoader;
+        Stage stage = ApplicazioneStage.getStage();
+        Scene scene;
+        String fxmlFile;
 
-            // Controlla il ruolo dell'utente e carica la view appropriata
-            if (Credentials.getRole() != null) {
-                cambiaViewDopoLogin();
-            } else {
-                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-                loginView();
-            }
-        } catch (DAOException | SQLException | IOException e) {
-            Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-            loginView();
+        // Caricamento del login in base alla GUI
+        if (ScreenSize.getGUI() == 0){
+            fxmlFile = "/com/StandardGUI/login.fxml";
+        } else {
+            fxmlFile = "/com/IpovisionGUI/login2.fxml";
         }
+
+        // Caricamento della scena
+        fxmlLoader = new FXMLLoader();
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+        stage.setTitle("iKitchen");
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        stage.show();
     }
 
     // Metodo che gestisce il caricamento della view in base al ruolo
@@ -111,32 +114,28 @@ public class LoginGrafico {
         stage.show();
     }
 
-    // Metodo per il cambio della grafica
-    public void cambiaGrafica()throws IOException {
+    @FXML // Acquisizione credienziali e passaggio al controller del login
+    protected void onLoginButtonClick() throws IOException {
+        CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+        LoginController loginController = new LoginController();
 
-        // Invoca il metodo per il cambio grafica
-        ScreenSize.changeGUI();
+        // Chiamata al login controller per effettuare il login
+        try {
+            loginController.start(credB);
 
-        // Settaggi scena
-        FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
-        String fxmlFile;
+            // Recupera il nome associato allo username
+            loginController.recuperaNome(credB);
 
-        // Caricamento del login in base alla GUI
-        if (ScreenSize.getGUI() == 0){
-            fxmlFile = "/com/StandardGUI/login.fxml";
-        } else {
-            fxmlFile = "/com/IpovisionGUI/login2.fxml";
+            // Controlla il ruolo dell'utente e carica la view appropriata
+            if (Credentials.getRole() != null) {
+                cambiaViewDopoLogin();
+            } else {
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+                loginView();
+            }
+        } catch (DAOException | SQLException | IOException e) {
+            Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+            loginView();
         }
-
-        // Caricamento della scena
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
     }
 }

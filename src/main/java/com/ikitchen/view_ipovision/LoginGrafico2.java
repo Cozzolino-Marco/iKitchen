@@ -25,11 +25,10 @@ public class LoginGrafico2 {
     @FXML
     private PasswordField textFieldPassword;
 
-    @FXML
-    public void loginView() throws IOException {
-
+    // Chiamata al controller della registrazione
+    public void registratiView() throws IOException {
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/registratiView2.fxml"));
         Parent root = fxmlLoader.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
@@ -43,8 +42,7 @@ public class LoginGrafico2 {
         stage.show();
     }
 
-    // Acquisizione credienziali e passaggio al controller del login
-    @FXML
+    @FXML // Acquisizione credienziali e passaggio al controller del login
     protected void onLoginButtonClick() throws IOException {
         CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
         LoginController loginController = new LoginController();
@@ -67,6 +65,24 @@ public class LoginGrafico2 {
             Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
             loginView();
         }
+    }
+
+    @FXML // Metodo per il login
+    public void loginView() throws IOException {
+
+        // Carica il file FXML per la vista del login
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+        Parent root = fxmlLoader.load();
+
+        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        Stage stage = ApplicazioneStage.getStage();
+
+        // Imposta la nuova scena con il layout caricato
+        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+
+        // Cambia la scena dello stage
+        stage.setScene(scene);
+        stage.show();
     }
 
     // Metodo che gestisce il caricamento della view in base al ruolo
@@ -97,23 +113,6 @@ public class LoginGrafico2 {
         stage.setTitle("iKitchen");
         stage.setScene(scene);
         stage.centerOnScreen();
-        stage.show();
-    }
-
-    // Chiamata al controller della registrazione
-    public void registratiView() throws IOException {
-        // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/registratiView2.fxml"));
-        Parent root = fxmlLoader.load();
-
-        // Ottieni lo stage attuale dalla classe ApplicazioneStage
-        Stage stage = ApplicazioneStage.getStage();
-
-        // Imposta la nuova scena con il layout caricato
-        Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-
-        // Cambia la scena dello stage
-        stage.setScene(scene);
         stage.show();
     }
 

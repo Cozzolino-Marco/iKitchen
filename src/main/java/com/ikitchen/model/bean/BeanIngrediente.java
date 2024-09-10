@@ -13,10 +13,12 @@ public class BeanIngrediente {
     private int limite;
     private Blob immagine;
     private String tipo;
+    private boolean validita;
 
+    // Costruttore vuoto usato dal metodo verificaQuantita del controller applicativo di ottieni ricetta
     public BeanIngrediente() {}
 
-    // Per mandare i dati dal controller grafico a quello applicativo
+    // Per mandare i dati dal controller grafico a quello applicativo di ottieni ricetta
     public BeanIngrediente (String codIngrediente, String nome, Date scadenza, int quantita, int limite, Blob immagine, String tipo) {
 
         // Controllo della consistenza del nome
@@ -59,14 +61,11 @@ public class BeanIngrediente {
     public void setQuantita(int quantita) {
         this.quantita = quantita;
     }
-    public void setLimite(int limite) {
-        this.limite = limite;
+    public void setValidita(boolean validita) {
+        this.validita = validita;
     }
 
     // Getter
-    public String getCodIngrediente() {
-        return codIngrediente;
-    }
     public String getNome() {
         return nome;
     }
@@ -76,20 +75,11 @@ public class BeanIngrediente {
     public int getQuantita() {
         return quantita;
     }
-    public int getLimite() {
-        return limite;
-    }
     public Blob getImmagine() {
         return immagine;
     }
     public String getTipo() {
         return tipo;
-    }
-
-
-    private boolean validita;
-    public void setValidita(boolean validita) {
-        this.validita = validita;
     }
     public boolean isValido() {
         return validita;
