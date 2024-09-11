@@ -52,6 +52,11 @@ public class UtenteControllerGrafico2 {
     @FXML
     private Label labelTitle;
 
+    // Dichiarazioni costanti
+    private static final String WARNING_POPUP_TITLE = "IN COSTRUZIONE";
+    private static final String WARNING_POPUP_MESSAGE = "SEZIONE NON ANCORA IMPLEMENTATA!";
+    private static final String WARNING_POPUP_TYPE = "construction";
+
     // Setta il titolo della categoria della barra di navigazione superiore
     public void setLabelTitle(String title) {
         labelTitle.setText(title);
@@ -251,17 +256,17 @@ public class UtenteControllerGrafico2 {
 
     // Metodo per aggiungere un ingrediente alla propria dispensa
     public void aggiungiProdotto() {
-        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+        Popup.mostraPopup(WARNING_POPUP_TITLE, WARNING_POPUP_MESSAGE, WARNING_POPUP_TYPE);
     }
 
     // Metodo per invitare un familiare alla condivisione della dispensa di casa
     public void invitaFamiliare() {
-        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+        Popup.mostraPopup(WARNING_POPUP_TITLE, WARNING_POPUP_MESSAGE, WARNING_POPUP_TYPE);
     }
 
     // Visualizzazione lista delle ricette preferite
     public void preferitiView() {
-        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+        Popup.mostraPopup(WARNING_POPUP_TITLE, WARNING_POPUP_MESSAGE, WARNING_POPUP_TYPE);
     }
 
     // Metodo per la gestione grafica dei tab
