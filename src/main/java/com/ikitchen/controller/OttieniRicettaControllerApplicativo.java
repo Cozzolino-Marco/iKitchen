@@ -88,11 +88,8 @@ public class OttieniRicettaControllerApplicativo {
     // Restituisce al controller grafico la lista degli ingredienti della dispensa con ognuno il flag della validità settato
     public BeanIngredienti verificaQuantita(BeanRicetta beanRicetta) throws DAOException, SQLException {
 
-        // Recupero lo username
-        String username = Credentials.getUsername();
-
         // Recupera la lista degli ingredienti disponibili nella dispensa dell'utente
-        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente(username);
+        ListIngredienti ingredientiDispensa = facadeOttieniRicetta.ottieniIngredientiDispensaUtente();
 
         // Ottengo la data corrente
         Date currentDate = new Date();

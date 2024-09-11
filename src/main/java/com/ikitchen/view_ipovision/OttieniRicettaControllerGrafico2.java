@@ -114,7 +114,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     }
 
     @FXML // Metodo per aggiornare dinamicamente i bottoni delle categorie
-    public void loadCategories() {
+    private void loadCategories() {
         categoriesContainer.getChildren().clear();
 
         // Creare una LinkedHashMap per mantenere l'ordine di inserimento
@@ -289,7 +289,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     }
 
     @FXML // Metodo che mostra le ricette caricate a livello grafico
-    protected void mostraRicette() throws IOException {
+    public void mostraRicette() throws IOException {
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
         if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null || storageComboBox.getValue() == null) {
@@ -541,7 +541,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         }
     }
 
-    // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione per il popup "mostraRicetta"
+    // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione per il popup "mostraDettagliRicetta"
     private VBox createInitialContent(BeanRicetta dettagliRicetta) throws SQLException {
 
         // Crea VBox per il titolo e dettagli
@@ -609,7 +609,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         return popupInitialContent;
     }
 
-    // Creazione grafica griglia dedicata agli ingredienti per il popup "mostraRicetta"
+    // Creazione grafica griglia dedicata agli ingredienti per il popup "mostraDettagliRicetta"
     private VBox createIngredientiContent(BeanRicetta dettagliRicetta) throws SQLException, DAOException {
 
         // Crea VBox per le altre informazioni
@@ -708,7 +708,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         return new HBox(5, iconView, ingredienteLabel);
     }
 
-    // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma per il popup "mostraRicetta"
+    // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma per il popup "mostraDettagliRicetta"
     private VBox createFinalContent(BeanRicetta dettagliRicetta) throws DAOException {
 
         // Crea VBox per le altre informazioni

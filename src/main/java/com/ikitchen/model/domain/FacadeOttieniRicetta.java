@@ -2,6 +2,8 @@ package com.ikitchen.model.domain;
 
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.dao.*;
+import com.ikitchen.model.utility.Credentials;
+
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -11,7 +13,10 @@ public class FacadeOttieniRicetta {
     private ListIngredienti globalListIngredientiDispensaUtente = null;
 
     // Metodo per recuperare la lista dei prodotti nella dispensa dell'utente
-    public ListIngredienti ottieniIngredientiDispensaUtente(String username) throws DAOException, SQLException {
+    public ListIngredienti ottieniIngredientiDispensaUtente() throws DAOException, SQLException {
+
+        // Recupero lo username
+        String username = Credentials.getUsername();
 
         // Se la lista non è presente in memoria, chiamare il DAO per recuperare gli ingredienti
         if (globalListIngredientiDispensaUtente == null) {
