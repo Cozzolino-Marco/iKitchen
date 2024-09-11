@@ -1,7 +1,6 @@
 package com.ikitchen.model.bean;
 
 import com.ikitchen.model.domain.Role;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,8 +15,8 @@ public class CredentialsBean {
     private String cognome;
 
     // Regex per validare un'email
-    private String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    Pattern pattern = Pattern.compile(EMAIL_REGEX);
+    private String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    Pattern pattern = Pattern.compile(emailRegex);
 
     // Usato dal controller grafico della registrazione per popolare i dati utente
     public CredentialsBean() {}

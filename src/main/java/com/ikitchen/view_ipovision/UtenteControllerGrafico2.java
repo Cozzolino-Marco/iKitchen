@@ -254,6 +254,11 @@ public class UtenteControllerGrafico2 {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
+    // Metodo per invitare un familiare alla condivisione della dispensa di casa
+    public void invitaFamiliare() {
+        Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
+    }
+
     // Visualizzazione lista delle ricette preferite
     public void preferitiView() {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");

@@ -6,6 +6,7 @@ import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
@@ -25,6 +26,9 @@ public class LoginGrafico {
     @FXML
     private PasswordField textFieldPassword;
 
+    // Dichiarazioni costanti
+    private static final String ERROR_POPUP_TYPE = "error";
+
     @FXML // Acquisizione credienziali e passaggio al controller del login
     protected void onLoginButtonClick() throws IOException {
         
@@ -33,7 +37,7 @@ public class LoginGrafico {
         try {
             credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
         } catch (IllegalArgumentException e) {
-            Popup.mostraPopup("Errore", "L'email fornita non è valida!", "error");
+            Popup.mostraPopup("Errore email", "L'email fornita non è valida!", ERROR_POPUP_TYPE);
             loginView();
         }
 
@@ -51,12 +55,12 @@ public class LoginGrafico {
                 // Controlla il ruolo dell'utente e carica la view appropriata
                 if (Credentials.getRole() != null) {
                     cambiaViewDopoLogin();
-                } else {
-                    Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-                    loginView();
                 }
+            } catch (LoadException e) {
+                Popup.mostraPopup("Caricamento non riuscito", "Impossibile caricamento della pagina!", ERROR_POPUP_TYPE);
+                loginView();
             } catch (DAOException | SQLException | IOException e) {
-                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", ERROR_POPUP_TYPE);
                 loginView();
             }
         }

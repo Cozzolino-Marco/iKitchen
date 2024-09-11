@@ -18,4 +18,6 @@ module com.example.ikitchen {
 
     exports com.ikitchen.exception;
     exports com.ikitchen.model.bean;
+    exports com.ikitchen.view_api;
+    opens com.ikitchen.view_api to javafx.fxml;
 }

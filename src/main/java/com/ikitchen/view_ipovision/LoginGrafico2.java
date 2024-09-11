@@ -6,6 +6,7 @@ import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
@@ -18,6 +19,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginGrafico2 {
+
+    // Dichiarazioni costanti
+    private static final String ERROR_POPUP_TYPE = "error";
 
     @FXML
     private TextField textFieldUsername;
@@ -44,26 +48,38 @@ public class LoginGrafico2 {
 
     @FXML // Acquisizione credienziali e passaggio al controller del login
     protected void onLoginButtonClick() throws IOException {
-        CredentialsBean credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
-        LoginController loginController = new LoginController();
 
-        // Chiamata al login controller per effettuare il login
+        // Gestione eccezione per validità email
+        CredentialsBean credB = null;
         try {
-            loginController.start(credB);
+            credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+        } catch (IllegalArgumentException e) {
+            Popup.mostraPopup("Errore email", "L'email fornita non è valida!", ERROR_POPUP_TYPE);
+            loginView();
+        }
 
-            // Recupera il nome associato allo username
-            loginController.recuperaNome(credB);
+        // Verifica se credB è stato istanziato correttamente
+        if (credB != null) {
+            LoginController loginController = new LoginController();
 
-            // Controlla il ruolo dell'utente e carica la view appropriata
-            if (Credentials.getRole() != null) {
-                cambiaViewDopoLogin();
-            } else {
-                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
+            // Chiamata al login controller per effettuare il login
+            try {
+                loginController.start(credB);
+
+                // Recupera il nome associato allo username
+                loginController.recuperaNome(credB);
+
+                // Controlla il ruolo dell'utente e carica la view appropriata
+                if (Credentials.getRole() != null) {
+                    cambiaViewDopoLogin();
+                }
+            } catch (LoadException e) {
+                Popup.mostraPopup("Caricamento non riuscito", "Impossibile caricamento della pagina!", ERROR_POPUP_TYPE);
+                loginView();
+            } catch (DAOException | SQLException | IOException e) {
+                Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", ERROR_POPUP_TYPE);
                 loginView();
             }
-        } catch (DAOException | SQLException | IOException e) {
-            Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", "error");
-            loginView();
         }
     }
 

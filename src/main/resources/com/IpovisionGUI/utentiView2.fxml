@@ -30,12 +30,13 @@
             </HBox>
 
             <!-- Nav bar -->
-            <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="200.0" minHeight="60.0">
+            <HBox style="-fx-background-color: #E5E5E5;" alignment="CENTER" spacing="150.0" minHeight="60.0">
                 <Button text="LOGOUT" onAction="#logout"/>
                 <Button text="CATEGORIE" onAction="#categorieView"/>
                 <Button text="HOME" onAction="#homePageUtente"/>
                 <Button text="PREFERITI" onAction="#preferitiView"/>
                 <Button text="AGGIUNGI" onAction="#aggiungiProdotto"/>
+                <Button text="INVITA" onAction="#invitaFamiliare"/>
             </HBox>
         </VBox>
     </top>

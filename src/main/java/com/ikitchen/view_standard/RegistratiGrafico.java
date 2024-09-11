@@ -93,7 +93,7 @@ public class RegistratiGrafico {
         try {
             beanRegistrazione.setUsername(username);
         } catch (IllegalArgumentException e) {
-            Popup.mostraPopup("Errore", "L'email fornita non è valida!", "error");
+            Popup.mostraPopup("Errore email", "L'email fornita non è valida!", "error");
             emailValida = false;  // L'email non è valida, quindi si ferma il flusso
         }
 

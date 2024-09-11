@@ -1,6 +1,8 @@
 package com.ikitchen.view_standard;
 
 import static com.ikitchen.ApplicationStart.getHostServicesInstance;
+
+import com.ikitchen.controller.GraphicController;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
@@ -41,7 +43,7 @@ import java.util.Objects;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class OttieniRicettaControllerGrafico {
+public class OttieniRicettaControllerGrafico implements GraphicController {
 
     // Elementi grafici
     @FXML
@@ -115,6 +117,7 @@ public class OttieniRicettaControllerGrafico {
     }
 
     // Metodo per mostrare la pagina della scelta delle categorie
+    @Override
     public void categorieView() throws IOException {
 
         FXMLLoader fxmlLoader;
@@ -662,7 +665,6 @@ public class OttieniRicettaControllerGrafico {
         for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
             if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
                 ingredienteTrovato = beanIngrediente;
-                validIngredientCount++;
                 break;
             }
         }
@@ -671,6 +673,7 @@ public class OttieniRicettaControllerGrafico {
         ImageView iconView;
         if (ingredienteTrovato != null && ingredienteTrovato.isValido()) {
             iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
+            validIngredientCount++;
         } else {
             iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
         }

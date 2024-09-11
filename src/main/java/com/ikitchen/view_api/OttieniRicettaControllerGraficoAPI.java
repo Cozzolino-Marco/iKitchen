@@ -1,4 +1,4 @@
-package com.ikitchen.view_standard;
+package com.ikitchen.view_api;
 
 import com.ikitchen.model.bean.BeanRicetta;
 import com.ikitchen.model.bean.BeanRicette;
@@ -41,7 +41,7 @@ public class OttieniRicettaControllerGraficoAPI {
     }
 
     // Metodo per il web scraping delle ricette
-    public BeanRicette scrapeRicette(Document doc) throws IOException, SQLException {
+    private BeanRicette scrapeRicette(Document doc) throws IOException, SQLException {
 
         BeanRicette ricetteBean = new BeanRicette();
 
@@ -98,7 +98,7 @@ public class OttieniRicettaControllerGraficoAPI {
     }
 
     // Metodo che genera l'URL al quale connettersi
-    public String generateUrl(String categoria, int pageNumber) {
+    private String generateUrl(String categoria, int pageNumber) {
 
         // Link di riferimento
         String baseUrlCatalogo = "https://www.giallozafferano.it/ricette-cat/";
@@ -164,7 +164,7 @@ public class OttieniRicettaControllerGraficoAPI {
     }
 
     // Metodo che converte gli URL relativi delle immagini in assoluti se necessario
-    public Blob imageControlUrl(Document docRicetta, Element immagineElement) throws SQLException, IOException {
+    private Blob imageControlUrl(Document docRicetta, Element immagineElement) throws SQLException, IOException {
 
         // Variabili utili
         byte[] immagineTemp;
