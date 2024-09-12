@@ -95,14 +95,14 @@ public class RegistratiGrafico2 {
                 Parent root = fxmlLoader.load();
 
                 // Ottieni lo stage attuale dalla classe ApplicazioneStage
-                Stage stage = ApplicazioneStage.getStage();
+                Stage actualStage = ApplicazioneStage.getStage();
 
                 // Imposta la nuova scena con il layout caricato
                 Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
                 // Cambia la scena dello stage
-                stage.setScene(scene);
-                stage.show();
+                actualStage.setScene(scene);
+                actualStage.show();
 
                 // Messaggio di successo
                 Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");

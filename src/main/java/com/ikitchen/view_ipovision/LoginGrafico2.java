@@ -73,11 +73,15 @@ public class LoginGrafico2 {
                 if (Credentials.getRole() != null) {
                     cambiaViewDopoLogin();
                 }
+
             } catch (LoadException e) {
+
                 // Warning
                 Popup.mostraPopup("Caricamento non riuscito", "Impossibile caricamento della pagina!", ERROR_POPUP_TYPE);
                 loginView();
+
             } catch (DAOException | SQLException | IOException e) {
+
                 // Errore
                 Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", ERROR_POPUP_TYPE);
                 loginView();

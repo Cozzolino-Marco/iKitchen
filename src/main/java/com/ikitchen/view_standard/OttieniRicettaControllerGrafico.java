@@ -1,7 +1,6 @@
 package com.ikitchen.view_standard;
 
 import static com.ikitchen.ApplicationStart.getHostServicesInstance;
-
 import com.ikitchen.controller.GraphicController;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
 import com.ikitchen.exception.DAOException;

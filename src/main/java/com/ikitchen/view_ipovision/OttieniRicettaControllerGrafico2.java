@@ -1,7 +1,6 @@
 package com.ikitchen.view_ipovision;
 
 import static com.ikitchen.ApplicationStart.getHostServicesInstance;
-
 import com.ikitchen.controller.GraphicController;
 import com.ikitchen.controller.OttieniRicettaControllerApplicativo;
 import com.ikitchen.exception.DAOException;
@@ -560,21 +559,21 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         dettagli.setAlignment(Pos.CENTER);
 
         // Gestione grafica dell'immagine della ricetta
-        ImageView immagineRicetta;
+        ImageView imageRecipeView;
         if (dettagliRicetta.getImmagine() != null && dettagliRicetta.getImmagine().getBinaryStream() != null) {
-            immagineRicetta = new ImageView(new Image(dettagliRicetta.getImmagine().getBinaryStream()));
-            immagineRicetta.setFitWidth(250);
-            immagineRicetta.setFitHeight(150);
+            imageRecipeView = new ImageView(new Image(dettagliRicetta.getImmagine().getBinaryStream()));
+            imageRecipeView.setFitWidth(250);
+            imageRecipeView.setFitHeight(150);
         } else {
-            immagineRicetta = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE))));
-            immagineRicetta.setFitWidth(180);
-            immagineRicetta.setFitHeight(180);
+            imageRecipeView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(DEFAULT_IMAGE))));
+            imageRecipeView.setFitWidth(180);
+            imageRecipeView.setFitHeight(180);
         }
-        immagineRicetta.setPreserveRatio(true);
-        Rectangle clip = new Rectangle(immagineRicetta.getFitWidth(), immagineRicetta.getFitHeight());
+        imageRecipeView.setPreserveRatio(true);
+        Rectangle clip = new Rectangle(imageRecipeView.getFitWidth(), imageRecipeView.getFitHeight());
         clip.setArcWidth(30);
         clip.setArcHeight(30);
-        immagineRicetta.setClip(clip);
+        imageRecipeView.setClip(clip);
 
         // StackPane per cuoco e likes
         StackPane cuocoLikesPane = new StackPane();
@@ -603,7 +602,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         descrizione.setWrapText(true);
 
         // Aggiungi gli elementi iniziali al VBox
-        popupInitialContent.getChildren().addAll(titolo, dettagli, immagineRicetta, cuocoLikesPane, descrizione);
+        popupInitialContent.getChildren().addAll(titolo, dettagli, imageRecipeView, cuocoLikesPane, descrizione);
 
         // Restituisci il contenuto delle informazioni iniziali
         return popupInitialContent;
@@ -618,18 +617,18 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         popupIngredientiContent.setSpacing(10);
 
         // Recupero dal controller applicativo la lista di ingredienti validi per la ricetta scelta
-        BeanIngredienti beanIngredienti = ricette.verificaQuantita(dettagliRicetta);
+        BeanIngredienti ingredientiBean = ricette.verificaQuantita(dettagliRicetta);
 
         // Label ingredienti
-        Label ingredientiLabel = new Label("INGREDIENTI");
-        ingredientiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
-        ingredientiLabel.setAlignment(Pos.CENTER_LEFT);
-        VBox.setMargin(ingredientiLabel, new Insets(10, 0, 0, 0));
+        Label labelIngredienti = new Label("INGREDIENTI");
+        labelIngredienti.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+        labelIngredienti.setAlignment(Pos.CENTER_LEFT);
+        VBox.setMargin(labelIngredienti, new Insets(10, 0, 0, 0));
 
         // Variabili di gestione della griglia degli ingredienti
-        GridPane ingredientiGrid = new GridPane();
-        ingredientiGrid.setHgap(10);
-        ingredientiGrid.setVgap(5);
+        GridPane gridIngredienti = new GridPane();
+        gridIngredienti.setHgap(10);
+        gridIngredienti.setVgap(5);
         int column = 0;
         int row = 0;
 
@@ -637,23 +636,23 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         for (Ingrediente ingrediente : dettagliRicetta.getIngredienti().getListaIngredienti()) {
 
             // Crea la riga dell'ingrediente (box con l'icona e il nome)
-            HBox ingredienteBox = creaRigaIngrediente(ingrediente, beanIngredienti);
+            HBox ingredienteBox = creaRigaIngrediente(ingrediente, ingredientiBean);
 
             // Aggiungi il box appena restituito nella griglia degli ingredienti
-            ingredientiGrid.add(ingredienteBox, column, row);
+            gridIngredienti.add(ingredienteBox, column, row);
 
             // Gestione cambio colonne della griglia
-            int dimListaIngredienti = dettagliRicetta.getIngredienti().getListaIngredienti().size();
+            int dimList = dettagliRicetta.getIngredienti().getListaIngredienti().size();
             row++;
-            if (dimListaIngredienti % 2 == 0) {
+            if (dimList % 2 == 0) {
                 // Se la lista degli ingredienti ha una dimensione pari
-                if (row >= dimListaIngredienti / 2) {
+                if (row >= dimList / 2) {
                     row = 0;
                     column = 1;
                 }
             } else {
                 // Se la lista degli ingredienti ha una dimensione dispari
-                if (row > dimListaIngredienti / 2) {
+                if (row > dimList / 2) {
                     row = 0;
                     column = 1;
                 }
@@ -661,7 +660,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         }
 
         // Aggiungi le altre informazioni al VBox
-        popupIngredientiContent.getChildren().addAll(ingredientiLabel, ingredientiGrid);
+        popupIngredientiContent.getChildren().addAll(labelIngredienti, gridIngredienti);
 
         // Restituisci le informazioni aggiuntive
         return popupIngredientiContent;
@@ -671,26 +670,26 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     private HBox creaRigaIngrediente(Ingrediente ingrediente, BeanIngredienti beanIngredienti) {
 
         // Variabile per il BeanIngrediente corrispondente
-        BeanIngrediente ingredienteTrovato = null;
+        BeanIngrediente ingredientTrovato = null;
 
         // Trova l'ingrediente corrispondente dalla lista di ingredienti validati
         for (BeanIngrediente beanIngrediente : beanIngredienti.getListIngredienti()) {
             if (beanIngrediente.getNome().equals(ingrediente.getNome())) {
-                ingredienteTrovato = beanIngrediente;
+                ingredientTrovato = beanIngrediente;
                 break;
             }
         }
 
         // Aggiungi un'icona di successo o di errore accanto all'ingrediente
-        ImageView iconView;
-        if (ingredienteTrovato != null && ingredienteTrovato.isValido()) {
-            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
+        ImageView icon;
+        if (ingredientTrovato != null && ingredientTrovato.isValido()) {
+            icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/success_icon.png"))));
             validIngredientCount++;
         } else {
-            iconView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
+            icon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/error_icon.png"))));
         }
-        iconView.setFitWidth(17);
-        iconView.setFitHeight(17);
+        icon.setFitWidth(17);
+        icon.setFitHeight(17);
 
         // Recupera il tipo di ingrediente (cibo o drink)
         String tipoIngrediente = null;
@@ -705,62 +704,62 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         ingredienteLabel.setStyle("-fx-text-fill: #666666; -fx-font-size: 11.9px;");
 
         // Crea e ritorna l'HBox che contiene l'icona e l'etichetta
-        return new HBox(5, iconView, ingredienteLabel);
+        return new HBox(5, icon, ingredienteLabel);
     }
 
     // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma per il popup "mostraDettagliRicetta"
     private VBox createFinalContent(BeanRicetta dettagliRicetta) throws DAOException {
 
         // Crea VBox per le altre informazioni
-        VBox popupFinalContent = new VBox();
-        popupFinalContent.setAlignment(Pos.CENTER_LEFT);
-        popupFinalContent.setSpacing(10);
+        VBox contentfinale = new VBox();
+        contentfinale.setAlignment(Pos.CENTER_LEFT);
+        contentfinale.setSpacing(10);
 
         // Passaggi della ricetta
-        Label passaggiLabel = new Label("PASSAGGI");
-        passaggiLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.9px;");
-        VBox.setMargin(passaggiLabel, new Insets(10, 0, 0, 0));
-        VBox passaggiBox = new VBox(10);
+        Label labelPassaggi = new Label("PASSAGGI");
+        labelPassaggi.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.9px;");
+        VBox.setMargin(labelPassaggi, new Insets(10, 0, 0, 0));
+        VBox boxPerPassaggi = new VBox(10);
         String passaggiTesto = dettagliRicetta.getPassaggi();
         if (passaggiTesto == null || passaggiTesto.isEmpty()) {
             Label passaggiMessage = new Label("NON SONO STATI SCRITTI PASSAGGI PER QUESTA RICETTA");
             passaggiMessage.setStyle("-fx-text-fill: #666666;");
-            passaggiBox.getChildren().add(passaggiMessage);
+            boxPerPassaggi.getChildren().add(passaggiMessage);
         } else {
             Label passaggi = new Label(dettagliRicetta.getPassaggi());
-            passaggiBox.getChildren().add(passaggi);
+            boxPerPassaggi.getChildren().add(passaggi);
         }
 
         // Video URL
-        Label videoLabel = new Label("VIDEO TUTORIAL");
-        videoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.8px;");
-        VBox.setMargin(videoLabel, new Insets(10, 0, 0, 0));
-        VBox linkVideoBox = new VBox(10);
+        Label labelVideo = new Label("VIDEO TUTORIAL");
+        labelVideo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 13.8px;");
+        VBox.setMargin(labelVideo, new Insets(10, 0, 0, 0));
+        VBox videoBoxLink = new VBox(10);
         String linkVideo = dettagliRicetta.getVideoUrl();
         if (linkVideo == null || linkVideo.isEmpty()) {
             Label linkVideoMessage = new Label("NON E' PRESENTE IL LINK PER IL VIDEO");
             linkVideoMessage.setStyle("-fx-text-fill: #666666;");
-            linkVideoBox.getChildren().add(linkVideoMessage);
+            videoBoxLink.getChildren().add(linkVideoMessage);
         } else {
             Hyperlink videoLink = new Hyperlink(dettagliRicetta.getVideoUrl());
             videoLink.setStyle("-fx-font-size: 14px;");
             videoLink.setOnAction(e -> getHostServicesInstance().showDocument(dettagliRicetta.getVideoUrl()));
-            linkVideoBox.getChildren().add(videoLink);
+            videoBoxLink.getChildren().add(videoLink);
         }
-        VBox.setMargin(linkVideoBox, new Insets(0, 0, 20, 0));
+        VBox.setMargin(videoBoxLink, new Insets(0, 0, 20, 0));
 
         // Pulsante per confermare l'uso della ricetta
-        Button confirmButton = new Button("USA RICETTA");
+        Button buttonConfirm = new Button("USA RICETTA");
 
         // Controlla se tutti gli ingredienti sono validi e se la lista non è vuota per abilitare o disabilitare il pulsante
         if (validIngredientCount == dettagliRicetta.getIngredienti().getListaIngredienti().size() && !dettagliRicetta.getIngredienti().getListaIngredienti().isEmpty()) {
-            confirmButton.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
-            confirmButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
-            confirmButton.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato
+            buttonConfirm.setDisable(false);  // Abilita il pulsante se tutti gli ingredienti sono validi
+            buttonConfirm.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+            buttonConfirm.setCursor(Cursor.HAND); // Cambia il cursore a "mano" se abilitato
         } else {
-            confirmButton.setDisable(true);   // Disabilita il pulsante se non tutti gli ingredienti sono validi
-            confirmButton.setStyle("-fx-background-color: #9e0606; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
-            confirmButton.setCursor(Cursor.DEFAULT); // Cursore standard se disabilitato
+            buttonConfirm.setDisable(true);   // Disabilita il pulsante se non tutti gli ingredienti sono validi
+            buttonConfirm.setStyle("-fx-background-color: #9e0606; -fx-background-radius: 10; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 5px 10px;");
+            buttonConfirm.setCursor(Cursor.DEFAULT); // Cursore standard se disabilitato
         }
 
         // Azzera il contatore degli ingredienti validi
@@ -775,18 +774,18 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
                 Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Si è verificato un errore durante l'uso della ricetta.", ERROR_POPUP_TYPE);
             }
         };
-        confirmButton.setOnAction(confirmHandler);
+        buttonConfirm.setOnAction(confirmHandler);
 
         // Allineamento bottone "usa ricetta"
         HBox buttonBox = new HBox(10);
         buttonBox.setAlignment(Pos.CENTER);
-        buttonBox.getChildren().add(confirmButton);
+        buttonBox.getChildren().add(buttonConfirm);
 
         // Aggiungi le altre informazioni al VBox
-        popupFinalContent.getChildren().addAll(passaggiLabel, passaggiBox, videoLabel, linkVideoBox, buttonBox);
+        contentfinale.getChildren().addAll(labelPassaggi, boxPerPassaggi, labelVideo, videoBoxLink, buttonBox);
 
         // Restituisci le informazioni aggiuntive
-        return popupFinalContent;
+        return contentfinale;
     }
 
     // Metodo per mostrare la pagina dei preferiti

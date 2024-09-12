@@ -20,6 +20,15 @@ public abstract class Ricetta implements Serializable {
     protected int likes;
 
     // Getter
+    public int getDurataPreparazione() {
+        return durataPreparazione;
+    }
+    public int getCalorie() {
+        return calorie;
+    }
+    public int getLikes() {
+        return likes;
+    }
     public String getCodice() {
         return codRicetta;
     }
@@ -29,8 +38,8 @@ public abstract class Ricetta implements Serializable {
     public String getDescrizione() {
         return descrizione;
     }
-    public Blob getImmagine() {
-        return immagine;
+    public String getVideoUrl() {
+        return videoUrl;
     }
     public String getProvenienza() {
         return provenienza;
@@ -38,23 +47,14 @@ public abstract class Ricetta implements Serializable {
     public String getCuoco() {
         return cuoco;
     }
-    public int getDurataPreparazione() {
-        return durataPreparazione;
-    }
-    public int getCalorie() {
-        return calorie;
+    public String getPassaggi() {
+        return passaggi;
     }
     public ListIngredienti getIngredienti() {
         return ingredienti;
     }
-    public String getPassaggi() {
-        return passaggi;
-    }
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-    public int getLikes() {
-        return likes;
+    public Blob getImmagine() {
+        return immagine;
     }
 
     // Setter

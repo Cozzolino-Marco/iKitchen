@@ -328,18 +328,18 @@ public class UtenteControllerGrafico2 {
             ConnectionFactory.closeConnection();
 
             // Carica il file FXML per la vista del login
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
-            Parent root = fxmlLoader.load();
+            FXMLLoader fxmlLoaderView = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
+            Parent root = fxmlLoaderView.load();
 
             // Ottieni lo stage attuale dalla classe ApplicazioneStage
-            Stage stage = ApplicazioneStage.getStage();
+            Stage stageView = ApplicazioneStage.getStage();
 
             // Imposta la nuova scena con il layout caricato
             Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
             // Cambia la scena dello stage
-            stage.setScene(scene);
-            stage.show();
+            stageView.setScene(scene);
+            stageView.show();
         }
     }
 }

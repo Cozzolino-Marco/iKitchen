@@ -37,21 +37,30 @@ public class Popup {
         popupContent.setAlignment(Pos.CENTER);
         popupContent.setStyle("-fx-background-color: #ffffff; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);");
 
-        // Aggiunta dell'icona in base al tipo di popup
+        // Aggiunta dell'icona di successo
         ImageView icon = new ImageView();
         if (tipo.equalsIgnoreCase("success")) {
             icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/success_icon.png"))));
             icon.setFitHeight(50);
             icon.setFitWidth(50);
-        } else if (tipo.equalsIgnoreCase("error")) {
+        }
+
+        // Aggiunta dell'icona di errore
+        if (tipo.equalsIgnoreCase("error")) {
             icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/error_icon.png"))));
             icon.setFitHeight(50);
             icon.setFitWidth(50);
-        } else if (tipo.equalsIgnoreCase("warning")) {
+        }
+
+        // Aggiunta dell'icona di attenzione
+        if (tipo.equalsIgnoreCase("warning")) {
             icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/warning_icon.png"))));
             icon.setFitHeight(50);
             icon.setFitWidth(50);
-        } else if (tipo.equalsIgnoreCase("construction")) {
+        }
+
+        // Aggiunta dell'icona di costruzione
+        if (tipo.equalsIgnoreCase("construction")) {
             icon.setImage(new Image(Objects.requireNonNull(Popup.class.getResourceAsStream("/construction_icon.jpg"))));
             icon.setFitHeight(160);
             icon.setFitWidth(160);
