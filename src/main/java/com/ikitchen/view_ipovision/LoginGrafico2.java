@@ -50,33 +50,35 @@ public class LoginGrafico2 {
     protected void onLoginButtonClick() throws IOException {
 
         // Gestione eccezione per validità email
-        CredentialsBean credB = null;
+        CredentialsBean credentialsBean = null;
         try {
-            credB = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
+            credentialsBean = new CredentialsBean(textFieldUsername.getText(), textFieldPassword.getText());
         } catch (IllegalArgumentException e) {
             Popup.mostraPopup("Errore email", "L'email fornita non è valida!", ERROR_POPUP_TYPE);
             loginView();
         }
 
         // Verifica se credB è stato istanziato correttamente
-        if (credB != null) {
+        if (credentialsBean != null) {
             LoginController loginController = new LoginController();
 
             // Chiamata al login controller per effettuare il login
             try {
-                loginController.start(credB);
+                loginController.start(credentialsBean);
 
                 // Recupera il nome associato allo username
-                loginController.recuperaNome(credB);
+                loginController.recuperaNome(credentialsBean);
 
                 // Controlla il ruolo dell'utente e carica la view appropriata
                 if (Credentials.getRole() != null) {
                     cambiaViewDopoLogin();
                 }
             } catch (LoadException e) {
+                // Warning
                 Popup.mostraPopup("Caricamento non riuscito", "Impossibile caricamento della pagina!", ERROR_POPUP_TYPE);
                 loginView();
             } catch (DAOException | SQLException | IOException e) {
+                // Errore
                 Popup.mostraPopup("Errore", "Hai sbagliato username o password, per favore ricontrolla!", ERROR_POPUP_TYPE);
                 loginView();
             }
@@ -86,14 +88,14 @@ public class LoginGrafico2 {
     @FXML // Metodo per il login
     public void loginView() throws IOException {
 
-        // Carica il file FXML per la vista del login
+        // Carica file FXML per la vista del login
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
         Parent root = fxmlLoader.load();
 
-        // Ottieni lo stage attuale dalla classe ApplicazioneStage
+        // Ottieni stage attuale dalla classe ApplicazioneStage
         Stage stage = ApplicazioneStage.getStage();
 
-        // Imposta la nuova scena con il layout caricato
+        // Imposta la nuova scena con il layout appena caricato
         Scene scene = new Scene(root, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         // Cambia la scena dello stage
@@ -140,7 +142,7 @@ public class LoginGrafico2 {
 
         // Settaggi scena
         FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
+        Stage newStage = ApplicazioneStage.getStage();
         Scene scene;
         String fxmlFile;
 
@@ -155,9 +157,9 @@ public class LoginGrafico2 {
         fxmlLoader = new FXMLLoader();
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
+        newStage.setTitle("iKitchen");
+        newStage.setScene(scene);
+        newStage.centerOnScreen();
+        newStage.show();
     }
 }

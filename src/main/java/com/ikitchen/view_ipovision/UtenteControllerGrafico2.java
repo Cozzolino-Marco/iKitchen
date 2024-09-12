@@ -79,16 +79,16 @@ public class UtenteControllerGrafico2 {
 
     // Visualizzazione della pagina dell'utente
     public void homePageUtente() throws IOException, DAOException, SQLException {
-        FXMLLoader fxmlLoader;
+        FXMLLoader loaderFxml;
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
         String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
-        fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        loaderFxml = new FXMLLoader();
+        Parent rootNode = loaderFxml.load(getClass().getResourceAsStream(fxmlFile));
 
         // Forzo la chiamata al controller stesso per rinizializzare la pagina
-        UtenteControllerGrafico2 controller = fxmlLoader.getController();
+        UtenteControllerGrafico2 controller = loaderFxml.getController();
         controller.initialize();
 
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
@@ -105,9 +105,9 @@ public class UtenteControllerGrafico2 {
         Stage stage = ApplicazioneStage.getStage();
         Scene scene;
 
-        String fxmlFile = "/com/IpovisionGUI/categorieView2.fxml";
+        String fileFxml = "/com/IpovisionGUI/categorieView2.fxml";
         fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fileFxml));
 
         OttieniRicettaControllerGrafico2 controller = fxmlLoader.getController();
         controller.initialize("", "", "", "");
@@ -191,9 +191,9 @@ public class UtenteControllerGrafico2 {
 
         // Creazione dell'immagine dell'ingrediente
         HBox imgBox;
-        ImageView imageView = new ImageView();
-        imageView.setFitHeight(80);
-        imageView.setFitWidth(75);
+        ImageView imageIngrediente = new ImageView();
+        imageIngrediente.setFitHeight(80);
+        imageIngrediente.setFitWidth(75);
 
         // Imposta l'immagine
         try {
@@ -202,7 +202,7 @@ public class UtenteControllerGrafico2 {
             if (inputStream != null) {
                 // Imposta immagine specificata
                 Image image = new Image(inputStream, 100, 100, true, true); // Imposta dimensioni fisse e preserva il rapporto
-                imageView.setImage(image);
+                imageIngrediente.setImage(image);
             } else {
                 // Forza il catch per caricare immagine di default
                 throw new SQLException();
@@ -210,15 +210,15 @@ public class UtenteControllerGrafico2 {
         } catch (Exception e) {
             // Carica immagine di default
             Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/default_image.png")), 100, 100, true, true);
-            imageView.setImage(defaultImage);
+            imageIngrediente.setImage(defaultImage);
         }
 
         // Creazione di un Rectangle per angoli arrotondati delle immagini
         Rectangle clip = new Rectangle(75, 80);
         clip.setArcWidth(30);
         clip.setArcHeight(30);
-        imageView.setClip(clip);
-        imgBox = new HBox(imageView);
+        imageIngrediente.setClip(clip);
+        imgBox = new HBox(imageIngrediente);
 
         // Creazione del titolo dell'ingrediente
         Label titleLabel = new Label(ingrediente.getNome().toUpperCase());
@@ -277,7 +277,7 @@ public class UtenteControllerGrafico2 {
         tabPane.setTabMinWidth(621);
 
         // Stile base per i tab
-        String baseStyle = "-fx-background-color: #a69a9a;"
+        String styleBase = "-fx-background-color: #a69a9a;"
                 + "-fx-text-fill: white;"
                 + "-fx-border-radius: 10px;"
                 + "-fx-background-radius: 10px;";
@@ -290,7 +290,7 @@ public class UtenteControllerGrafico2 {
 
         // Configura tutti i tab con lo stile base
         for (Tab tab : tabPane.getTabs()) {
-            tab.setStyle(baseStyle);
+            tab.setStyle(styleBase);
         }
 
         // Aggiungi un listener per cambiare lo stile quando un tab viene selezionato
@@ -299,7 +299,7 @@ public class UtenteControllerGrafico2 {
                 if (tab.equals(newTab)) {
                     tab.setStyle(selectedStyle); // Applica lo stile al tab selezionato
                 } else {
-                    tab.setStyle(baseStyle); // Applica lo stile base agli altri
+                    tab.setStyle(styleBase); // Applica lo stile base agli altri
                 }
             }
         });

@@ -196,7 +196,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     // Metodo per mostrare la homepage utente
     public void homePageUtente() throws IOException {
         FXMLLoader fxmlLoader;
-        Stage stage = ApplicazioneStage.getStage();
+        Stage stageHomepage = ApplicazioneStage.getStage();
         Scene scene;
 
         String fxmlFile = "/com/IpovisionGUI/utentiView2.fxml";
@@ -204,9 +204,9 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
         scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
-        stage.setTitle(APP_NAME);
-        stage.setScene(scene);
-        stage.show();
+        stageHomepage.setTitle(APP_NAME);
+        stageHomepage.setScene(scene);
+        stageHomepage.show();
     }
 
     // Dai parametri, interagisce con controller e DAO per ottenere la lista di ricette dal DB
@@ -349,7 +349,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
 
         // Gestione dell'immagine della ricetta
         HBox imageBox;
-        ImageView imageView;
+        ImageView immagineView;
         Image image;
         try {
             if (ricettaBean.getImmagine() != null && ricettaBean.getImmagine().getBinaryStream() != null) {
@@ -363,14 +363,14 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         }
 
         // Settaggi grafici per l'immagine
-        imageView = new ImageView(image);
-        imageView.setFitHeight(70);
-        imageView.setFitWidth(65);
+        immagineView = new ImageView(image);
+        immagineView.setFitHeight(70);
+        immagineView.setFitWidth(65);
         Rectangle clip = new Rectangle(65, 70);
         clip.setArcWidth(15);
         clip.setArcHeight(15);
-        imageView.setClip(clip);
-        imageBox = new HBox(imageView);
+        immagineView.setClip(clip);
+        imageBox = new HBox(immagineView);
         elementRicetta.setLeft(imageBox);
 
         // Creazione del titolo della ricetta
@@ -469,30 +469,30 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         popupStage.setTitle("DETTAGLI RICETTA");
 
         // Crea il contenuto del popup
-        VBox popupContent = new VBox();
-        popupContent.setSpacing(10);
-        popupContent.setPadding(new Insets(20));
-        popupContent.setStyle("-fx-background-color: black;");
-        popupContent.setAlignment(Pos.CENTER);
+        VBox contentPopup = new VBox();
+        contentPopup.setSpacing(10);
+        contentPopup.setPadding(new Insets(20));
+        contentPopup.setStyle("-fx-background-color: black;");
+        contentPopup.setAlignment(Pos.CENTER);
 
         try {
-            // Ottieni i dettagli completi della ricetta chiamando il controller applicativo
-            BeanRicetta dettagliRicetta = ricette.ottieniDettagliRicetta(ricettaBean);
+            // Ottieni i dettagli completi della ricetta con chiamata al controller applicativo
+            BeanRicetta dettagliRicettaResult = ricette.ottieniDettagliRicetta(ricettaBean);
 
-            // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione
-            VBox popupInitialContent = createInitialContent(dettagliRicetta);
+            // Creazione grafica di titolo, dettagli, immagine ricetta, cuoco, likes e descrizione (primi dettagli)
+            VBox popupInitialContent = createInitialContent(dettagliRicettaResult);
 
-            // Creazione grafica della sezione dedicata agli ingredienti
-            VBox popupIngredientiContent = createIngredientiContent(dettagliRicetta);
+            // Creazione grafica della sezione dedicata agli ingredienti (informazioni intermedie)
+            VBox popupIngredientiContent = createIngredientiContent(dettagliRicettaResult);
 
-            // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma
-            VBox popupOtherContent = createFinalContent(dettagliRicetta);
+            // Creazione grafica delle sezioni dedicate ai passaggi, link del video e bottone di conferma (dettagli finali)
+            VBox popupOtherContent = createFinalContent(dettagliRicettaResult);
 
             // Aggiungi tutti i contenuti creati al layout principale
-            popupContent.getChildren().addAll(popupInitialContent, popupIngredientiContent, popupOtherContent);
+            contentPopup.getChildren().addAll(popupInitialContent, popupIngredientiContent, popupOtherContent);
 
             // Inserisci il contenuto nel ScrollPane
-            ScrollPane localScrollPane = new ScrollPane(popupContent);
+            ScrollPane localScrollPane = new ScrollPane(contentPopup);
             localScrollPane.setFitToWidth(true);
 
             // Imposta la visualizzazione all'inizio

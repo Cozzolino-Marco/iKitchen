@@ -56,39 +56,39 @@ public class RegistratiGrafico2 {
         String ripetiPassword = textFieldRipetiPassword.getText();
 
         // Mostra un avviso se anche uno dei campi non è stato selezionato
-        if (nome.isEmpty() || cognome.isEmpty() || ruolo == null || username.isEmpty() || password.isEmpty() || ripetiPassword.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || ripetiPassword.isEmpty() || nome.isEmpty() || cognome.isEmpty() || ruolo == null) {
             Popup.mostraPopup("Attenzione", "Si prega di selezionare tutte le opzioni prima di procedere!", "warning");
             return;
         }
 
         // Creazione di un oggetto bean e riempimento con i dati acquisiti
-        CredentialsBean beanRegistrazione = new CredentialsBean();
-        beanRegistrazione.setNome(nome);
-        beanRegistrazione.setCognome(cognome);
-        beanRegistrazione.setRole(ruolo);
-        beanRegistrazione.setPassword(password);
-        beanRegistrazione.setRipetiPassword(ripetiPassword);
+        CredentialsBean beanRegister = new CredentialsBean();
+        beanRegister.setNome(nome);
+        beanRegister.setCognome(cognome);
+        beanRegister.setRole(ruolo);
+        beanRegister.setPassword(password);
+        beanRegister.setRipetiPassword(ripetiPassword);
 
         // Variabile che indica se l'email è valida
-        boolean emailValida = true;
+        boolean validEmail = true;
 
         // Gestione eccezione per validità email
         try {
-            beanRegistrazione.setUsername(username);
+            beanRegister.setUsername(username);
         } catch (IllegalArgumentException e) {
             Popup.mostraPopup("Errore", "L'email fornita non è valida!", "error");
-            emailValida = false;  // L'email non è valida, quindi si ferma il flusso
+            validEmail = false;  // L'email non è valida, quindi si ferma il flusso
         }
 
         // Continua solo se l'email è valida
-        if (emailValida) {
+        if (validEmail) {
 
             // Chiama il controller applicativo per effettuare la registrazione
             RegistratiController controllerRegistrati = new RegistratiController();
 
             // Mostra il popup in base all'esito della query
             try {
-                controllerRegistrati.effettuaRegistrazione(beanRegistrazione);
+                controllerRegistrati.effettuaRegistrazione(beanRegister);
 
                 // Carica il file FXML per la vista del login
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/IpovisionGUI/login2.fxml"));
@@ -104,10 +104,17 @@ public class RegistratiGrafico2 {
                 stage.setScene(scene);
                 stage.show();
 
+                // Messaggio di successo
                 Popup.mostraPopup("Successo", "Ti sei registrato con successo!", "success");
+
             } catch (IllegalArgumentException e) {
+
+                // Messaggio di warning
                 Popup.mostraPopup("Attenzione", "Password non coincidenti!", "warning");
+
             } catch (DAOException | SQLException | IOException e) {
+
+                // Messaggio di errore
                 Popup.mostraPopup("Errore", "Si è verificato un errore durante la registrazione.", "error");
             }
         }
