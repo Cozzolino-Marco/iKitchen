@@ -237,18 +237,18 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
             int maxColumns = 3;
 
             for (BeanRicetta beanRicetta : listaRicette.getListRicette()) {
-                BorderPane element = createRicettaElement(beanRicetta);
+                BorderPane graphicElement = createRicettaElement(beanRicetta);
 
                 // Imposta la larghezza minima per ciascun elemento
-                element.setMinWidth(220);
-                element.setMaxWidth(220);
-                element.setMaxWidth(Double.MAX_VALUE);
+                graphicElement.setMinWidth(220);
+                graphicElement.setMaxWidth(220);
+                graphicElement.setMaxWidth(Double.MAX_VALUE);
 
                 // Forzatura all'espansione orizzontale dell'elemento
-                GridPane.setHgrow(element, Priority.ALWAYS);
+                GridPane.setHgrow(graphicElement, Priority.ALWAYS);
 
                 // Aggiungi l'elemento alla griglia in base a riga e colonna
-                gridContainerRicette.add(element, column, row);
+                gridContainerRicette.add(graphicElement, column, row);
 
                 column++;
 
@@ -291,8 +291,8 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     @FXML // Metodo che mostra le ricette caricate a livello grafico
     public void mostraRicette() throws IOException {
 
-        // Mostra un avviso se anche uno dei campi non è stato selezionato
-        if (provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null || storageComboBox.getValue() == null) {
+        // Mostra un avviso particolare se anche uno dei campi non è stato selezionato
+        if (storageComboBox.getValue() == null || provenienzaComboBox.getValue() == null || filtraggioComboBox.getValue() == null) {
             Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Si prega di selezionare tutte le opzioni prima di procedere!", WARNING_POPUP_TYPE);
 
         } else if ("Dal web".equals(provenienzaComboBox.getValue()) &&
@@ -301,13 +301,13 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
                         "Solo dal file system".equals(storageComboBox.getValue()) ||
                         "Da entrambi".equals(storageComboBox.getValue()))) {
 
-            // Mostra un popup con un messaggio specifico
+            // Mostra un popup con un messaggio
             Popup.mostraPopup(WARNING_MESSAGE_TITLE,
                     "Con la provenienza 'Dal web', non è possibile selezionare 'Filtrate in base alla dispensa' come filtraggio " +
                             "e non sono ammesse le selezioni di: 'Solo dal database', 'Solo dal file system', 'Da entrambi' come storage.",
                     WARNING_POPUP_TYPE);
 
-        } else if ("Da chef".equals(provenienzaComboBox.getValue()) && "Nessuno".equals(storageComboBox.getValue())) {
+        } else if ("Nessuno".equals(storageComboBox.getValue()) && "Da chef".equals(provenienzaComboBox.getValue())) {
 
             // Mostra un popup con un messaggio specifico
             Popup.mostraPopup(WARNING_MESSAGE_TITLE, "Con la provenienza 'Da chef', non è possibile selezionare 'Nessuno' come storage.", WARNING_POPUP_TYPE);
@@ -320,7 +320,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
             // Caricamento della scena
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
+            Scene sceneElencoRicette;
             String fxmlFile = "/com/IpovisionGUI/elencoRicetteView2.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
 
@@ -336,19 +336,19 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
             controller.initialize(categoriaSelezionata, provenienzaComboBox.getValue().toString(), filtraggioComboBox.getValue().toString(), storageComboBox.getValue().toString());
 
             // Ultimi settaggi della scena ed avvio
-            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+            sceneElencoRicette = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
             stage.setTitle(APP_NAME);
-            stage.setScene(scene);
+            stage.setScene(sceneElencoRicette);
             stage.show();
         }
     }
 
     // Gestione grafica di un elemento ricetta
     private BorderPane createRicettaElement(BeanRicetta ricettaBean) {
-        BorderPane element = new BorderPane();
+        BorderPane elementRicetta = new BorderPane();
 
         // Gestione dell'immagine della ricetta
-        HBox imgBox;
+        HBox imageBox;
         ImageView imageView;
         Image image;
         try {
@@ -370,8 +370,8 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         clip.setArcWidth(15);
         clip.setArcHeight(15);
         imageView.setClip(clip);
-        imgBox = new HBox(imageView);
-        element.setLeft(imgBox);
+        imageBox = new HBox(imageView);
+        elementRicetta.setLeft(imageBox);
 
         // Creazione del titolo della ricetta
         Label titleLabel = new Label(ricettaBean.getTitolo().toUpperCase());
@@ -381,15 +381,15 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         ImageView cuocoIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cuoco_icon.jpg"))));
         cuocoIcon.setFitHeight(14);
         cuocoIcon.setFitWidth(14);
-        Label cuocoLabel = new Label(ricettaBean.getCuoco().toUpperCase());
-        cuocoLabel.setStyle("-fx-font-size: 10px;");
-        HBox cuocoBox = new HBox(cuocoIcon, cuocoLabel);
+        Label chefLabel = new Label(ricettaBean.getCuoco().toUpperCase());
+        chefLabel.setStyle("-fx-font-size: 10px;");
+        HBox cuocoBox = new HBox(cuocoIcon, chefLabel);
         cuocoBox.setSpacing(5);
 
         // Creazione dell'icona per le calorie
-        ImageView calorieIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/calorie_icon.png"))));
-        calorieIcon.setFitHeight(14);
-        calorieIcon.setFitWidth(14);
+        ImageView caloriesIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/calorie_icon.png"))));
+        caloriesIcon.setFitHeight(14);
+        caloriesIcon.setFitWidth(14);
         Label calorieLabel;
         if (ricettaBean.getCalorie() == 0) {
             calorieLabel = new Label("TBA KCAL");
@@ -403,18 +403,18 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         spacer.setMinWidth(10);
 
         // Creazione dell'icona per durata della preparazione
-        ImageView durataIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/duration_icon.png"))));
-        durataIcon.setFitHeight(14);
-        durataIcon.setFitWidth(14);
+        ImageView durationIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/duration_icon.png"))));
+        durationIcon.setFitHeight(14);
+        durationIcon.setFitWidth(14);
         Label durataLabel = new Label(ricettaBean.getDurataPreparazione() + " MIN");
         durataLabel.setStyle("-fx-font-size: 12.1px;");
 
         // Parte bottom per info calorie e durata
-        HBox infoBox = new HBox(calorieIcon, calorieLabel, spacer, durataIcon, durataLabel);
-        infoBox.setSpacing(5);
+        HBox informationBox = new HBox(caloriesIcon, calorieLabel, spacer, durationIcon, durataLabel);
+        informationBox.setSpacing(5);
 
         // VBox che contiene le informazioni del cuoco e calorie-durata
-        VBox detailsBox = new VBox(cuocoBox, infoBox);
+        VBox detailsBox = new VBox(cuocoBox, informationBox);
         detailsBox.setSpacing(5);
 
         // Creazione della struttura principale
@@ -426,16 +426,16 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         ImageView likeIcon = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/like_icon_black.jpg"))));
         likeIcon.setFitHeight(24);
         likeIcon.setFitWidth(24);
-        final boolean[] isLiked = {false}; // Stato del like
+        final boolean[] isLikedNow = {false}; // Stato del like
 
         // Impostare il comportamento interattivo del like
         likeIcon.setOnMouseClicked(event -> {
-            if (isLiked[0]) {
+            if (isLikedNow[0]) {
                 likeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/like_icon_black.jpg"))));
-                isLiked[0] = false;
+                isLikedNow[0] = false;
             } else {
                 likeIcon.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/like_icon_red.png"))));
-                isLiked[0] = true;
+                isLikedNow[0] = true;
             }
         });
 
@@ -444,21 +444,21 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         StackPane.setAlignment(likeIcon, Pos.TOP_RIGHT);
 
         // Creazione della struttura principale
-        HBox mainContent = new HBox(imgBox, titleAndDetailsBox);
+        HBox mainContent = new HBox(imageBox, titleAndDetailsBox);
         mainContent.setSpacing(10);
         mainContent.setAlignment(Pos.CENTER_LEFT);
 
         // Impostazione dell'elemento grafico
-        element.setCenter(mainContent);
-        element.setRight(likePane);
-        element.setPadding(new Insets(20));
-        element.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
+        elementRicetta.setCenter(mainContent);
+        elementRicetta.setRight(likePane);
+        elementRicetta.setPadding(new Insets(20));
+        elementRicetta.setStyle("-fx-border-color: gray; -fx-border-width: 1; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         // Gestore di eventi per il click sull'elemento in base alla provenienza
-        gestisciClickElementoRicetta(element, ricettaBean, provenienzaScelta);
+        gestisciClickElementoRicetta(elementRicetta, ricettaBean, provenienzaScelta);
 
         // Restituzione elemento grafico creato
-        return element;
+        return elementRicetta;
     }
 
     // Metodo per mostrare la pagina dei dettagli della ricetta scelta
@@ -517,7 +517,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
     // Gestore di eventi per il click sull'elemento ricetta in base alla provenienza
     private void gestisciClickElementoRicetta(BorderPane element, BeanRicetta ricettaBean, String provenienzaScelta) {
 
-        // Controllo della provenienza
+        // Controllo del campo della provenienza
         if (provenienzaScelta.equals("Da chef")) {
             element.setOnMouseClicked(event -> mostraDettagliRicetta(ricettaBean));
         } else {
@@ -531,7 +531,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
                         // Apri il link nel browser predefinito
                         Desktop.getDesktop().browse(new URI(url));
                     } else {
-                        // Gestisci il caso in cui il sistema non supporti l'apertura di URL
+                        // Gestisci il caso in cui il sistema non supporti l'apertura dell'URL
                         Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);
                     }
                 } catch (IOException | URISyntaxException e) {
@@ -794,8 +794,7 @@ public class OttieniRicettaControllerGrafico2 implements GraphicController {
         Popup.mostraPopup("In costruzione", "Sezione non ancora implementata!", "construction");
     }
 
-    // Metodo per mostrare la pagina della scelta delle categorie
-    @Override
+    @Override // Metodo per mostrare la pagina della scelta delle categorie
     public void categorieView() throws IOException {
 
         FXMLLoader fxmlLoader;

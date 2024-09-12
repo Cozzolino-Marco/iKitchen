@@ -116,8 +116,7 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
         this.storageScelto = storage;
     }
 
-    // Metodo per mostrare la pagina della scelta delle categorie
-    @Override
+    @Override // Metodo per mostrare la pagina della scelta delle categorie
     public void categorieView() throws IOException {
 
         FXMLLoader fxmlLoader;
@@ -143,23 +142,23 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
         categoriesContainer.getChildren().clear();
 
         // Creare una LinkedHashMap per mantenere l'ordine di inserimento
-        Map<String, String> categorieConImmagini = new LinkedHashMap<>();
-        categorieConImmagini.put("Colazione", "colazione.png");
-        categorieConImmagini.put("Pasto veloce", "pasto_veloce.png");
-        categorieConImmagini.put("Bevande", "bevande.png");
-        categorieConImmagini.put("Primi piatti", "primi_piatti.png");
-        categorieConImmagini.put("Secondi piatti", "secondi_piatti.png");
-        categorieConImmagini.put("Contorni", "contorni.png");
-        categorieConImmagini.put("Dolci", "dolci.png");
+        Map<String, String> categorieImmagini = new LinkedHashMap<>();
+        categorieImmagini.put("Colazione", "colazione.png");
+        categorieImmagini.put("Pasto veloce", "pasto_veloce.png");
+        categorieImmagini.put("Bevande", "bevande.png");
+        categorieImmagini.put("Primi piatti", "primi_piatti.png");
+        categorieImmagini.put("Secondi piatti", "secondi_piatti.png");
+        categorieImmagini.put("Contorni", "contorni.png");
+        categorieImmagini.put("Dolci", "dolci.png");
 
-        for (Map.Entry<String, String> entry : categorieConImmagini.entrySet()) {
+        for (Map.Entry<String, String> entry : categorieImmagini.entrySet()) {
             String categoria = entry.getKey();
             String immaginePath = entry.getValue();
 
             // Creazione del bottone
-            Button categoriaButton = new Button();
-            categoriaButton.setPrefWidth(250);
-            categoriaButton.setMaxWidth(250);
+            Button categoryButton = new Button();
+            categoryButton.setPrefWidth(250);
+            categoryButton.setMaxWidth(250);
 
             // Creazione dell'HBox per contenere testo e immagine
             HBox buttonContent = new HBox();
@@ -172,32 +171,32 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
             textLabel.setStyle("-fx-font-size: 16; -fx-text-fill: white;");
 
             // Creazione e aggiunta dell'immagine al bottone
-            ImageView categoriaImageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + immaginePath))));
+            ImageView categoriaImage = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/" + immaginePath))));
 
             // Impostazione della dimensione fissa per l'immagine
             final double fixedSize = 30;
-            categoriaImageView.setFitHeight(fixedSize);
-            categoriaImageView.setFitWidth(fixedSize);
-            categoriaImageView.setPreserveRatio(false);
+            categoriaImage.setFitHeight(fixedSize);
+            categoriaImage.setFitWidth(fixedSize);
+            categoriaImage.setPreserveRatio(false);
 
             // Creare una maschera quadrata con angoli smussati per rendere l'immagine stondato
             Rectangle clip = new Rectangle(30, 30);
             clip.setArcWidth(10);
             clip.setArcHeight(10);
-            categoriaImageView.setClip(clip);
+            categoriaImage.setClip(clip);
 
             // Aggiunta di spazio tra il testo e l'immagine per allineare l'immagine a destra
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
 
             // Aggiunta di testo, spazio e immagine all'HBox
-            buttonContent.getChildren().addAll(textLabel, spacer, categoriaImageView);
+            buttonContent.getChildren().addAll(textLabel, spacer, categoriaImage);
 
             // Aggiunta dell'HBox al bottone
-            categoriaButton.setGraphic(buttonContent);
+            categoryButton.setGraphic(buttonContent);
 
             // Event handler del bottone
-            categoriaButton.setOnAction(event -> {
+            categoryButton.setOnAction(event -> {
                 setCategoria(categoria);
                 try {
                     filtriView();
@@ -207,11 +206,11 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
             });
 
             // Stile del bottone con angoli stondati
-            categoriaButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10;");
+            categoryButton.setStyle("-fx-background-color: #0b5959; -fx-background-radius: 10;");
 
             // Aggiunta del bottone al contenitore con margini per centratura
-            VBox.setMargin(categoriaButton, new Insets(7, 0, 7, 0));
-            categoriesContainer.getChildren().add(categoriaButton);
+            VBox.setMargin(categoryButton, new Insets(7, 0, 7, 0));
+            categoriesContainer.getChildren().add(categoryButton);
         }
 
         // Impostazione di padding del VBox per distanziare il primo e ultimo bottone dalle barre di navigazione
