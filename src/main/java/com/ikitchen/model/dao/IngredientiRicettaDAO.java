@@ -20,9 +20,9 @@ public class IngredientiRicettaDAO {
             cs.setString(1, idRicetta);
 
             // Esegui la stored procedure
-            boolean status = cs.execute();
+            boolean statusExecute = cs.execute();
 
-            if(status) {
+            if(statusExecute) {
                 ResultSet rs = cs.getResultSet();
 
                 // Itera attraverso il ResultSet e popola la lista di ingredienti

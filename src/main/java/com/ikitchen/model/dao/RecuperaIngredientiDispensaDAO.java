@@ -22,9 +22,9 @@ public class RecuperaIngredientiDispensaDAO {
             cs.setString(1, username);
 
             // Esegui la stored procedure
-            boolean status = cs.execute();
+            boolean stato = cs.execute();
 
-            if(status) {
+            if(stato) {
                 ResultSet rs = cs.getResultSet();
 
                 // Itera attraverso il ResultSet e popola la lista di ingredienti

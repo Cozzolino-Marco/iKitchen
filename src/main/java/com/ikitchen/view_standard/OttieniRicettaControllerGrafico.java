@@ -228,7 +228,7 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
             // Se una categoria è stata selezionata, procedi con il caricamento della nuova scena
             FXMLLoader fxmlLoader = new FXMLLoader();
             Stage stage = ApplicazioneStage.getStage();
-            Scene scene;
+            Scene sceneFiltri;
 
             String fxmlFile = "/com/StandardGUI/filtriView.fxml";
             Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
@@ -237,10 +237,10 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
             controller.setCategoria(categoriaScelta); // Passa la categoria selezionata
             controller.initialize("", "", "", "");
 
-            scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+            sceneFiltri = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
             stage.setTitle(APP_NAME);
-            stage.setScene(scene);
+            stage.setScene(sceneFiltri);
             stage.show();
         }
     }
@@ -458,12 +458,12 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
             element.setOnMouseClicked(event -> {
                 try {
                     // Ottieni il link della ricetta
-                    String url = ricettaBean.getLinkRicetta();
+                    String urlRecipe = ricettaBean.getLinkRicetta();
 
                     // Verifica che il sistema supporti la navigazione su web
                     if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
                         // Apri il link nel browser predefinito
-                        Desktop.getDesktop().browse(new URI(url));
+                        Desktop.getDesktop().browse(new URI(urlRecipe));
                     } else {
                         // Gestisci il caso in cui il sistema non supporti l'apertura di URL
                         Popup.mostraPopup(ERROR_MESSAGE_TITLE, "Navigazione web non supportata su questo sistema.", ERROR_POPUP_TYPE);

@@ -70,8 +70,8 @@ public class LoginGrafico {
     public void loginView() throws IOException {
         
         // Carica il file FXML per la vista del login
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
-        Parent root = fxmlLoader.load();
+        FXMLLoader fxmlLoaderLogin = new FXMLLoader(getClass().getResource("/com/StandardGUI/login.fxml"));
+        Parent root = fxmlLoaderLogin.load();
 
         // Ottieni lo stage attuale dalla classe ApplicazioneStage
         Stage stage = ApplicazioneStage.getStage();
@@ -117,7 +117,7 @@ public class LoginGrafico {
     private void cambiaViewDopoLogin() throws IOException, DAOException, SQLException {
 
         String fxmlFile;
-        Stage stage = ApplicazioneStage.getStage();
+        Stage stageChangeView = ApplicazioneStage.getStage();
         FXMLLoader fxmlLoader = new FXMLLoader();
 
         if (Credentials.getRole().getId() == 1) {
@@ -132,10 +132,10 @@ public class LoginGrafico {
 
         // Imposta la scena
         Scene scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
-        stage.setTitle("iKitchen");
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.show();
+        stageChangeView.setTitle("iKitchen");
+        stageChangeView.setScene(scene);
+        stageChangeView.centerOnScreen();
+        stageChangeView.show();
     }
 
     // Chiamata al controller della registrazione
