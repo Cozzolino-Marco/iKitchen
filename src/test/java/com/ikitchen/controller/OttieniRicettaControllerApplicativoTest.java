@@ -1,5 +1,6 @@
 package com.ikitchen.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.bean.BeanIngredienti;
@@ -10,8 +11,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance (TestInstance.Lifecycle.PER_CLASS)
 class OttieniRicettaControllerApplicativoTest {

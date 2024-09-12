@@ -1,5 +1,6 @@
 package com.ikitchen.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.*;
 import com.ikitchen.model.domain.Role;
@@ -7,7 +8,6 @@ import com.ikitchen.model.utility.Credentials;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import java.sql.SQLException;
-import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance (TestInstance.Lifecycle.PER_CLASS)
 class LoginControllerTest {

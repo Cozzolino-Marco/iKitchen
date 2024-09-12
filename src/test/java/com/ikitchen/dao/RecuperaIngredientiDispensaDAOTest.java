@@ -1,7 +1,7 @@
 package com.ikitchen.dao;
 
+import static org.junit.jupiter.api.Assertions.*;
 import com.ikitchen.exception.DAOException;
-import com.ikitchen.model.bean.BeanIngrediente;
 import com.ikitchen.model.dao.RecuperaIngredientiDispensaDAO;
 import com.ikitchen.model.domain.Ingrediente;
 import com.ikitchen.model.domain.ListIngredienti;
@@ -10,12 +10,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 @TestInstance (TestInstance.Lifecycle.PER_CLASS)
 class RecuperaIngredientiDispensaDAOTest {
@@ -55,6 +51,6 @@ class RecuperaIngredientiDispensaDAOTest {
         }
 
         // Se tutti gli ingredienti hanno superato il controllo, il test è completato con successo
-        assertEquals(true, true, "Tutti gli ingredienti sono corretti.");
+        assertTrue(true, "Tutti gli ingredienti sono corretti.");
     }
 }
