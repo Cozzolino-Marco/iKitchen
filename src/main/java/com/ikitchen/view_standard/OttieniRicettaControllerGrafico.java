@@ -122,19 +122,19 @@ public class OttieniRicettaControllerGrafico implements GraphicController {
 
         FXMLLoader fxmlLoader;
         Stage stage = ApplicazioneStage.getStage();
-        Scene scene;
+        Scene scenes;
 
-        String fxmlFile = "/com/StandardGUI/categorieView.fxml";
+        String fxmlFiles = "/com/StandardGUI/categorieView.fxml";
         fxmlLoader = new FXMLLoader();
-        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFile));
+        Parent rootNode = fxmlLoader.load(getClass().getResourceAsStream(fxmlFiles));
 
         OttieniRicettaControllerGrafico controller = fxmlLoader.getController();
         controller.initialize("", "", "", "");
 
-        scene = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
+        scenes = new Scene(rootNode, ScreenSize.getSceneWidth(), ScreenSize.getSceneHeight());
 
         stage.setTitle(APP_NAME);
-        stage.setScene(scene);
+        stage.setScene(scenes);
         stage.show();
     }
 
