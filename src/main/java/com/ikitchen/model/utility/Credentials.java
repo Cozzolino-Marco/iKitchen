@@ -35,6 +35,9 @@ public class Credentials {
     public static void setNome(String nome) {
         Credentials.nome = nome;
     }
+    public static void setCognome(String cognome) {
+        Credentials.cognome = cognome;
+    }
     public static void setRole(Role role){
         Credentials.role = role;
     }

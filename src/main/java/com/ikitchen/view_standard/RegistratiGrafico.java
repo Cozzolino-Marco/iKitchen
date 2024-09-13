@@ -5,6 +5,7 @@ import com.ikitchen.exception.DAOException;
 import com.ikitchen.model.bean.CredentialsBean;
 import com.ikitchen.model.domain.ApplicazioneStage;
 import com.ikitchen.model.domain.Role;
+import com.ikitchen.model.utility.Credentials;
 import com.ikitchen.model.utility.Popup;
 import com.ikitchen.model.utility.ScreenSize;
 import javafx.collections.FXCollections;
