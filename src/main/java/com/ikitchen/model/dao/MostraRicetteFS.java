@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 public class MostraRicetteFS {
 
+    // Variabile per conservare e registrare messaggi di Log
     private static final Logger logger = Logger.getLogger(MostraRicetteFS.class.getName());
 
     // Metodo per recuperare ricette dal file system
