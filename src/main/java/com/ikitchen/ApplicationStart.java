@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ApplicationStart extends Application {
 
-    // Classe di JavaFX che fornisce funzionalità per interagire con il SO host
+    // Classe di JavaFX che fornisce funzionalità per interagire con il SO host per link esterno
     private static HostServices hostServices;
 
     @Override
