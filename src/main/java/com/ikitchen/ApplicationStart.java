@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class ApplicationStart extends Application {
 
-    // Classe di JavaFX che fornisce funzionalità per interagire con il SO host per link esterno
+    // Memorizza l'istanza di HostServices che viene fornita dalla JVM quando l'applicazione JavaFX viene avviata
     private static HostServices hostServices;
 
     @Override
@@ -29,12 +29,12 @@ public class ApplicationStart extends Application {
         stage.show();
     }
 
-    // Ritorno l'istanza utile al servizio link web della ricetta
+    // Metodo pubblico e statico per ottenere l'istanza di HostServices utile al link del video della ricetta
     public static HostServices getHostServicesInstance() {
         return hostServices;
     }
 
-    // Ritorno l'istanza utile al servizio link web della ricetta
+    // Imposta l'istanza di HostServices qua che è l'unico punto in cui è garantito che l'istanza di HostServices sia pronta e disponibile
     public static void setHostServicesInstance(HostServices hostServices) {
         ApplicationStart.hostServices = hostServices;
     }
